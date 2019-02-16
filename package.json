@@ -1,5 +1,5 @@
 {
-  "name": "Plan S Journal Checker",
+  "name": "PlanSJournalChecker",
   "version": "0.1.0",
   "engines": {
     "node": "9.8.0"
