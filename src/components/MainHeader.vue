@@ -10,7 +10,7 @@
 
         </div>
         <div class="nav">
-            <router-link to="./search">Search</router-link>
+            <router-link to="./wizard">Wizard</router-link>
             <router-link to="./faq">FAQ</router-link>
         </div>
     </md-toolbar>

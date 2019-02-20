@@ -7,7 +7,7 @@
       </h2>
       <div class="more">
         <div class="buttons">
-          <md-button class="md-raised md-button md-primary" to="search">
+          <md-button class="md-raised md-button md-primary" to="wizard">
             Get started
           </md-button>
 

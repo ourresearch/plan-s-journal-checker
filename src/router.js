@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Meta from 'vue-meta'
 
 import Journal from './views/Journal'
-import Search from './views/Search'
+import Wizard from './views/Wizard'
 import Home from './views/Home'
 
 
@@ -29,8 +29,8 @@ export default new Router({
     },
 
     {
-      path: '/search',
-      component: Search
+      path: '/wizard',
+      component: Wizard
     },
 
     {
