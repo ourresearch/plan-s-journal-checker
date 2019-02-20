@@ -201,13 +201,16 @@
 
             },
             stepWizardBackward(){
-                console.log("backward!")
-                if (this.previousStep) {
-                    this.activeStep.isActive = false
-                    this.previousStep.isActive = true
+                let activeStep =  this.wizardSteps.find(function(step){
+                    return !!step.isActive
+                })
+                let prevStepIndex = activeStep.index - 1
+                if (prevStepIndex < 0) {
+                    console.log("we're already at the beginning!")
                 }
                 else {
-                    console.log("nothing happening, we're already at the start!")
+                    activeStep.isActive = false
+                    this.wizardSteps[prevStepIndex].isActive = true
                 }
 
             },
