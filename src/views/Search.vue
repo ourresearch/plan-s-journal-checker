@@ -8,7 +8,14 @@
 
         <div class="results">
             <div class="result" v-for="result in results">
-                {{result.name}}
+                <div class="name">
+                    {{result.name}}
+                </div>
+                <div class="tags">
+                    <div class="tag cc-by" vue-if="result.prop_cc_by_since_2018 > 0.97">
+                        Fully CC-BY
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -61,6 +68,9 @@
         mounted() {
             // this.doQuery()
         },
+        // destroyed () {
+        //   document.removeEventListener("keyup", this.nextItem)
+        // },
         watch: {
             query: _.debounce(function(oldVal, newVal){
                 console.log("query changed", oldVal, newVal)
@@ -83,6 +93,27 @@
         border-radius: 5px;
         border: 3px solid #ccc;
         width: 100%;
+    }
+
+    .results {
+        .result {
+            padding: 20px 10px;
+            cursor: pointer;
+            .name {
+                font-size: 24px;
+            }
+            .tags {
+                margin: 10px 0;
+                .tag {
+                    padding: 10px 20px;
+                    margin-right: 10px;
+                    background: darkgoldenrod;
+                    color: white;
+                    border-radius: 5px;
+                }
+            }
+        }
+
     }
 
 
