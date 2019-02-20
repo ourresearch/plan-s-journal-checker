@@ -11,7 +11,7 @@
             <div class="wizard-step wizard-step-0" v-if="myWizardStepIndex===0 && myWizardStep.isActive">
                 <h1>Welcome to the journal selection wizard</h1>
                 <div class="content">
-                    This wizard will help you pick a journal for your paper that fits with your funder mandate. It one or two minutes to complete.
+                    This wizard will help you pick a journal for your paper that fits with your funder mandate. It takes one or two minutes to complete.
                 </div>
 
             </div>
@@ -88,8 +88,8 @@
 
         </div>
 
-        <md-button>go back</md-button>
-        <md-button>next</md-button>
+        <md-button @click="stepWizardBackward()">go back</md-button>
+        <md-button @click="stepWizardForward()" class="md-raised md-primary">next</md-button>
 
 
 
@@ -116,46 +116,99 @@
                     isActive: true,
                     name: "intro",
                     displayName: "Intro",
-                    displayStep: false
+                    displayStep: false,
+                    index: 0
                 },
                 {
                     isActive: false,
                     name: "correspondingAuthor",
                     displayName: "Corresponding Author",
                     displayStep: 1,
-                    userInput: {}
+                    userInput: {},
+                    index: 1
                 },
                 {
                     isActive: false,
                     name: "institution",
                     displayName: "Institutional Affiliation",
                     displayStep: 2,
-                    userInput: {}
+                    userInput: {},
+                    index: 2
                 },
                 {
                     isActive: false,
                     name: "funder",
                     displayName: "Funder",
                     displayStep: 3,
-                    userInput: {}
+                    userInput: {},
+                    index: 3
                 },
                 {
                     isActive: false,
                     name: "journal",
                     displayName: "Journal",
                     displayStep: 4,
-                    userInput: {}
+                    userInput: {},
+                    index: 4
                 }
             ]
 
         }),
         computed: {
+            activeStep(){
+                return this.wizardSteps.find(function(step){
+                    return !!step.isActive
+                })
+            },
+            activeStepIndex(){
+                return this.wizardSteps.findIndex(function(step){
+                    return !!step.isActive
+                })
+            },
+            nextStep(){
+                let nextStepIndex = this.activeStepIndex + 1
+                if (nextStepIndex > this.wizardSteps.length) {
+                    return undefined
+                }
+                else {
+                    return this.wizardSteps[nextStepIndex]
+                }
+            },
+            previousStep(){
+                let prevStepIndex = this.activeStep - 1
+                if (prevStepIndex < 0) {
+                    return undefined
+                }
+                else {
+                    return this.wizardSteps[prevStepIndex]
+                }
+            }
         },
         methods: {
             stepWizardForward(){
+                let activeStep =  this.wizardSteps.find(function(step){
+                    return !!step.isActive
+                })
+                let nextStepIndex = activeStep.index + 1
+                if (nextStepIndex >= this.wizardSteps.length) {
+                    console.log("we're done!")
+                }
+                else {
+                    activeStep.isActive = false
+                    this.wizardSteps[nextStepIndex].isActive = true
+                }
+
 
             },
             stepWizardBackward(){
+                console.log("backward!")
+                if (this.previousStep) {
+                    this.activeStep.isActive = false
+                    this.previousStep.isActive = true
+                }
+                else {
+                    console.log("nothing happening, we're already at the start!")
+                }
 
             },
 
