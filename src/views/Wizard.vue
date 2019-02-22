@@ -3,98 +3,89 @@
 
 
 
-        <div class="wizard-step-wrapper" v-for="(myWizardStep, myWizardStepIndex) in wizardSteps">
 
 
 
-            <!-- STEP 0, INTRODUCTION-->
-            <div class="wizard-step wizard-step-0" v-if="myWizardStepIndex===0 && myWizardStep.isActive">
-                <h1>Welcome to the journal selection wizard</h1>
-                <div class="content">
-                    This wizard will help you pick a journal for your paper that fits with your funder mandate. It takes one or two minutes to complete.
-                </div>
-
+        <!-- STEP 0, INTRODUCTION-->
+        <div class="wizard-step wizard-step-0" v-if="currentStep===0">
+            <h1>Welcome to the journal selection wizard</h1>
+            <div class="content">
+                This wizard will help you pick a journal for your paper that fits with your funder mandate. It takes one or two minutes to complete.
             </div>
-
-
-            <!-- STEP 1, CORRESPONDING AUTHOR-->
-            <div class="wizard-step wizard-step-1" v-if="myWizardStepIndex===1 && myWizardStep.isActive">
-                <h1>
-                    Are you the corresponding author for this paper?
-                </h1>
-                <div class="content">
-
-                </div>
-
-            </div>
-
-
-            <!-- STEP 2, INSTITUTIONS -->
-            <div class="wizard-step wizard-step-2" v-if="myWizardStepIndex===2 && myWizardStep.isActive">
-                <h1>
-                    What's your institutional affiliation?
-                </h1>
-                <div class="content">
-
-                </div>
-
-            </div>
-
-            <!-- STEP 3, FUNDER -->
-            <div class="wizard-step wizard-step-3" v-if="myWizardStepIndex===3 && myWizardStep.isActive">
-                <h1>
-                    Who is funding this researchg?
-                </h1>
-                <div class="content">
-
-                </div>
-
-            </div>
-
-            <!-- STEP 4, JOURNAL -->
-            <div class="wizard-step wizard-step-3" v-if="myWizardStepIndex===4 && myWizardStep.isActive">
-                <h1>
-                    What journal do you want to publish in?
-                </h1>
-                <div class="content">
-                    <div class="input">
-                        <input type="text" id="querybox" v-model="query">
-                    </div>
-
-                    <div class="results">
-                        <div class="result" v-for="result in results">
-                            <div class="name">
-                                {{result.name}}
-                            </div>
-                            <div class="tags">
-                                <div class="tag cc-by" v-if="result.prop_cc_by_since_2018 > 0.95">
-                                    Fully CC-BY
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-
-
-
-
-
 
         </div>
 
-        <md-button @click="stepWizardBackward()">go back</md-button>
-        <md-button @click="stepWizardForward()" class="md-raised md-primary">next</md-button>
+
+        <!-- STEP 1, CORRESPONDING AUTHOR-->
+        <div class="wizard-step wizard-step-1" v-if="currentStep===1">
+            <h1>
+                Are you the corresponding author for this paper?
+            </h1>
+            <div class="content">
+
+            </div>
+
+        </div>
 
 
+        <!-- STEP 2, INSTITUTIONS -->
+        <div class="wizard-step wizard-step-2" v-if="currentStep===2">
+            <h1>
+                What's your institutional affiliation?
+            </h1>
+            <div class="content">
 
+            </div>
+
+        </div>
+
+        <!-- STEP 3, FUNDER -->
+        <div class="wizard-step wizard-step-3" v-if="currentStep===3">
+            <h1>
+                Who is funding this researchg?
+            </h1>
+            <div class="content">
+
+            </div>
+
+        </div>
+
+        <!-- STEP 4, JOURNAL -->
+        <div class="wizard-step wizard-step-3" v-if="currentStep===4">
+            <h1>
+                What journal do you want to publish in?
+            </h1>
+            <div class="content">
+                <div class="input">
+                    <input type="text" id="querybox" v-model="query">
+                </div>
+
+                <div class="results">
+                    <div class="result" v-for="result in results">
+                        <div class="name">
+                            {{result.name}}
+                        </div>
+                        <div class="tags">
+                            <div class="tag cc-by" v-if="result.prop_cc_by_since_2018 > 0.95">
+                                Fully CC-BY
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
+
+    <md-button @click="stepWizardBackward()">go back</md-button>
+    <md-button @click="stepWizardForward()" class="md-raised md-primary">next</md-button>
+
+
+
+
 
 
 </template>
@@ -111,106 +102,25 @@
             loading: true,
             results: [],
             apiUrl: "http://api.rickscafe.io/search/journals/title/",
-            wizardSteps: [
-                {
-                    isActive: true,
-                    name: "intro",
-                    displayName: "Intro",
-                    displayStep: false,
-                    index: 0
-                },
-                {
-                    isActive: false,
-                    name: "correspondingAuthor",
-                    displayName: "Corresponding Author",
-                    displayStep: 1,
-                    userInput: {},
-                    index: 1
-                },
-                {
-                    isActive: false,
-                    name: "institution",
-                    displayName: "Institutional Affiliation",
-                    displayStep: 2,
-                    userInput: {},
-                    index: 2
-                },
-                {
-                    isActive: false,
-                    name: "funder",
-                    displayName: "Funder",
-                    displayStep: 3,
-                    userInput: {},
-                    index: 3
-                },
-                {
-                    isActive: false,
-                    name: "journal",
-                    displayName: "Journal",
-                    displayStep: 4,
-                    userInput: {},
-                    index: 4
-                }
-            ]
-
+            currentStep: 0,
         }),
         computed: {
-            activeStep(){
-                return this.wizardSteps.find(function(step){
-                    return !!step.isActive
-                })
-            },
-            activeStepIndex(){
-                return this.wizardSteps.findIndex(function(step){
-                    return !!step.isActive
-                })
-            },
-            nextStep(){
-                let nextStepIndex = this.activeStepIndex + 1
-                if (nextStepIndex > this.wizardSteps.length) {
-                    return undefined
-                }
-                else {
-                    return this.wizardSteps[nextStepIndex]
-                }
-            },
-            previousStep(){
-                let prevStepIndex = this.activeStep - 1
-                if (prevStepIndex < 0) {
-                    return undefined
-                }
-                else {
-                    return this.wizardSteps[prevStepIndex]
-                }
-            }
         },
         methods: {
             stepWizardForward(){
-                let activeStep =  this.wizardSteps.find(function(step){
-                    return !!step.isActive
-                })
-                let nextStepIndex = activeStep.index + 1
-                if (nextStepIndex >= this.wizardSteps.length) {
+                if (this.currentStep >= 4){
                     console.log("we're done!")
                 }
                 else {
-                    activeStep.isActive = false
-                    this.wizardSteps[nextStepIndex].isActive = true
+                    this.currentStep += 1
                 }
-
-
             },
             stepWizardBackward(){
-                let activeStep =  this.wizardSteps.find(function(step){
-                    return !!step.isActive
-                })
-                let prevStepIndex = activeStep.index - 1
-                if (prevStepIndex < 0) {
-                    console.log("we're already at the beginning!")
+                if (this.currentStep <= 0){
+                    console.log("we're at the beginning!")
                 }
                 else {
-                    activeStep.isActive = false
-                    this.wizardSteps[prevStepIndex].isActive = true
+                    this.currentStep -= 1
                 }
 
             },
