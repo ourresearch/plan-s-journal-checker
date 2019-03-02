@@ -6,14 +6,18 @@
           Plan S funder mandate.
       </h2>
       <div class="more">
+
+
+        <autocomplete-journal></autocomplete-journal>
+
+        <autocomplete-institution></autocomplete-institution>
+
+
         <div class="buttons">
-          <md-button class="md-raised md-button md-primary" to="search">
-            Get started
+          <md-button class="md-raised md-button md-primary" @click="runSearch">
+            Find journal
           </md-button>
 
-          <md-button class="md-raised md-button" to="faq">
-            View FAQ
-          </md-button>
         </div>
 
         <p>
@@ -33,13 +37,19 @@
 
 <script>
     import axios from 'axios'
+    import AutocompleteJournal from '../components/AutocompleteJournal'
+    import AutocompleteInstitution from '../components/AutocompleteInstitution'
+    import {store} from '../components/store.js'
 
     export default {
         name: 'Home',
         data: () => ({
+            storeState: store.state
         }),
         components: {
-            axios
+            axios,
+            AutocompleteJournal,
+            AutocompleteInstitution
         },
         metaInfo: {
             title: 'Home'
@@ -48,6 +58,9 @@
 
         },
         methods: {
+            runSearch(){
+                console.log("running search!", store.state)
+            }
         },
         mounted() {
         }
