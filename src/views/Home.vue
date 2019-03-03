@@ -14,17 +14,14 @@
             <input-institution></input-institution>
             <input-funder></input-funder>
 
-            <div id="search-button" @click="runSearch">
-
-              <i class="fas fa-search"></i>
-              <span>Find journals</span>
-            </div>
 
 
         </div>
-          <div class="bottom">
+        <div id="search-button" @click="runSearch">
 
-          </div>
+          <i class="fas fa-search"></i>
+          <span>Find journals</span>
+        </div>
 
       </div>
     </div>
@@ -99,7 +96,7 @@
         align-items: center;
         text-align: left;
         .content {
-            width: 1200px;
+            width: 1100px;
             margin-top: 10vh;
             padding: 40px 40px;
             border-radius: 10px;
@@ -113,9 +110,11 @@
             }
 
             .searchbar {
+                display: flex;
 
                 .inputs {
                     display:flex;
+                    flex: 1;
 
 
                     .autosuggest-container {
@@ -123,26 +122,30 @@
                         background: #fff;
                         /*border: none;*/
                         position: relative;
-                        /*border-radius: 10px;*/
+                        padding: 15px 0;
 
                         flex: 1;
                         &.input-journal {
-                            flex: 2;
+                            border-radius: 5px 0 0 5px;
+                        }
+                        &.input-funder {
+                            border-radius: 0 5px 5px 0;
                         }
 
                         &.has-focus {
-                            border-radius: 10px 10px 10px 0;
-                            box-shadow: 0px 0 2px 0 rgba(0, 0, 0, .4);
+                            /*border-radius: 10px 10px 10px 0;*/
+                            /*box-shadow: 0px 0 2px 0 rgba(0, 0, 0, .4);*/
                             /*border-radius: 5px;*/
                             /*border-bottom: none;*/
                             border: 1px solid #999;
+                            flex: 3;
                             h2 {
                                 color: dodgerblue;
                             }
                         }
 
                         h2 {
-                            font-size: 14px;
+                            font-size: 12px;
                             text-transform: uppercase;
                             margin: 10px 15px 5px;
                             i {
@@ -157,7 +160,7 @@
                             width: 80%;
                             border: none;
                             /*border-bottom: 1px solid #ccc;*/
-                            font-size: 24px;
+                            font-size: 20px;
                             /*padding: 0 0 15px 15px;*/
                             /*margin: 15px;*/
                             padding: 0 15px;
