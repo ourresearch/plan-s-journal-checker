@@ -86,9 +86,8 @@
 <style lang="scss">
 
     .home {
-        /*background: url("../assets/books.jpg") no-repeat;*/
-        background: #fff;
-        background-color: #fff;
+        background: url("../assets/sky.jpg") no-repeat;
+        background-color: deepskyblue;
         background-size: cover;
         background-position: 50% 50%;
         height: 100vh;
@@ -107,7 +106,7 @@
                 margin-bottom: 0;
                 padding: 0 0 20px;
                 margin: 0;
-                color: #333;
+                color: #fff;
                 /*background: #fff;*/
                 padding: 20px;
                 /*text-shadow: 5px 5px 25px rgba(0, 0, 0, 1);*/
@@ -127,6 +126,7 @@
                 .inputs {
                     display:flex;
                     flex: 1;
+                    /*flex-direction: column;*/
 
 
                     .autosuggest-container {
@@ -157,7 +157,7 @@
                             /*border: 1px solid #999;*/
                             transition: all 0.5s;
                             h2 {
-                                color: dodgerblue;
+                                color: orangered;
                             }
                         }
 
@@ -196,10 +196,10 @@
                             border-top: none;
                             width: 352px;
                             margin-left: -1px;
-                            margin-top: 24px;
+                            margin-top: 28px;
                             z-index: 999;
                             background: #fff;
-                            border-radius: 0 0 5px 5px;
+                            border-radius: 10px;
                             box-shadow: 0px 6px 6px 0px rgba(0, 0, 0, .1);
 
 
@@ -233,11 +233,11 @@
                 }
 
                 #search-button {
-                    background: dodgerblue;
+                    background: orangered;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    border-radius: 0 10 10px 0;
+                    border-radius: 0 10px 10px 0;
                     height: 90px;
                     color: #fff;
                     font-size: 36px;
