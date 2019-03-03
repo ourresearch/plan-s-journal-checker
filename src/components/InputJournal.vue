@@ -25,6 +25,7 @@
 
 <script>
     import axios from 'axios'
+    import _ from "lodash"
     import {VueAutosuggest} from "vue-autosuggest";
     import {store} from './store.js'
 
@@ -48,7 +49,7 @@
                 inputProps: {
                     id: "journal-input",
                     onInputChange: this.fetchResults,
-                    placeholder: "eg: Nature, information science",
+                    placeholder: "eg: Nature, astronomy",
                     class: "form-control"
                 },
                 suggestions: [],
@@ -100,7 +101,7 @@
             },
             getSuggestionValue(suggestion) {
                 let {name, item} = suggestion;
-                return item.name
+                return _.truncate(item.name, {length: 30})
             }
         },
         watch: {

@@ -41,7 +41,7 @@
                 inputProps: {
                     id: "institution-input",
                     onInputChange: this.fetchResults,
-                    placeholder: "eg: University of Florida",
+                    placeholder: "eg: Cambridge",
                     class: "form-control",
                 },
                 suggestions: [],
@@ -73,7 +73,7 @@
             },
             getSuggestionValue(suggestion) {
                 let {name, item} = suggestion;
-                return item.name
+                return _.truncate(item.name, {length: 30})
             }
         },
         watch: {

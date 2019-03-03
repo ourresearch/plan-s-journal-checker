@@ -42,7 +42,7 @@
                 inputProps: {
                     id: "funder-input",
                     onInputChange: this.fetchResults,
-                    placeholder: "eg: US National Science Foundation",
+                    placeholder: "eg: Wellcome Trust",
                     class: "form-control"
                 },
                 suggestions: [],
@@ -74,7 +74,7 @@
             },
             getSuggestionValue(suggestion) {
                 let {name, item} = suggestion;
-                return item.name
+                return _.truncate(item.name, {length: 30})
             }
         },
         watch: {
