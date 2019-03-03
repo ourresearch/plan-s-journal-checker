@@ -135,8 +135,8 @@
                         border:none;
                         background: #fff;
                         /*border: none;*/
-                        position: relative;
-                        padding-top: 10px;
+                        padding-top: 15px;
+                        padding-bottom: 30px;
                         width: 350px;
 
 
@@ -164,7 +164,7 @@
                         h2 {
                             font-size: 14px;
                             text-transform: uppercase;
-                            margin: 10px 15px 0px;
+                            margin: 10px 15px 10px;
                             i {
                                 display: none;
                             }
@@ -196,7 +196,7 @@
                             border-top: none;
                             width: 352px;
                             margin-left: -1px;
-                            margin-top: 28px;
+                            margin-top: 33px;
                             z-index: 999;
                             background: #fff;
                             border-radius: 10px;
@@ -238,7 +238,7 @@
                     align-items: center;
                     justify-content: center;
                     border-radius: 0 10px 10px 0;
-                    height: 90px;
+                    height: 110px;
                     color: #fff;
                     font-size: 36px;
                     text-transform: uppercase;
