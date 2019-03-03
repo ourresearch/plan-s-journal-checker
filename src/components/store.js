@@ -5,7 +5,8 @@ export const store = {
         journal: {},
         topic: "",
         institutions: [],
-        funders: []
+        funders: [],
+        focus: null
 
     },
     setJournal(journalObj) {
@@ -42,11 +43,15 @@ export const store = {
         return ret
 
     },
+    setFocus(focus){
+        this.state.focus = focus
+    },
     reset(){
         this.state.journal = {}
         this.state.topic = ""
         this.state.institutions = []
         this.state.funders = []
+        this.focus = null
     }
 };
 

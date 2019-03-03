@@ -2,12 +2,12 @@
   <div class="home">
     <div class="content">
 
+      <h2 class="hero">
+          Find a journal that meets your
+          Plan S funder mandate.
+      </h2>
 
       <div class="searchbar">
-        <h2 class="hero">
-            Find a journal that meets your
-            Plan S funder mandate.
-        </h2>
         <div class="inputs">
           <div class="journal input-column">
             <h2>Journal or topic</h2>
@@ -74,10 +74,20 @@
                     query: store.getQueryObj()
                 }
                 this.$router.push(routeObj)
+            },
+            inputFocus(input){
+
             }
         },
         mounted() {
             store.reset()
+            store.setFocus("journal")
+            setTimeout(function(){document.getElementById("journal-input").focus()}, 1000)
+        },
+        watch: {
+            storeState: function(newState, oldState){
+                console.log("change in store state", newState)
+            }
         }
     }
 </script>
@@ -86,32 +96,45 @@
 <style lang="scss">
 
   .home {
+    background: url("../assets/books.jpg") no-repeat;
+    background-color: #fff;
+    background-size: cover;
+    background-position: 50% 50%;
+    height: 100vh;
+    width: 100%;
     display: flex;
-    justify-content: center;
-    min-height: 100vh;
-    background: #ddd;
+    flex-direction: column;
+    align-items: center;
+    text-align: left;
     .content {
-      width: 1200px;
+      width: 781px;
+      margin-top: 10vh;
+        background: #fff;
+        padding: 40px 40px;
+        border-radius: 10px;
+        box-shadow: 0 12px 95px 25px rgba(0, 0, 0, .4);
       h2.hero {
         font-size: 40px;
         line-height: 1.3;
-        margin-bottom: 30px;
+        margin-bottom: 0;
+        background: #fff;
+          padding: 0 0 20px;
+          margin: 0;
       }
 
       .searchbar {
         /*display: flex;*/
-        width: 700px;
-        .sep {
-          width: 100%;
-          border-bottom: 1px solid #ddd;
-        }
+        /*.sep {*/
+          /*width: 100%;*/
+          /*border-bottom: 1px solid #ddd;*/
+        /*}*/
 
         .inputs {
-          border: 1px solid #ddd;
-          border-radius: 5px;
+          /*border-radius: 5px;*/
           background: #fff;
 
           .input-column {
+              border: 1px solid #ddd;
 
             h2 {
               font-size: 14px;
@@ -148,6 +171,7 @@
                 background: #fff;
                 z-index: 999;
                 border-radius: 0 0 10px 10px;
+                box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, .2);
 
                 ul {
                   list-style: none;

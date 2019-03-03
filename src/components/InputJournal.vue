@@ -8,6 +8,8 @@
                 :inputProps="inputProps"
                 :sectionConfigs="sectionConfigs"
                 :getSuggestionValue="getSuggestionValue"
+                @focus="onFocus"
+                @blur="onBlur"
         >
             <template slot-scope="{ suggestion }">
                 <div v-if="suggestion.name == 'journals'">
@@ -36,9 +38,8 @@
                 timeout: null,
                 selected: null,
                 searchText: "",
+                storeState: store.state,
                 debounceMilliseconds: 50,
-                // usersUrl: "https://jsonplaceholder.typicode.com/users",
-                // photosUrl: "https://jsonplaceholder.typicode.com/photos",
                 journalsUrl: "http://api.rickscafe.io/search/journals/title/",
                 topicsUrl: "http://api.rickscafe.io/search/institutions/name/", // for testing
                 inputProps: {
@@ -70,8 +71,14 @@
             };
         },
         methods: {
-            doSearch() {
-                console.log("Searching...");
+            onFocus(){
+              console.log("focus!")
+                this.$emit("inputFocus", "journal")
+            },
+            onBlur(){
+              console.log("blur!")
+                this.$emit("inputBlur", "journal")
+
             },
             fetchResults(val, oldVal) {
                 this.searchText = val;
@@ -97,15 +104,6 @@
                     });
                 }, this.debounceMilliseconds);
             },
-            // filterResults(data, text, field) {
-            //     return data
-            //         .filter(item => {
-            //             if (item[field].toLowerCase().indexOf(text.toLowerCase()) > -1) {
-            //                 return item[field];
-            //             }
-            //         })
-            //         .sort();
-            // },
             getSuggestionValue(suggestion) {
                 let {name, item} = suggestion;
                 return item.name
@@ -114,7 +112,8 @@
         watch: {
             suggestions(newSuggestions, oldSuggestions) {
                 console.log("new suggestions:", newSuggestions);
-            }
+            },
+
         },
         mounted() {
             // this.$refs.autosuggestJournal.searchInput = "PLOS ONE"
