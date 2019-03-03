@@ -9,22 +9,20 @@
 
       <div class="searchbar">
         <div class="inputs">
-        <input-journal :initial-value="storeState.journal"></input-journal>
 
-          <div class="sep"></div>
+            <input-journal :initial-value="storeState.journal"></input-journal>
+            <input-institution></input-institution>
+            <input-funder></input-funder>
 
-        <input-institution></input-institution>
-          <div class="sep"></div>
-
-        <input-funder></input-funder>
-
-        </div>
-          <div class="bottom">
             <div id="search-button" @click="runSearch">
 
               <i class="fas fa-search"></i>
               <span>Find journals</span>
             </div>
+
+
+        </div>
+          <div class="bottom">
 
           </div>
 
@@ -90,6 +88,7 @@
 
     .home {
         background: url("../assets/books.jpg") no-repeat;
+        /*background: #fff;*/
         background-color: #fff;
         background-size: cover;
         background-position: 50% 50%;
@@ -100,17 +99,15 @@
         align-items: center;
         text-align: left;
         .content {
-            width: 700px;
+            width: 1200px;
             margin-top: 10vh;
-            background: #fff;
             padding: 40px 40px;
             border-radius: 10px;
-            box-shadow: 0 12px 95px 25px rgba(0, 0, 0, .4);
+            /*box-shadow: 0 12px 95px 25px rgba(0, 0, 0, .4);*/
             h2.hero {
                 font-size: 40px;
                 line-height: 1.3;
                 margin-bottom: 0;
-                background: #fff;
                 padding: 0 0 20px;
                 margin: 0;
             }
@@ -118,18 +115,23 @@
             .searchbar {
 
                 .inputs {
-                    background: #fff;
+                    display:flex;
 
 
                     .autosuggest-container {
                         border: 1px solid #ddd;
+                        background: #fff;
                         /*border: none;*/
                         position: relative;
-                        padding: 5px 0 0;
-                        margin: 5px 0;
-                        border-radius: 5px;
+                        /*border-radius: 10px;*/
+
+                        flex: 1;
+                        &.input-journal {
+                            flex: 2;
+                        }
 
                         &.has-focus {
+                            border-radius: 10px 10px 10px 0;
                             box-shadow: 0px 0 2px 0 rgba(0, 0, 0, .4);
                             /*border-radius: 5px;*/
                             /*border-bottom: none;*/
@@ -143,13 +145,16 @@
                             font-size: 14px;
                             text-transform: uppercase;
                             margin: 10px 15px 5px;
+                            i {
+                                display: none;
+                            }
                         }
 
                         input {
                             outline: none;
                             /*position: relative;*/
                             /*display: block;*/
-                            width: 580px;
+                            width: 80%;
                             border: none;
                             /*border-bottom: 1px solid #ccc;*/
                             font-size: 24px;
@@ -170,12 +175,11 @@
                             position: absolute;
                             border: 1px solid #999;
                             border-top: 1px solid #ddd;
-                            width: 620px;
+                            width: 500px;
                             background: #fff;
-                            margin-top: -2px;
                             margin-left: -1px;
                             z-index: 999;
-                            /*background: #fcfcfc;*/
+                            background: #fafafa;
                             border-radius: 0 0 5px 5px;
                             box-shadow: 0px 2px 2px 0 rgba(0, 0, 0, .4);
 
@@ -209,28 +213,30 @@
                     }
                 }
 
+                #search-button {
+                    background: dodgerblue;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 10px;
+                    height: 80px;
+                    color: #fff;
+                    margin-left: 10px;
+                    font-size: 36px;
+                    text-transform: uppercase;
+                    font-weight: bold;
+                    cursor: pointer;
+                    width: 100px;
+                    i {
+                        color: #fff;
+                    }
+                    span {
+                        display:none;
+                    }
+                }
                 .bottom {
                     display: flex;
-                    /*justify-content: flex-end;*/
-                    #search-button {
-                        background: dodgerblue;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        border-radius: 5px;
-                        margin-top: 20px;
-                        height: 50px;
-                        color: #fff;
-                        font-size: 16px;
-                        text-transform: uppercase;
-                        font-weight: bold;
-                        cursor: pointer;
-                        width: 200px;
-                        i {
-                            color: #fff;
-                            margin-right: 15px;
-                        }
-                    }
+                    justify-content: flex-end;
 
                 }
 
