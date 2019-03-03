@@ -1,5 +1,7 @@
 <template>
-    <div class="autosuggest-container input-funder">
+    <div class="autosuggest-container input-funder" :class="{'has-focus': hasFocus}">
+
+        <h2><i class="far fa-money-bill-alt"></i> Your funder</h2>
         <vue-autosuggest
                 class="hello"
                 id="auto-2"
@@ -8,6 +10,8 @@
                 :inputProps="inputProps"
                 :getSuggestionValue="getSuggestionValue"
                 @selected="onSelected"
+                @focus="hasFocus=true"
+                @blur="hasFocus=false"
         >
             <template slot-scope="{ suggestion }">
                 <span class="my-suggestion-item">{{suggestion.item.name}}</span>
@@ -32,18 +36,19 @@
                 timeout: null,
                 selected: null,
                 searchText: "",
+                hasFocus: false,
                 debounceMilliseconds: 50,
                 fundersUrl: "http://api.rickscafe.io/search/funders/name/",
                 inputProps: {
                     id: "funder-input",
                     onInputChange: this.fetchResults,
-                    placeholder: "eg: Wellcome Trust",
+                    placeholder: "eg: US National Science Foundation",
                     class: "form-control"
                 },
                 suggestions: [],
                 onSelected: selected => {
                     this.selected = selected.item;
-                    store.addFunder(selected.item)
+                    store.setFunder(selected.item)
                 }
             };
         },

@@ -1,5 +1,6 @@
 <template>
-    <div class="autosuggest-container input-institution">
+    <div class="autosuggest-container input-institution" :class="{'has-focus': hasFocus}">
+        <h2><i class="fas fa-university"></i> Your institution</h2>
         <vue-autosuggest
                 class="hello"
                 id="auto-2"
@@ -8,6 +9,8 @@
                 :inputProps="inputProps"
                 :getSuggestionValue="getSuggestionValue"
                 @selected="onSelected"
+                @focus="hasFocus=true"
+                @blur="hasFocus=false"
         >
             <template slot-scope="{ suggestion }">
                 <span class="my-suggestion-item">{{suggestion.item.name}}</span>
@@ -32,18 +35,19 @@
                 timeout: null,
                 selected: null,
                 searchText: "",
+                hasFocus: false,
                 debounceMilliseconds: 50,
                 institutionsUrl: "http://api.rickscafe.io/search/institutions/name/",
                 inputProps: {
                     id: "institution-input",
                     onInputChange: this.fetchResults,
-                    placeholder: "eg: Cambridge",
+                    placeholder: "eg: University of Florida",
                     class: "form-control",
                 },
                 suggestions: [],
                 onSelected: selected => {
                     this.selected = selected.item;
-                    store.addInstitution(selected.item)
+                    store.setInstitution(selected.item)
                 }
             };
         },

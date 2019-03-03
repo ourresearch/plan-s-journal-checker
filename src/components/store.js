@@ -4,19 +4,21 @@ export const store = {
     state: {
         journal: {},
         topic: "",
-        institutions: [],
-        funders: [],
-        focus: null
+        institution: {},
+        funder: {}
+
+        // institutions: [],
+        // funders: []
 
     },
     setJournal(journalObj) {
         this.state.journal = journalObj
     },
-    addInstitution(institutionObj){
-        this.state.institutions.push(institutionObj)
+    setInstitution(institution) {
+        this.state.institution = institution
     },
-    addFunder(funderObj){
-        this.state.funders.push(funderObj)
+    setFunder(funder) {
+        this.state.setFunder = funder
     },
     getQueryObj(){
         let ret = {}
@@ -28,20 +30,26 @@ export const store = {
             ret.topic = this.state.topic
         }
 
-        if (this.state.institutions.length){
-            ret.institutions = this.state.institutions.map(x => {
-                return x.id
-            }).join(",")
-        }
-
-        if (this.state.funders.length){
-            ret.funders = this.state.funders.map(x => {
-                return x.id
-            }).join(",")
-        }
+        // if (this.state.institutions.length){
+        //     ret.institutions = this.state.institutions.map(x => {
+        //         return x.id
+        //     }).join(",")
+        // }
+        //
+        // if (this.state.funders.length){
+        //     ret.funders = this.state.funders.map(x => {
+        //         return x.id
+        //     }).join(",")
+        // }
 
         return ret
 
+    },
+    addInstitution(institutionObj){
+        this.state.institutions.push(institutionObj)
+    },
+    addFunder(funderObj){
+        this.state.funders.push(funderObj)
     },
     setFocus(focus){
         this.state.focus = focus

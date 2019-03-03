@@ -1,5 +1,6 @@
 <template>
-    <div class="autosuggest-container input-journal">
+    <div class="autosuggest-container input-journal" :class="{'has-focus': hasFocus}">
+        <h2><i class="fas fa-book"></i> Journal or topic</h2>
         <vue-autosuggest
                 class="hello"
                 id="auto-1"
@@ -8,8 +9,8 @@
                 :inputProps="inputProps"
                 :sectionConfigs="sectionConfigs"
                 :getSuggestionValue="getSuggestionValue"
-                @focus="onFocus"
-                @blur="onBlur"
+                @focus="hasFocus=true"
+                @blur="hasFocus=false"
         >
             <template slot-scope="{ suggestion }">
                 <div v-if="suggestion.name == 'journals'">
@@ -32,11 +33,13 @@
         components: {
             VueAutosuggest
         },
+        props:['initialValue'],
         data() {
             return {
                 results: [],
                 timeout: null,
-                selected: null,
+                hasFocus: false,
+                selected: this.initialValue,
                 searchText: "",
                 storeState: store.state,
                 debounceMilliseconds: 50,
@@ -71,15 +74,6 @@
             };
         },
         methods: {
-            onFocus(){
-              console.log("focus!")
-                this.$emit("inputFocus", "journal")
-            },
-            onBlur(){
-              console.log("blur!")
-                this.$emit("inputBlur", "journal")
-
-            },
             fetchResults(val, oldVal) {
                 this.searchText = val;
                 clearTimeout(this.timeout);
@@ -116,7 +110,10 @@
 
         },
         mounted() {
-            // this.$refs.autosuggestJournal.searchInput = "PLOS ONE"
+            console.log("mount up!", store.state)
+            if (store.state.journal){
+                this.$refs.autosuggestJournal.searchInput = store.state.journal.name
+            }
         }
     }
 </script>
