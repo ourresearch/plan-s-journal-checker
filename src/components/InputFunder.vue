@@ -1,5 +1,5 @@
 <template>
-    <div class="autosuggest-container autosuggest-institution">
+    <div class="autosuggest-container input-funder">
         <vue-autosuggest
                 class="hello"
                 id="auto-2"
@@ -7,18 +7,12 @@
                 :suggestions="suggestions"
                 :inputProps="inputProps"
                 :getSuggestionValue="getSuggestionValue"
+                @selected="onSelected"
         >
             <template slot-scope="{ suggestion }">
-                <span class="my-suggestion-item">suggestion: {{suggestion.item}}</span>
+                <span class="my-suggestion-item">{{suggestion.item.name}}</span>
             </template>
         </vue-autosuggest>
-
-        <div v-if="selected" style="margin-top: 10px;">
-            You have selected:
-            <code>
-                <pre>{{selected}}</pre>
-            </code>
-        </div>
     </div>
 </template>
 
@@ -28,7 +22,7 @@
     import {store} from './store.js'
 
     export default {
-        name: 'AutocompleteInstitution',
+        name: 'InputFunder',
         components: {
             VueAutosuggest
         },
@@ -39,54 +33,48 @@
                 selected: null,
                 searchText: "",
                 debounceMilliseconds: 50,
-                institutionsUrl: "http://api.rickscafe.io/search/institutions/name/",
+                fundersUrl: "http://api.rickscafe.io/search/funders/name/",
                 inputProps: {
-                    id: "autosuggest__input",
+                    id: "funder-input",
                     onInputChange: this.fetchResults,
-                    placeholder: "Enter your institution",
+                    placeholder: "eg: Wellcome Trust",
                     class: "form-control"
                 },
                 suggestions: [],
                 onSelected: selected => {
                     this.selected = selected.item;
-                    store.setInstitution(selected.item)
+                    store.addFunder(selected.item)
                 }
             };
         },
         methods: {
-            doSearch() {
-                console.log("Searching...");
-            },
             fetchResults(val, oldVal) {
                 this.searchText = val;
                 clearTimeout(this.timeout);
                 this.timeout = setTimeout(() => {
 
-                    axios.get(this.institutionsUrl + val)
+                    axios.get(this.fundersUrl + val)
                         .then(response => {
                             this.suggestions = [];
                             this.selected = null;
 
-                            const institutions = response.data.list
+                            const funders = response.data.list.slice(0, 5)
 
-                            institutions.length &&
-                                this.suggestions.push({data: institutions});
+                            funders.length &&
+                                this.suggestions.push({data: funders});
 
                         });
 
                 }, this.debounceMilliseconds);
             },
             getSuggestionValue(suggestion) {
-                console.log("getting suggestion falue", suggestion)
-                return suggestion.name
-
                 let {name, item} = suggestion;
                 return item.name
             }
         },
         watch: {
             suggestions(newSuggestions, oldSuggestions) {
-                console.log("new suggestions:", newSuggestions);
+                // console.log("new suggestions:", newSuggestions);
             }
         }
     }
@@ -96,7 +84,7 @@
 
 <style lang="scss">
 
-    .autosuggest-institution {
+    .autosuggest-funder {
         // this is copy-pasted from the vue-autocomplete example page here
         // https://codesandbox.io/s/2olxlv9q9r
 

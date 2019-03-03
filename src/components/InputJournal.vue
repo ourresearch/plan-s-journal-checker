@@ -1,9 +1,9 @@
 <template>
-    <div class="autosuggest-container autosuggest-journal">
+    <div class="autosuggest-container input-journal">
         <vue-autosuggest
                 class="hello"
                 id="auto-1"
-                ref="autosuggest"
+                ref="autosuggestJournal"
                 :suggestions="suggestions"
                 :inputProps="inputProps"
                 :sectionConfigs="sectionConfigs"
@@ -26,7 +26,7 @@
     import {store} from './store.js'
 
     export default {
-        name: 'AutocompleteJournal',
+        name: 'InputJournal',
         components: {
             VueAutosuggest
         },
@@ -42,15 +42,15 @@
                 journalsUrl: "http://api.rickscafe.io/search/journals/title/",
                 topicsUrl: "http://api.rickscafe.io/search/institutions/name/", // for testing
                 inputProps: {
-                    id: "autosuggest__input",
+                    id: "journal-input",
                     onInputChange: this.fetchResults,
-                    placeholder: "Enter a journal or topic",
+                    placeholder: "eg: Nature, information science",
                     class: "form-control"
                 },
                 suggestions: [],
                 sectionConfigs: {
                     topics: {
-                        limit: 4,
+                        limit: 3,
                         label: "Topic",
                         onSelected: selected => {
                             this.selected = selected.item;
@@ -58,9 +58,10 @@
                         }
                     },
                     journals: {
-                        limit: 4,
+                        limit: 3,
                         label: "Journal",
                         onSelected: selected => {
+                            console.log("selected!", selected)
                             this.selected = selected.item;
                             store.setJournal(selected.item)
                         }
@@ -87,11 +88,12 @@
                         const topics = values[1].data.list
                         // const topics = this.filterResults(values[1].data, val, "name");
 
+                        journals.length &&
+                            this.suggestions.push({name: "journals", data: journals});
+
                         topics.length &&
                             this.suggestions.push({name: "topics", data: topics});
 
-                        journals.length &&
-                            this.suggestions.push({name: "journals", data: journals});
                     });
                 }, this.debounceMilliseconds);
             },
@@ -113,6 +115,9 @@
             suggestions(newSuggestions, oldSuggestions) {
                 console.log("new suggestions:", newSuggestions);
             }
+        },
+        mounted() {
+            // this.$refs.autosuggestJournal.searchInput = "PLOS ONE"
         }
     }
 </script>
@@ -143,7 +148,6 @@
             box-sizing: border-box;
             -webkit-box-sizing: border-box;
             -moz-box-sizing: border-box;
-            width: 400px;
         }
 
         #autosuggest__input.autosuggest__input-open {
@@ -168,7 +172,7 @@
             padding: 0px;
             /*max-height: 400px;*/
             overflow-y: scroll;
-            max-width: 800px; // i think this has to be hardcoded because "position:absolute" on the div
+            /*max-width: 800px; // i think this has to be hardcoded because "position:absolute" on the div*/
         }
 
         .autosuggest__results ul {

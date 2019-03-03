@@ -1,20 +1,21 @@
 <template>
-    <div class="header-container">
-        <div class="header-top-row">
+    <div class="header-container" :class="specialPageMode">
+        <div class="header-top-row" :class="specialPageMode">
             <div class="left">
                 <h1>
                     <router-link to="/">
-                    Publia
+                    PublishOpen
                     </router-link>
                 </h1>
-                <autocomplete-journal></autocomplete-journal>
+                <autocomplete-journal v-if="specialPageMode=='search'"></autocomplete-journal>
             </div>
             <div class="spacer"></div>
             <div class="nav">
                 <router-link to="./faq">FAQ</router-link>
             </div>
         </div>
-        <div class="header-second-row">
+
+        <div class="header-second-row" v-if="specialPageMode=='search'">
             <div class="filter-container">
                 <div class="filter-closed" @click="editInstitution">
                     <div class="filter-unset">
@@ -36,16 +37,17 @@
 </template>
 
 <script>
-    import AutocompleteJournal from './AutocompleteJournal.vue'
+    import AutocompleteJournal from './InputJournal.vue'
     import {store} from './store.js'
 
     export default {
-        name: 'MainHeader',
+        name: 'SearchHeader',
         components: {
             AutocompleteJournal
         },
         data: () => ({
-            storeState: store.state
+            storeState: store.state,
+            specialPageMode: "landing"
         }),
         computed: {
         },
@@ -57,6 +59,22 @@
                 console.log("edit funder")
 
             }
+        },
+        watch: {
+            "$route": function(to, from){
+                if (to.path == "/"){
+                    this.specialPageMode = "landing"
+                }
+                else if (to.path == "/search") {
+                    this.specialPageMode = "search"
+                }
+                else {
+                    this.specialPageMode = null
+                }
+
+            }
+
+
         }
     }
 </script>
@@ -69,11 +87,21 @@
         left:0;
         right:0;
         background: #fff;
+        &.landing {
+            background: none;
+            height: 50px;
+            position: static;
+            margin-bottom: -50px;
+        }
         .header-top-row {
             display: flex;
             padding: 15px;
             align-items: center;
             border-bottom: 1px solid #ddd;
+            &.landing {
+                border-bottom: none;
+            }
+
             .left {
                 align-items: center;
                 display:flex;
