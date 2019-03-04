@@ -10,11 +10,11 @@
       <div class="searchbar">
         <div class="inputs">
 
-            <input-journal :initial-value="storeState.journal"></input-journal>
+            <input-journal @blur="blur" @focus="focus" :initial-value="storeState.journal"></input-journal>
             <div class="sep"></div>
-            <input-institution></input-institution>
+            <input-institution :initial-value="storeState.institution"></input-institution>
             <div class="sep"></div>
-            <input-funder></input-funder>
+            <input-funder :initial-value="storeState.funder"></input-funder>
 
 
 
@@ -58,6 +58,12 @@
 
         },
         methods: {
+            blur(){
+              console.log("blur")
+            },
+            focus(){
+              console.log("focus")
+            },
             runSearch(){
                 let routeObj = {
                     path: "search",

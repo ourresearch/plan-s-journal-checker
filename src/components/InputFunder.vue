@@ -30,11 +30,12 @@
         components: {
             VueAutosuggest
         },
+        props:['initialValue'],
         data() {
             return {
                 results: [],
                 timeout: null,
-                selected: null,
+                selected: this.initialValue,
                 searchText: "",
                 hasFocus: false,
                 debounceMilliseconds: 50,

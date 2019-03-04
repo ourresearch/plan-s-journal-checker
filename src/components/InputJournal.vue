@@ -1,6 +1,6 @@
 <template>
     <div class="autosuggest-container input-journal" :class="{'has-focus': hasFocus}">
-        <h2><i class="fas fa-book"></i> Journal or topic</h2>
+        <h2><i class="fas fa-book"></i> <span>Journal or topic</span></h2>
         <vue-autosuggest
                 class="hello"
                 id="auto-1"
@@ -9,7 +9,7 @@
                 :inputProps="inputProps"
                 :sectionConfigs="sectionConfigs"
                 :getSuggestionValue="getSuggestionValue"
-                @focus="hasFocus=true"
+                @focus="$emit('inputFocus')"
                 @blur="hasFocus=false"
         >
             <template slot-scope="{ suggestion }">
@@ -102,18 +102,21 @@
             getSuggestionValue(suggestion) {
                 let {name, item} = suggestion;
                 return _.truncate(item.name, {length: 30})
+            },
+            setFocus(){
+                this.$emit("inputFocus")
+                this.hasFocus = true
             }
         },
         watch: {
             suggestions(newSuggestions, oldSuggestions) {
-                console.log("new suggestions:", newSuggestions);
+                // console.log("new suggestions:", newSuggestions);
             },
 
         },
         mounted() {
-            console.log("mount up!", store.state)
             if (store.state.journal){
-                this.$refs.autosuggestJournal.searchInput = store.state.journal.name
+                this.$refs.autosuggestJournal.searchInput = this.selected.name
             }
         }
     }

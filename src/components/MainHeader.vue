@@ -7,28 +7,11 @@
                     PublishOpen
                     </router-link>
                 </h1>
-                <autocomplete-journal v-if="specialPageMode=='search'"></autocomplete-journal>
+
             </div>
             <div class="spacer"></div>
             <div class="nav">
                 <router-link to="./faq">FAQ</router-link>
-            </div>
-        </div>
-
-        <div class="header-second-row" v-if="specialPageMode=='search'">
-            <div class="filter-container">
-                <div class="filter-closed" @click="editInstitution">
-                    <div class="filter-unset">
-                        Institution
-                    </div>
-                </div>
-            </div>
-            <div class="filter-container">
-                <div class="filter-closed" @click="editFunder">
-                    <div class="filter-unset">
-                        Funder
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -37,13 +20,13 @@
 </template>
 
 <script>
-    import AutocompleteJournal from './InputJournal.vue'
+    import InputJournal from './InputJournal.vue'
     import {store} from './store.js'
 
     export default {
         name: 'SearchHeader',
         components: {
-            AutocompleteJournal
+            InputJournal
         },
         data: () => ({
             storeState: store.state,
@@ -52,40 +35,38 @@
         computed: {
         },
         methods: {
-            editInstitution(){
-                console.log("edit institution")
-            },
-            editFunder(){
-                console.log("edit funder")
+            setSpecialPageMode(){
+                let path = window.location.pathname
 
-            }
-        },
-        watch: {
-            "$route": function(to, from){
-                if (to.path == "/"){
+                if (path == "/"){
                     this.specialPageMode = "landing"
                 }
-                else if (to.path == "/search") {
+                else if (path == "/search") {
                     this.specialPageMode = "search"
                 }
                 else {
                     this.specialPageMode = null
                 }
-
             }
-
-
+        },
+        watch: {
+            "$route": function(to, from){
+                this.setSpecialPageMode()
+            }
+        },
+        mounted(){
+            this.setSpecialPageMode()
         }
     }
 </script>
 
-<style scoped lang="scss">
+<style  lang="scss">
 
     .header-container {
         position: fixed;
-        top:0;
-        left:0;
-        right:0;
+        top: 0;
+        left: 0;
+        right: 0;
         background: #fff;
         &.landing {
             background: none;
@@ -104,15 +85,14 @@
 
             .left {
                 align-items: center;
-                display:flex;
+                display: flex;
+                flex: 1;
                 h1 {
                     margin: 0 10px 0 0;
                     font-weight: 300;
                 }
 
-            }
-            .spacer {
-                flex:1
+
             }
             .nav {
                 margin-right: 10px;
@@ -126,36 +106,8 @@
 
         }
 
-        .header-second-row {
-            display: flex;
-            padding: 10px 15px;
-            border-bottom: 1px solid #ddd;
-            .filter-container {
-                position: relative;
-                .filter-closed {
-                    margin-right: 10px;
-                    .filter-unset {
-                        cursor: pointer;
-                        border-radius: 3px;
-                        padding: 5px 10px;
-                        border: 1px solid #ddd;
-                    }
-                    .filter-set {
-                        cursor: pointer;
-                        padding: 5px 10px;
-                        background: dodgerblue;
-                        color: #fff;
-                    }
-                }
-
-
-            }
-
-        }
 
     }
-
-
 
 
 </style>
