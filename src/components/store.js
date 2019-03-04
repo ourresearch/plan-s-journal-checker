@@ -54,10 +54,10 @@ export const store = {
       }
 
       if (this.state.institution) {
-          str += ("?institution=" + this.state.institution.id)
+          str += ("&institution=" + this.state.institution.id)
       }
       if (this.state.funder) {
-          str += ("?funder=" + this.state.funder.id)
+          str += ("&funder=" + this.state.funder.id)
       }
 
       return str
