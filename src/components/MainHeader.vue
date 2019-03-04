@@ -21,7 +21,6 @@
 
 <script>
     import InputJournal from './InputJournal.vue'
-    import {store} from './store.js'
 
     export default {
         name: 'SearchHeader',
@@ -29,7 +28,6 @@
             InputJournal
         },
         data: () => ({
-            storeState: store.state,
             specialPageMode: "landing"
         }),
         computed: {
@@ -90,6 +88,9 @@
                 h1 {
                     margin: 0 10px 0 0;
                     font-weight: 300;
+                    a {
+                        color: #fff;
+                    }
                 }
 
 
@@ -101,6 +102,7 @@
                     font-size: 18px;
                     padding: 5px;
                     display: block;
+                    color: #fff;
                 }
             }
 

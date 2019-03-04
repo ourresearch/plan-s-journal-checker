@@ -2,10 +2,10 @@
 
 export const store = {
     state: {
-        journal: {},
+        journal: null,
         topic: "",
-        institution: {},
-        funder: {}
+        institution: null,
+        funder: null
 
         // institutions: [],
         // funders: []
@@ -30,6 +30,7 @@ export const store = {
             ret.topic = this.state.topic
         }
 
+
         // if (this.state.institutions.length){
         //     ret.institutions = this.state.institutions.map(x => {
         //         return x.id
@@ -45,6 +46,26 @@ export const store = {
         return ret
 
     },
+    getQueryString(){
+      let str = "";
+
+      if (this.state.journal) {
+          str += ("?journal=" + this.state.journal.name)
+      }
+
+      if (this.state.institution) {
+          str += ("?institution=" + this.state.institution.id)
+      }
+      if (this.state.funder) {
+          str += ("?funder=" + this.state.funder.id)
+      }
+
+      return str
+
+
+    },
+
+
     addInstitution(institutionObj){
         this.state.institutions.push(institutionObj)
     },
