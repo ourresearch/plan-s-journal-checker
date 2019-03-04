@@ -1,10 +1,10 @@
 <template>
   <div class="home">
-      <div class="top-screen" :class="{'results-mode': resultsMode}">
+      <div class="top-screen" :class="'page-mode-' + pageMode">
 
-            <div class="content" :class="{'results-mode': resultsMode}">
+            <div class="content" :class="'page-mode-' + pageMode">
 
-              <h2 class="hero" v-if="!resultsMode">
+              <h2 class="hero" v-if="pageMode=='ready'">
                   Find journals that meet your
                   open-access funder mandate:
               </h2>
@@ -39,15 +39,15 @@
 
       </div>
 
-      <div class="bottom-screen" :class="{'results-mode': resultsMode}">
+      <div class="bottom-screen" :class="'page-mode-' + pageMode">
 
-          <div class="results-list">
+          <div class="results-list" v-if="pageMode=='results-list'">
               <div class="journal-row"
                    v-for="journal in results">
 
                   <div class="icon">
-                      <i class="fas fa-times" v-show="!journal.plan_s_policy.compliant"></i>
-                      <i class="fas fa-check" v-show="journal.plan_s_policy.compliant"></i>
+                      <i class="fas fa-times" v-show="!journal.policy.compliant"></i>
+                      <i class="fas fa-check" v-show="journal.policy.compliant"></i>
                   </div>
                   <div class="words">
                       <div class="row-1">
@@ -59,7 +59,7 @@
                           {{ journal.metrics.num_articles_since_2018}} articles since 2018
                       </div>
                       <div class="row-3">
-                          <div v-show="journal.plan_s_policy.compliant">
+                          <div v-show="journal.policy.compliant">
                               Plan S compliant
                           </div>
                       </div>
@@ -91,7 +91,7 @@
         name: 'Home',
         data: () => ({
             storeState: store.state,
-            resultsMode: false,
+            pageMode: "ready",
             resultsLoading: false,
             searchEndpoint: "https://rickscafe-api.herokuapp.com/serp",
             results: []
@@ -116,7 +116,7 @@
               console.log("focus")
             },
             runSearch(){
-                this.resultsMode = true
+                this.pageMode = "results-list"
                 this.resultsLoading = true
 
                 let routeObj = {
@@ -129,6 +129,7 @@
 
                 axios.get(this.searchEndpoint + store.getQueryString())
                         .then(response => {
+                            console.log("got journals response", response.data)
                             this.results.length = 0;
                             this.results = response.data.list
                         });
@@ -173,7 +174,7 @@
             flex-direction: column;
             align-items: center;
 
-            &.results-mode {
+            &.page-mode-results-list, .page-mode-single-article {
                 height: 150px;
             }
 
@@ -183,7 +184,7 @@
                 margin-top: 20vh;
                 border-radius: 10px;
 
-                &.results-mode {
+                &.page-mode-results-list, .page-mode-single-article {
                     margin-top: 60px;
                 }
 
@@ -350,7 +351,7 @@
             background: #fff;
             min-height: 0;
             padding-top: 100px;
-            &.results-mode {
+            &.page-mode-results-list, .page-mode-single-article {
                 min-height: 100vh;
             }
 

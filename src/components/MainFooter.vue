@@ -19,7 +19,7 @@
 
                         </li>
                         <li>
-                            <a href="https://github.com/Impactstory/osdash-webapp">
+                            <a href="https://github.com/Impactstory/plan-s-journal-checker">
                                 Source code
                             </a>
 
@@ -39,12 +39,7 @@
                     Built with <i class="far fa-heart"></i> by <a href="https://impactstory.org">Impactstory</a>, <br> using open data from
                     <a href="https://unpaywall.org">Unpaywall.</a>
                 </div>
-                <hr>
 
-                <div>
-                    Made possible by support from the National Institute of Mental Health
-
-                </div>
             </div>
         </div>
 
