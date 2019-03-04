@@ -18,7 +18,7 @@ export const store = {
         this.state.institution = institution
     },
     setFunder(funder) {
-        this.state.setFunder = funder
+        this.state.funder = funder
     },
     getQueryObj(){
         let ret = {}
@@ -28,6 +28,13 @@ export const store = {
         }
         else if (this.state.topic) {
             ret.topic = this.state.topic
+        }
+
+        if (this.state.institution) {
+            ret.institution = this.state.institution.id
+        }
+        if (this.state.funder) {
+            ret.funder = this.state.funder.id
         }
 
 

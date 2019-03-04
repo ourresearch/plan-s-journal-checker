@@ -29,6 +29,14 @@
 
               </div>
             </div>
+
+            <div class="data" style="display:none;color:#fff; width:500px; background:#000;padding:20px;">
+                <pre>
+                    {{storeState}}
+                </pre>
+
+            </div>
+
       </div>
 
       <div class="bottom-screen" :class="{'results-mode': resultsMode}">
@@ -38,7 +46,8 @@
                    v-for="journal in results">
 
                   <div class="icon">
-                      <!--<i class="fas fa-times"></i>-->
+                      <i class="fas fa-times" v-show="!journal.plan_s_policy.compliant"></i>
+                      <i class="fas fa-check" v-show="journal.plan_s_policy.compliant"></i>
                   </div>
                   <div class="words">
                       <div class="row-1">
@@ -209,8 +218,8 @@
                             border:none;
                             background: #fff;
                             /*border: none;*/
-                            padding-top: 15px;
-                            padding-bottom: 30px;
+                            padding-top: 5px;
+                            padding-bottom: 20px;
                             width: 350px;
                             flex: 1;
                             &.input-journal {
@@ -234,9 +243,9 @@
                             }
 
                             h2 {
-                                font-size: 14px;
+                                font-size: 12px;
                                 text-transform: uppercase;
-                                margin: 10px 15px 10px;
+                                margin: 10px 15px 5px;
                                 i {
                                     display: none;
                                 }
@@ -249,7 +258,7 @@
                                 width: 100%;
                                 border: none;
                                 /*border-bottom: 1px solid #ccc;*/
-                                font-size: 22px;
+                                font-size: 18px;
                                 /*padding: 0 0 15px 15px;*/
                                 /*margin: 15px;*/
                                 padding: 0 15px;
@@ -268,7 +277,7 @@
                                 border-top: none;
                                 width: 352px;
                                 margin-left: -1px;
-                                margin-top: 33px;
+                                margin-top: 23px;
                                 z-index: 999;
                                 background: #fff;
                                 border-radius: 10px;
@@ -310,7 +319,7 @@
                         align-items: center;
                         justify-content: center;
                         border-radius: 0 10px 10px 0;
-                        height: 110px;
+                        height: 82px;
                         color: #fff;
                         font-size: 36px;
                         text-transform: uppercase;
@@ -350,7 +359,11 @@
                 margin: 0 auto;
 
                 .journal-row {
+                    display: flex;
                     margin-bottom: 20px;
+                    .icon {
+
+                    }
                     .name {
                         font-size: 20px;
                     }
