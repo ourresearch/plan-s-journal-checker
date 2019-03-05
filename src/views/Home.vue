@@ -41,15 +41,18 @@
 
       <div class="bottom-screen-wrapper" :class="{'landing-mode': showLandingMode}">
           <div class="bottom-screen">
-              <div class="results-list" v-if="!res.journal.show">
 
-                  <div class="results-list-loading loading"v-show="res.journalList.isLoading">
+
+
+              <div class="results-list-wrapper" v-if="!res.journal.show">
+
+                  <div class="results-list loading"v-show="res.journalList.isLoading">
                       <div class="loading">
                           Loading...
                       </div>
                   </div>
 
-                  <div class="results-list-loaded" v-if="!res.journalList.isLoading">
+                  <div class="results-list loaded" v-if="!res.journalList.isLoading">
                       <div class="journal-row"
                            v-for="journal in res.journalList.data">
 
@@ -59,7 +62,7 @@
                           </div>
                           <div class="words">
                               <div class="row-1">
-                                  <span class="name" @click="zoomOnJournal(journal.id)">
+                                  <span class="name" @click="getJournal(journal.issnl)">
                                     {{journal.name}}
                                   </span>
                               </div>
@@ -77,17 +80,17 @@
               </div>
 
 
-              <div class="single-result" v-if="res.journal.show">
+              <div class="single-result-wrapper" v-if="res.journal.show">
 
-                  <div class="single-result-loading loading" v-if="res.journal.isLoading">
+                  <div class="single-result loading" v-if="res.journal.isLoading">
                     <div class="loading">
-                          Loading...
+                          Loading journal...
                     </div>
                   </div>
 
-                  <div class="single-result-loaded" v-if="!res.journal.isLoading">
+                  <div class="single-result loaded" v-if="!res.journal.isLoading">
                       <div class="is-zoom">
-                          <md-button class="md-raised" @click="pageMode='results-list'">
+                          <md-button class="md-raised" @click="res.journal.show=false">
                             < back to results
                           </md-button>
                       </div>
@@ -181,7 +184,6 @@
                 this.form[fieldName] = val
             },
             updateJournal(input) {
-                console.log("journal selected", input)
                 this.form.journalSearch = input
             },
 
@@ -192,17 +194,40 @@
                 this.res.journal.isLoading = true
                 this.res.journal.show = true
 
-                let query = this.$route.query
-                query.zoom = id
-                this.$router.push({
-                    path: "/",
-                    query: query
-                })
+                // let query = this.$route.query
+                // query.zoom = id
+                // this.$router.push({
+                //     path: "/",
+                //     query: query
+                // })
+
+                let url = this.baseEndpoint
+                    + this.endpoints.journal
+                    + id
+                    + this.getJournalQueryModifiersStr()
+
+
+                console.log("getting this url", url)
+
+                axios.get(url)
+                    .then(response => {
+                        console.log("got response from journal endpoint", response.data)
+                        this.res.journal.data = response.data
+                        this.res.journal.isLoading = false
+                    })
 
             },
             getJournalList(q, queryType){
                 this.res.journalList.isLoading = true
                 this.res.journal.show = false
+                // this.$router.push({
+                //     path: "/",
+                //     query: {
+                //         q: q,
+                //         queryType: queryType
+                //     }
+                // })
+
                 let url = this.baseEndpoint
                     + this.endpoints[queryType]
                     + q
@@ -246,13 +271,20 @@
             },
 
             submitForm(){
-                this.showLandingMode = false;
-                this.$router.push({
-                    path: "/",
-                    query: this.getJournalQueryModifiers()
-                })
 
-                console.log("type", this.form)
+                console.log(
+                    "submitting form",
+                    this.form.journalSearch.q,
+                    this.form.journalSearch.type,
+                    this.form
+                )
+
+                this.showLandingMode = false;
+                // this.$router.push({
+                //     path: "/",
+                //     query: this.getJournalQueryModifiers()
+                // })
+
                 if (["topic", "text"].indexOf(this.form.journalSearch.type) > -1){
                     this.getJournalList(
                         this.form.journalSearch.q,
@@ -262,34 +294,6 @@
                 else {
                     this.getJournal(this.form.journalSearch.q)
                 }
-
-
-                // store.search()
-                //     .then(response => {
-                //         console.log("got search response", response)
-                //         this.singleResult = response.data
-                //         this.resultsLoading = false
-                //     });
-                //
-                // if (store.getSearchType() == "journal") {
-                //     this.pageMode = "single-result"
-                //     this.showSingleResult = true
-                // }
-                // else {
-                //     this.pageMode = "results-list"
-                //     store.search()
-                //         .then(response => {
-                //             console.log("got journals response", response)
-                //             this.results = response.data.list
-                //             this.resultsLoading = false
-                //         });
-                // }
-                //
-                // let routeObj = {
-                //     path: "/",
-                //     query: store.getQueryObj()
-                // }
-                // this.$router.push(routeObj)
             }
         },
         mounted() {
@@ -449,11 +453,40 @@
                                         cursor: pointer;
                                         padding: 10px 20px;
                                         font-size: 16px;
+                                        div {
+                                            display: flex;
+                                            i {
+                                                margin-right: 5px;
+                                                margin-top: 1px;
+                                            }
+
+                                        }
+
+                                    }
+                                    .autosuggest__results_title
+                                    {
+                                        padding: 20px 20px 0;
+                                        border-bottom: 1px solid #eee;
+                                        color: orangered;
                                     }
 
-                                    .autosuggest__results_title {
-                                        display: none;
-                                    }
+                                    /*.autosuggest__results_title_topics:before,*/
+                                    /*.autosuggest__results_title_journals:before*/
+                                    /*{*/
+                                        /*font-family: "Font Awesome 5 Free";*/
+                                        /*display: inline-block;*/
+                                        /*padding-right: 6px;*/
+                                        /*vertical-align: middle;*/
+                                        /*opacity: .9;*/
+                                    /*}*/
+
+                                    /*.autosuggest__results_title_topics:before {*/
+                                        /*content: "\f02b";*/
+                                    /*}*/
+
+                                    /*.autosuggest__results_title_journals:before {*/
+                                        /*content: "\f02d";*/
+                                    /*}*/
 
                                     .autosuggest__results_item:active,
                                     .autosuggest__results_item:hover,

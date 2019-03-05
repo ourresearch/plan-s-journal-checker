@@ -13,12 +13,13 @@
                 @blur="blurHandler"
         >
             <template slot-scope="{ suggestion }">
+
                 <div v-if="suggestion.name == 'journals'">
-                    <!--<i class="fas fa-graduation-cap"></i>-->
+                    <i class="fas fa-book"></i>
                     {{ suggestion.item.name }}
                 </div>
                 <div v-else>
-                    <!--<i class="fas fa-book"></i>-->
+                    <i class="fas fa-tag"></i>
                     {{ suggestion.item.topic }}
                 </div>
             </template>
@@ -111,9 +112,6 @@
             },
             getSuggestionValue(suggestion) {
                 let {name, item} = suggestion;
-
-                console.log("input has a suggestion", item)
-
                 if (item.name){ // it's a journal
                     return _.truncate(item.name, {length: 30})
                 } else { // it's a topic
@@ -121,14 +119,12 @@
                 }
             },
             blurHandler(){
-                console.log("blur")
                 let that = this
                 setTimeout(function(){
-                    console.log("code inside timeout")
                     that.suggestions = [];
                     if (!that.selected && that.searchText){
                         that.$emit("selected", {
-                            q: this.searchText,
+                            q: that.searchText,
                             type: "text"
                         })
                     }
