@@ -68,7 +68,7 @@
                         onSelected: selected => {
                             console.log("selected!", selected)
                             this.selected = selected.item;
-                            store.setJournal(selected.item)
+                            store.setJournalSearch(selected.item)
                         }
                     }
                 }
@@ -115,8 +115,8 @@
 
         },
         mounted() {
-            if (store.state.journal){
-                this.$refs.autosuggestJournal.searchInput = this.selected.name
+            if (store.input.journal){
+                this.$refs.autosuggestJournal.searchInput = store.state.journal.name
             }
         }
     }

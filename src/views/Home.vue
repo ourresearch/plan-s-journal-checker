@@ -12,11 +12,11 @@
               <div class="searchbar">
                 <div class="inputs">
 
-                    <input-journal @blur="blur" @focus="focus" :initial-value="storeState.journal"></input-journal>
+                    <input-journal></input-journal>
                     <div class="sep"></div>
-                    <input-institution :initial-value="storeState.institution"></input-institution>
+                    <input-institution></input-institution>
                     <div class="sep"></div>
-                    <input-funder :initial-value="storeState.funder"></input-funder>
+                    <input-funder></input-funder>
 
 
 
@@ -32,42 +32,60 @@
 
             <div class="data" style="display:none;color:#fff; width:500px; background:#000;padding:20px;">
                 <pre>
-                    {{storeState}}
+                    {{userInput}}
                 </pre>
 
             </div>
 
       </div>
 
-      <div class="bottom-screen" :class="'page-mode-' + pageMode">
+      <div class="bottom-screen-wrapper" :class="'page-mode-' + pageMode">
 
-          <div class="results-list" v-if="pageMode=='results-list'">
-              <div class="journal-row"
-                   v-for="journal in results">
+          <div class="bottom-screen loading "v-show="resultsLoading">
+              <div class="loading">
+                  Loading...
+              </div>
+          </div>
 
-                  <div class="icon">
-                      <i class="fas fa-times" v-show="!journal.policy.compliant"></i>
-                      <i class="fas fa-check" v-show="journal.policy.compliant"></i>
-                  </div>
-                  <div class="words">
-                      <div class="row-1">
-                          <span class="name">
-                            {{journal.name}}
-                          </span>
+          <div class="bottom-screen loaded" v-show="!resultsLoading">
+              <div class="results-list" v-if="pageMode=='results-list'">
+                  <div class="journal-row"
+                       v-for="journal in results">
+
+                      <div class="icon">
+                          <i class="fas fa-times" v-show="!journal.policy.compliant"></i>
+                          <i class="fas fa-check" v-show="journal.policy.compliant"></i>
                       </div>
-                      <div class="row-1">
-                          {{ journal.metrics.num_articles_since_2018}} articles since 2018
-                      </div>
-                      <div class="row-3">
-                          <div v-show="journal.policy.compliant">
-                              Plan S compliant
+                      <div class="words">
+                          <div class="row-1">
+                              <span class="name">
+                                {{journal.name}}
+                              </span>
                           </div>
-                      </div>
+                          <div class="row-1">
+                              {{ journal.metrics.num_articles_since_2018}} articles since 2018
+                          </div>
+                          <div class="row-3">
+                              <div v-show="journal.policy.compliant">
+                                  Plan S compliant
+                              </div>
+                          </div>
 
+                      </div>
                   </div>
+
               </div>
 
+
+              <div class="single-result" v-if="pageMode=='single-result'">
+                  <h1>single result</h1>
+                  <pre>{{singleResult}}</pre>
+              </div>
+
+
+
           </div>
+
 
 
       </div>
@@ -90,11 +108,12 @@
     export default {
         name: 'Home',
         data: () => ({
-            storeState: store.state,
+            userInput: store.input,
             pageMode: "ready",
             resultsLoading: false,
-            searchEndpoint: "https://rickscafe-api.herokuapp.com/serp",
-            results: []
+            journalEndpoint: "https://rickscafe-api.herokuapp.com/journal/",
+            results: [],
+            singleResult: {}
         }),
         components: {
             axios,
@@ -116,23 +135,25 @@
               console.log("focus")
             },
             runSearch(){
-                this.pageMode = "results-list"
+                if (store.getSearchType() == "journal") {
+                    this.pageMode = "single-result"
+                    store.search()
+                        .then(response => {
+                            console.log("got journals response", response)
+                            this.singleResult = response.data
+                            this.resultsLoading = false
+                        });
+                }
+                else {
+                    this.pageMode = "results-list"
+                }
                 this.resultsLoading = true
 
                 let routeObj = {
                     path: "/",
                     query: store.getQueryObj()
                 }
-                console.log("route obj", routeObj)
                 this.$router.push(routeObj)
-
-
-                axios.get(this.searchEndpoint + store.getQueryString())
-                        .then(response => {
-                            console.log("got journals response", response.data)
-                            this.results.length = 0;
-                            this.results = response.data.list
-                        });
 
 
             },
@@ -146,9 +167,6 @@
             setTimeout(function(){document.getElementById("journal-input").focus()}, 1000)
         },
         watch: {
-            storeState: function(newState, oldState){
-                console.log("change in store state", newState)
-            },
             "$route": function(to, from){
                 // console.log("route change")
             }
@@ -168,14 +186,15 @@
             background-color: dodgerblue;
             background-size: cover;
             background-position: 50% 50%;
-            height: 100vh;
             width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
+            height: 150px;
 
-            &.page-mode-results-list, .page-mode-single-article {
-                height: 150px;
+
+            &.page-mode-ready {
+                height: 100vh;
             }
 
 
@@ -184,7 +203,7 @@
                 margin-top: 20vh;
                 border-radius: 10px;
 
-                &.page-mode-results-list, .page-mode-single-article {
+                &.page-mode-results-list, .page-mode-single-result {
                     margin-top: 60px;
                 }
 
@@ -347,30 +366,39 @@
 
 
 
-        .bottom-screen {
+        .bottom-screen-wrapper {
             background: #fff;
             min-height: 0;
             padding-top: 100px;
-            &.page-mode-results-list, .page-mode-single-article {
-                min-height: 100vh;
+            min-height: 100vh;
+            &.page-mode-ready {
+                min-height: 0;
             }
 
-            .results-list {
+            .bottom-screen {
                 max-width: 1150px;
                 margin: 0 auto;
+                &.loading {
+                    display:flex;
+                    justify-content: center;
+                }
+                .results-list {
 
-                .journal-row {
-                    display: flex;
-                    margin-bottom: 20px;
-                    .icon {
+                    .journal-row {
+                        display: flex;
+                        margin-bottom: 20px;
+                        .icon {
 
+                        }
+                        .name {
+                            font-size: 20px;
+                        }
                     }
-                    .name {
-                        font-size: 20px;
-                    }
+
                 }
 
             }
+
         }
 
 
