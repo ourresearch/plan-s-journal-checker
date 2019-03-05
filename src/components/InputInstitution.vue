@@ -22,7 +22,6 @@
 <script>
     import axios from 'axios'
     import {VueAutosuggest} from "vue-autosuggest";
-    import {store} from './store.js'
 
     export default {
         name: 'InputInstitution',
@@ -48,7 +47,7 @@
                 suggestions: [],
                 onSelected: selected => {
                     this.selected = selected.item;
-                    store.setInstitution(selected.item)
+                    this.$emit("selected", selected.item)
                 }
             };
         },

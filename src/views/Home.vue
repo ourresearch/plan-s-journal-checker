@@ -1,10 +1,10 @@
 <template>
   <div class="home">
-      <div class="top-screen" :class="'page-mode-' + pageMode">
+      <div class="top-screen" :class="{'landing-mode': showLandingMode}">
 
-            <div class="content" :class="'page-mode-' + pageMode">
+            <div class="content" :class="{'landing-mode': showLandingMode}">
 
-              <h2 class="hero" v-if="pageMode=='ready'">
+              <h2 class="hero" v-if="showLandingMode">
                   Find journals that meet your
                   open-access funder mandate:
               </h2>
@@ -12,16 +12,16 @@
               <div class="searchbar">
                 <div class="inputs">
 
-                    <input-journal></input-journal>
+                    <input-journal @selected="updateJournal"></input-journal>
                     <div class="sep"></div>
-                    <input-institution></input-institution>
+                    <input-institution @selected="updateModifier($event, 'institution')"></input-institution>
                     <div class="sep"></div>
-                    <input-funder></input-funder>
+                    <input-funder @selected="updateModifier($event, 'funder')"></input-funder>
 
 
 
                 </div>
-                <div id="search-button" @click="runSearch">
+                <div id="search-button" @click="submitForm">
 
                   <i class="fas fa-search"></i>
                   <span>Find journals</span>
@@ -39,47 +39,64 @@
 
       </div>
 
-      <div class="bottom-screen-wrapper" :class="'page-mode-' + pageMode">
+      <div class="bottom-screen-wrapper" :class="{'landing-mode': showLandingMode}">
+          <div class="bottom-screen">
+              <div class="results-list" v-if="!res.journal.show">
 
-          <div class="bottom-screen loading "v-show="resultsLoading">
-              <div class="loading">
-                  Loading...
-              </div>
-          </div>
-
-          <div class="bottom-screen loaded" v-show="!resultsLoading">
-              <div class="results-list" v-if="pageMode=='results-list'">
-                  <div class="journal-row"
-                       v-for="journal in results">
-
-                      <div class="icon">
-                          <i class="fas fa-times" v-show="!journal.policy.compliant"></i>
-                          <i class="fas fa-check" v-show="journal.policy.compliant"></i>
-                      </div>
-                      <div class="words">
-                          <div class="row-1">
-                              <span class="name">
-                                {{journal.name}}
-                              </span>
-                          </div>
-                          <div class="row-1">
-                              {{ journal.metrics.num_articles_since_2018}} articles since 2018
-                          </div>
-                          <div class="row-3">
-                              <div v-show="journal.policy.compliant">
-                                  Plan S compliant
-                              </div>
-                          </div>
-
+                  <div class="results-list-loading loading"v-show="res.journalList.isLoading">
+                      <div class="loading">
+                          Loading...
                       </div>
                   </div>
 
+                  <div class="results-list-loaded" v-if="!res.journalList.isLoading">
+                      <div class="journal-row"
+                           v-for="journal in res.journalList.data">
+
+                          <div class="icon">
+                              <i class="fas fa-times" v-show="!journal.policy_compliance.plan_s.compliant"></i>
+                              <i class="fas fa-check" v-show="journal.policy_compliance.plan_s.compliant"></i>
+                          </div>
+                          <div class="words">
+                              <div class="row-1">
+                                  <span class="name" @click="zoomOnJournal(journal.id)">
+                                    {{journal.name}}
+                                  </span>
+                              </div>
+                              <div class="row-1">
+                                  {{ journal.num_articles_since_2018}} articles since 2018
+                              </div>
+                              <div class="row-3">
+                                  <div v-show="journal.policy_compliance.plan_s.compliant">
+                                      Plan S compliant
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
               </div>
 
 
-              <div class="single-result" v-if="pageMode=='single-result'">
-                  <h1>single result</h1>
-                  <pre>{{singleResult}}</pre>
+              <div class="single-result" v-if="res.journal.show">
+
+                  <div class="single-result-loading loading" v-if="res.journal.isLoading">
+                    <div class="loading">
+                          Loading...
+                    </div>
+                  </div>
+
+                  <div class="single-result-loaded" v-if="!res.journal.isLoading">
+                      <div class="is-zoom">
+                          <md-button class="md-raised" @click="pageMode='results-list'">
+                            < back to results
+                          </md-button>
+                      </div>
+
+                      <h1>{{res.journal.data.name}}</h1>
+                      <pre>{{res.journal.data}}</pre>
+
+                  </div>
+
               </div>
 
 
@@ -109,11 +126,43 @@
         name: 'Home',
         data: () => ({
             userInput: store.input,
+
             pageMode: "ready",
-            resultsLoading: false,
+            showLandingMode: true,
+
             journalEndpoint: "https://rickscafe-api.herokuapp.com/journal/",
+            baseEndpoint: "https://rickscafe-api.herokuapp.com/",
+            endpoints: {
+                topic: "topic/",
+                text: "search/journals/",
+                journal: "journal/"
+            },
             results: [],
-            singleResult: {}
+            singleResult: {},
+
+
+            form: {
+                institution: {},
+                funder: {},
+                journalSearch: {
+                    type: null,
+                    q: null
+                }
+
+            },
+
+            res: {
+                journal: {
+                    isLoading: false,
+                    data: {},
+                    show: false
+                },
+                journalList: {
+                    isLoading: false,
+                    data: []
+                }
+            }
+
         }),
         components: {
             axios,
@@ -128,43 +177,128 @@
 
         },
         methods: {
-            blur(){
-              console.log("blur")
+            updateModifier(val, fieldName){
+                this.form[fieldName] = val
             },
-            focus(){
-              console.log("focus")
+            updateJournal(input) {
+                console.log("journal selected", input)
+                this.form.journalSearch = input
             },
-            runSearch(){
-                if (store.getSearchType() == "journal") {
-                    this.pageMode = "single-result"
-                    store.search()
-                        .then(response => {
-                            console.log("got journals response", response)
-                            this.singleResult = response.data
-                            this.resultsLoading = false
-                        });
+
+            zoomOnJournal(id){
+
+            },
+            getJournal(id){
+                this.res.journal.isLoading = true
+                this.res.journal.show = true
+
+                let query = this.$route.query
+                query.zoom = id
+                this.$router.push({
+                    path: "/",
+                    query: query
+                })
+
+            },
+            getJournalList(q, queryType){
+                this.res.journalList.isLoading = true
+                this.res.journal.show = false
+                let url = this.baseEndpoint
+                    + this.endpoints[queryType]
+                    + q
+                    + this.getJournalQueryModifiersStr()
+
+
+                console.log("getting this url", url)
+
+                axios.get(url)
+                    .then(response => {
+                        console.log("got response from journal list", response.data.list)
+                        this.res.journalList.data = response.data.list
+                        this.res.journalList.isLoading = false
+                    })
+
+            },
+            getJournalQueryModifiers(){
+                let ret = {}
+                if (this.form.institution){
+                    ret.institution = this.form.institution.id
+                }
+                if (this.form.funder){
+                    ret.funder = this.form.funder.id
+                }
+                return ret
+            },
+
+            getJournalQueryModifiersStr(){
+                let str = Object.entries(this.getJournalQueryModifiers())
+                    .map(entry => {
+                        return entry[0] + "=" + entry[1]
+                    })
+                    .join("&")
+
+                if (str) {
+                    return "?" + str
                 }
                 else {
-                    this.pageMode = "results-list"
+                    return ""
                 }
-                this.resultsLoading = true
-
-                let routeObj = {
-                    path: "/",
-                    query: store.getQueryObj()
-                }
-                this.$router.push(routeObj)
-
-
             },
-            inputFocus(input){
 
+            submitForm(){
+                this.showLandingMode = false;
+                this.$router.push({
+                    path: "/",
+                    query: this.getJournalQueryModifiers()
+                })
+
+                console.log("type", this.form)
+                if (["topic", "text"].indexOf(this.form.journalSearch.type) > -1){
+                    this.getJournalList(
+                        this.form.journalSearch.q,
+                        this.form.journalSearch.type
+                    )
+                }
+                else {
+                    this.getJournal(this.form.journalSearch.q)
+                }
+
+
+                // store.search()
+                //     .then(response => {
+                //         console.log("got search response", response)
+                //         this.singleResult = response.data
+                //         this.resultsLoading = false
+                //     });
+                //
+                // if (store.getSearchType() == "journal") {
+                //     this.pageMode = "single-result"
+                //     this.showSingleResult = true
+                // }
+                // else {
+                //     this.pageMode = "results-list"
+                //     store.search()
+                //         .then(response => {
+                //             console.log("got journals response", response)
+                //             this.results = response.data.list
+                //             this.resultsLoading = false
+                //         });
+                // }
+                //
+                // let routeObj = {
+                //     path: "/",
+                //     query: store.getQueryObj()
+                // }
+                // this.$router.push(routeObj)
             }
         },
         mounted() {
             // store.reset()
-            console.log("mount up!")
-            setTimeout(function(){document.getElementById("journal-input").focus()}, 1000)
+            this.$router.push({
+                path: "/",
+                query: {}
+            })
+            // setTimeout(function(){document.getElementById("journal-input").focus()}, 1000)
         },
         watch: {
             "$route": function(to, from){
@@ -193,19 +327,20 @@
             height: 150px;
 
 
-            &.page-mode-ready {
+            &.landing-mode {
                 height: 100vh;
             }
 
 
 
             .content {
-                margin-top: 20vh;
                 border-radius: 10px;
+                margin-top: 60px;
 
-                &.page-mode-results-list, .page-mode-single-result {
-                    margin-top: 60px;
+                &.landing-mode {
+                    margin-top: 20vh;
                 }
+
 
                 h2.hero {
                     font-size: 40px;
@@ -368,10 +503,9 @@
 
         .bottom-screen-wrapper {
             background: #fff;
-            min-height: 0;
             padding-top: 100px;
             min-height: 100vh;
-            &.page-mode-ready {
+            &.landing-mode {
                 min-height: 0;
             }
 

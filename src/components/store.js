@@ -14,7 +14,8 @@ export const store = {
     input: {
         institution: {},
         funder: {},
-        journalSearch: {}
+        journalSearch: {},
+        journalListSearch: {}
 
 
     },
@@ -46,6 +47,17 @@ export const store = {
         }
     },
 
+    setJournalListSearch(q, type){
+        let url
+        if (type == "string") {
+            url = "journal/" + q
+        }
+        else {
+            url = "search/journals/" + q
+        }
+        this.input.journalSearch = makeInputObj(url, q, type)
+    },
+
     setInstitution(institution) {
         this.input.institution = institution
     },
@@ -73,14 +85,13 @@ export const store = {
 
     },
     search(){
-        let url
-        let baseUrl = this.input.journalSearch.url
-        if (this.input.institution || this.input.funder){
+        let url = this.input.journalSearch.url
+        if (this.input.institution.id || this.input.funder.id){
             let str = "?" + [this.input.institution, this.input.funder]
                 .filter(x => {return !!x.id})
                 .map(x => {return x.id})
                 .join("&")
-            url = baseUrl + str
+            url += str
         }
 
         console.log("doing query with this baseurl", url)

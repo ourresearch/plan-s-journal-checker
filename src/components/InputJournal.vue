@@ -9,15 +9,18 @@
                 :inputProps="inputProps"
                 :sectionConfigs="sectionConfigs"
                 :getSuggestionValue="getSuggestionValue"
-                @focus="$emit('inputFocus')"
-                @blur="hasFocus=false"
+                @focus="focusHandler"
+                @blur="blurHandler"
         >
             <template slot-scope="{ suggestion }">
                 <div v-if="suggestion.name == 'journals'">
-                    <!--<img :class="{ avatar: true }" :src="suggestion.item.thumbnailUrl"/>-->
+                    <!--<i class="fas fa-graduation-cap"></i>-->
                     {{ suggestion.item.name }}
                 </div>
-                <div v-else>{{ suggestion.item.name }}</div>
+                <div v-else>
+                    <!--<i class="fas fa-book"></i>-->
+                    {{ suggestion.item.topic }}
+                </div>
             </template>
         </vue-autosuggest>
     </div>
@@ -27,7 +30,7 @@
     import axios from 'axios'
     import _ from "lodash"
     import {VueAutosuggest} from "vue-autosuggest";
-    import {store} from './store.js'
+    // import {store} from './store.js'
 
     export default {
         name: 'InputJournal',
@@ -42,10 +45,9 @@
                 hasFocus: false,
                 selected: this.initialValue,
                 searchText: "",
-                storeState: store.state,
                 debounceMilliseconds: 50,
                 journalsUrl: "http://api.rickscafe.io/search/journals/title/",
-                topicsUrl: "http://api.rickscafe.io/search/institutions/name/", // for testing
+                topicsUrl: "https://rickscafe-api.herokuapp.com/search/topics/",
                 inputProps: {
                     id: "journal-input",
                     onInputChange: this.fetchResults,
@@ -58,17 +60,25 @@
                         limit: 3,
                         label: "Topic",
                         onSelected: selected => {
+                            console.log("selected topic:", selected)
                             this.selected = selected.item;
-                            // global.journalSelected = selected.item
+                            // store.setJournalSearch(selected.item)
+                            this.$emit("selected", {
+                                q: selected.item.topic,
+                                type: "topic"
+                            })
                         }
                     },
                     journals: {
                         limit: 3,
                         label: "Journal",
                         onSelected: selected => {
-                            console.log("selected!", selected)
+                            console.log("selected journal:", selected)
                             this.selected = selected.item;
-                            store.setJournalSearch(selected.item)
+                            this.$emit("selected", {
+                                q: selected.item.id,
+                                type: "journal"
+                            })
                         }
                     }
                 }
@@ -101,10 +111,31 @@
             },
             getSuggestionValue(suggestion) {
                 let {name, item} = suggestion;
-                return _.truncate(item.name, {length: 30})
+
+                console.log("input has a suggestion", item)
+
+                if (item.name){ // it's a journal
+                    return _.truncate(item.name, {length: 30})
+                } else { // it's a topic
+                    return _.truncate(item.topic, {length: 30})
+                }
             },
-            setFocus(){
-                this.$emit("inputFocus")
+            blurHandler(){
+                console.log("blur")
+                let that = this
+                setTimeout(function(){
+                    console.log("code inside timeout")
+                    that.suggestions = [];
+                    if (!that.selected && that.searchText){
+                        that.$emit("selected", {
+                            q: this.searchText,
+                            type: "text"
+                        })
+                    }
+
+                }, 100)
+            },
+            focusHandler(){
                 this.hasFocus = true
             }
         },
@@ -115,9 +146,9 @@
 
         },
         mounted() {
-            if (store.input.journal){
-                this.$refs.autosuggestJournal.searchInput = store.state.journal.name
-            }
+            // if (store.input.journal){
+            //     this.$refs.autosuggestJournal.searchInput = store.state.journal.name
+            // }
         }
     }
 </script>

@@ -49,7 +49,7 @@
                 suggestions: [],
                 onSelected: selected => {
                     this.selected = selected.item;
-                    store.setFunder(selected.item)
+                    this.$emit("selected", selected.item)
                 }
             };
         },
