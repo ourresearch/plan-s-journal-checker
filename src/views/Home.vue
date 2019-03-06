@@ -13,10 +13,8 @@
                 <div class="inputs">
 
                     <input-journal @selected="updateJournal"></input-journal>
-                    <div class="sep"></div>
-                    <input-institution @selected="updateModifier($event, 'institution')"></input-institution>
-                    <div class="sep"></div>
                     <input-funder @selected="updateModifier($event, 'funder')"></input-funder>
+                    <input-institution @selected="updateModifier($event, 'institution')"></input-institution>
 
 
 
@@ -39,48 +37,60 @@
 
       </div>
 
-      <div class="bottom-screen-wrapper" :class="{'landing-mode': showLandingMode}">
-          <div class="bottom-screen">
 
 
+      <div class="bottom-screen" :class="{'landing-mode': showLandingMode}">
 
-              <div class="results-list-wrapper" v-if="!res.journal.show">
+          <div class="results-list-wrapper">
 
-                  <div class="results-list loading"v-show="res.journalList.isLoading">
-                      <div class="loading">
-                          Loading...
-                      </div>
+              <div class="results-list loading"v-show="res.journalList.isLoading">
+                  <div class="loading">
+                      Loading...
                   </div>
+              </div>
 
-                  <div class="results-list loaded" v-if="!res.journalList.isLoading">
-                      <div class="journal-row"
-                           v-for="journal in res.journalList.data">
+              <div class="results-list loaded" v-if="!res.journalList.isLoading">
+                  <div class="journal-row"
+                       v-for="journal in res.journalList.data">
 
-                          <div class="icon">
-                              <i class="fas fa-times" v-show="!journal.policy_compliance.plan_s.compliant"></i>
-                              <i class="fas fa-check" v-show="journal.policy_compliance.plan_s.compliant"></i>
+                      <div class="icon">
+                          <i class="fas fa-times" v-show="!journal.policy_compliance.plan_s.compliant"></i>
+                          <i class="fas fa-check" v-show="journal.policy_compliance.plan_s.compliant"></i>
+                      </div>
+                      <div class="words">
+                          <div class="row-1">
+                              <span class="name" @click="getJournal(journal.issnl)">
+                                {{journal.name}}
+                              </span>
                           </div>
-                          <div class="words">
-                              <div class="row-1">
-                                  <span class="name" @click="getJournal(journal.issnl)">
-                                    {{journal.name}}
-                                  </span>
-                              </div>
-                              <div class="row-1">
-                                  {{ journal.num_articles_since_2018}} articles since 2018
-                              </div>
-                              <div class="row-3">
-                                  <div v-show="journal.policy_compliance.plan_s.compliant">
-                                      Plan S compliant
-                                  </div>
+                          <div class="row-1">
+                              {{ journal.num_articles_since_2018}} articles since 2018
+                          </div>
+                          <div class="row-3">
+                              <div v-show="journal.policy_compliance.plan_s.compliant">
+                                  Plan S compliant
                               </div>
                           </div>
                       </div>
                   </div>
               </div>
+          </div>
 
 
+          <transition
+                  name="custom-classes-transition"
+                enter-active-class="animated slideInRight"
+                leave-active-class="animated slideOutRight"
+          >
               <div class="single-result-wrapper" v-if="res.journal.show">
+                  <div class="go-back-wrapper" v-if="res.journalList.data.length">
+                      <div class="go-back">
+                          <div class="back-button" @click="hideJournal">
+                            <i class="fas fa-arrow-left"></i> back to results
+                          </div>
+
+                      </div>
+                  </div>
 
                   <div class="single-result loading" v-if="res.journal.isLoading">
                     <div class="loading">
@@ -89,11 +99,6 @@
                   </div>
 
                   <div class="single-result loaded" v-if="!res.journal.isLoading">
-                      <div class="is-zoom">
-                          <md-button class="md-raised" @click="res.journal.show=false">
-                            < back to results
-                          </md-button>
-                      </div>
 
                       <h1>{{res.journal.data.name}}</h1>
                       <pre>{{res.journal.data}}</pre>
@@ -102,13 +107,14 @@
 
               </div>
 
-
-
-          </div>
+          </transition>
 
 
 
       </div>
+
+
+
 
 
 
@@ -186,9 +192,16 @@
             updateJournal(input) {
                 this.form.journalSearch = input
             },
+            hideJournal(){
+                this.res.journalList.show = false
+                this.res.journal.show = false
+            },
+            foo(){
+                this.res.journal.show = false
+            },
 
-            zoomOnJournal(id){
-
+            submitForm(){
+                this.res.journal.show = false;
             },
             getJournal(id){
                 this.res.journal.isLoading = true
@@ -271,7 +284,6 @@
             },
 
             submitForm(){
-
                 console.log(
                     "submitting form",
                     this.form.journalSearch.q,
@@ -292,6 +304,7 @@
                     )
                 }
                 else {
+                    this.res.journalList.data = []
                     this.getJournal(this.form.journalSearch.q)
                 }
             }
@@ -314,6 +327,8 @@
 
 
 <style lang="scss">
+    @import '../assets/animate.css';
+
 
     .home {
 
@@ -329,6 +344,7 @@
             flex-direction: column;
             align-items: center;
             height: 150px;
+            transition: height 0.3s;
 
 
             &.landing-mode {
@@ -340,6 +356,8 @@
             .content {
                 border-radius: 10px;
                 margin-top: 60px;
+                transition: margin-top 0.3s;
+                width: 1150px;
 
                 &.landing-mode {
                     margin-top: 20vh;
@@ -368,34 +386,33 @@
                     display: flex;
                     border-radius: 10px;
                     box-shadow: 0 2px 10px 5px rgba(0, 0, 0, .1);
+                    width: 100%;
                     .inputs {
                         display:flex;
-                        flex: 1;
+                        width: 100%;
+                        /*overflow: hidden;*/
                         .autosuggest-container {
-                            border: 1px solid #ddd;
-                            border-top: none;
-                            border:none;
                             background: #fff;
-                            /*border: none;*/
                             padding-top: 5px;
                             padding-bottom: 20px;
-                            width: 350px;
-                            flex: 1;
+                            flex:1;
+                            flex-direction: column;
+                            // see https://codepen.io/thomas-eilermann/pen/grjEjE
+                            transition: flex-basis 300ms ease-in-out;
                             &.input-journal {
                                 border-radius: 10px 0 0 10px;
                                 border-right: 1px solid #ddd;
+                                flex: 2;
+                                .autosuggest__results {
+                                    width: 502px;
+                                }
                             }
                             &.input-funder {
                                 border-left: 1px solid #ddd;
                             }
 
                             &.has-focus {
-                                /*border-radius: 10px 10px 10px 0;*/
-                                /*box-shadow: 0px 0 2px 0 rgba(0, 0, 0, .4);*/
-                                /*border-radius: 5px;*/
-                                /*border-bottom: none;*/
-                                /*border: 1px solid #999;*/
-                                transition: all 0.5s;
+                                /*flex-basis: 500px;*/
                                 h2 {
                                     color: orangered;
                                 }
@@ -434,7 +451,7 @@
                                 position: absolute;
                                 border: 1px solid #ddd;
                                 border-top: none;
-                                width: 352px;
+                                width: 303px;
                                 margin-left: -1px;
                                 margin-top: 23px;
                                 z-index: 999;
@@ -534,37 +551,85 @@
 
 
 
-        .bottom-screen-wrapper {
+        .bottom-screen {
             background: #fff;
-            padding-top: 100px;
             min-height: 100vh;
+            position: relative;
             &.landing-mode {
                 min-height: 0;
             }
 
-            .bottom-screen {
-                max-width: 1150px;
-                margin: 0 auto;
-                &.loading {
-                    display:flex;
-                    justify-content: center;
-                }
+            .results-list-wrapper {
+                width: 100%;
                 .results-list {
-
-                    .journal-row {
-                        display: flex;
-                        margin-bottom: 20px;
-                        .icon {
-
-                        }
-                        .name {
-                            font-size: 20px;
-                        }
+                    max-width: 1150px;
+                    margin: 0 auto;
+                    &.loading {
+                        display:flex;
+                        justify-content: center;
                     }
+                    &.loaded {
+                        padding-top: 50px;
+
+                        .journal-row {
+                            display: flex;
+                            margin-bottom: 20px;
+                            .icon {
+                                display: none;
+                            }
+                            .name {
+                                font-size: 20px;
+                                cursor: pointer;
+
+                            }
+                        }
+
+                    }
+
 
                 }
 
             }
+
+
+            .single-result-wrapper {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                width: 100%;
+                background: #fff;
+                box-shadow: 0 10px 5px 5px rgba(0,0,0,.5);
+                border-left: 1px solid #333;
+                z-index: 99;
+
+                .go-back-wrapper {
+                    background: #4DA1E7;
+                    color: #fff;
+                    padding: 10px;
+                    .go-back {
+                        max-width: 1150px;
+                        margin: 0 auto;
+                        .back-button {
+                            font-size: 16px;
+                            text-transform: uppercase;
+                            font-weight: bold;
+                            cursor: pointer;
+                        }
+
+
+                    }
+                }
+                .single-result.loading {
+                    display: flex;
+                    justify-content: center;
+                }
+                .single-result.loaded {
+                    max-width: 1150px;
+                    margin: 0 auto;
+                }
+
+            }
+
 
         }
 

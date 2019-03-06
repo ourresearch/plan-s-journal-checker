@@ -113,13 +113,14 @@
             getSuggestionValue(suggestion) {
                 let {name, item} = suggestion;
                 if (item.name){ // it's a journal
-                    return _.truncate(item.name, {length: 30})
+                    return _.truncate(item.name, {length: 50})
                 } else { // it's a topic
-                    return _.truncate(item.topic, {length: 30})
+                    return _.truncate(item.topic, {length: 50})
                 }
             },
             blurHandler(){
                 let that = this
+                this.hasFocus = false
                 setTimeout(function(){
                     that.suggestions = [];
                     if (!that.selected && that.searchText){
