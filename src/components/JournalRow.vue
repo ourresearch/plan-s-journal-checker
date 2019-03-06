@@ -105,7 +105,6 @@
         props: ['journal'],
         data() {
             return {
-                journal: this.journal
             };
         },
         methods: {},

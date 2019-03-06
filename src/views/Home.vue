@@ -8,7 +8,7 @@
                     Find journals that meet your
                     open-access funder mandate:
                 </h2>
-                <search-form @submit="doSearch" @update="updateSearch"></search-form>
+                <search-form @submit="formSubmitHandler" @update="updateSearch"></search-form>
             </div>
 
 
@@ -42,8 +42,8 @@
             <!--enter-active-class="animated slideInRight"-->
             <!--leave-active-class="animated slideOutRight"-->
             <!--&gt;-->
-            <div class="single-result-wrapper" v-if="!journalData.list">
-                <div class="go-back-wrapper" v-if="query.field && query.field != 'journal'">
+            <div class="single-result-wrapper" v-if="journalData && !journalData.list">
+                <div class="go-back-wrapper" v-if="mainQuery.field && mainQuery.field != 'journal'">
                     <div class="go-back">
                         <div class="back-button" @click="hideJournal">
                             <i class="fas fa-arrow-left"></i> back to results
@@ -102,7 +102,7 @@
                 journal: "journal/"
             },
 
-            query: {}, // set from form or url
+            mainQuery: {}, // set from form or url
 
 
             isLoading: false,
@@ -125,9 +125,28 @@
             },
             updateSearch(formData){
             },
+            formSubmitHandler(formData){
+                this.doSearch(formData)
+                this.mainQuery = formData
+                this.showLandingMode = false
+            },
             doSearch(formData){
                 console.log("home.doSearch", formData)
 
+                this.isLoading = true
+                let url = this.baseEndpoint
+                    + this.endpoints[formData.journalQueryField]
+                    + formData.journalQuery
+                    + "?institution=" + formData.institution
+                    + "&funder=" + formData.funder
+
+                console.log("Home.doSearch() getting this url", url)
+                axios.get(url)
+                    .then(response => {
+                        console.log("Home.doSearch() got response: ", response.data)
+                        this.journalData = response.data
+                        this.isLoading = false
+                    })
             },
 
             getZoomJournal(id) {
