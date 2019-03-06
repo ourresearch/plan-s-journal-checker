@@ -4,7 +4,7 @@
         <vue-autosuggest
                 class="hello"
                 id="auto-2"
-                ref="autosuggest"
+                ref="autosuggestInstitution"
                 :suggestions="suggestions"
                 :inputProps="inputProps"
                 :getSuggestionValue="getSuggestionValue"
@@ -16,6 +16,9 @@
                 <span class="my-suggestion-item">{{suggestion.item.name}}</span>
             </template>
         </vue-autosuggest>
+        <div class="close" @click="clear" v-show="searchText">
+            &times;
+        </div>
     </div>
 </template>
 
@@ -47,7 +50,7 @@
                 suggestions: [],
                 onSelected: selected => {
                     this.selected = selected.item;
-                    this.$emit("selected", selected.item)
+                    this.$emit("selected", selected.item.id)
                 }
             };
         },
@@ -73,7 +76,16 @@
             },
             getSuggestionValue(suggestion) {
                 let {name, item} = suggestion;
-                return _.truncate(item.name, {length: 30})
+                return item.name
+            },
+            clear(event){
+                console.log("clear", event)
+                this.suggestions = []
+                this.selected = null
+                this.searchText = ""
+                this.$refs.autosuggestInstitution.searchInput = ""
+                this.$emit("selected", null)
+
             }
         },
         watch: {

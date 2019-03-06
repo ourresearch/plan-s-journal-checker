@@ -1,5 +1,4 @@
 import axios from 'axios'
-console.log("foo")
 
 function makeInputObj(urlEnd, q, type){
     return {

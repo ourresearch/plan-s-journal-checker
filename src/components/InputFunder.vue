@@ -22,6 +22,9 @@
       :md-active.sync="alert"
       md-content="Sorry, only Plan S funders are suported right now."
       md-confirm-text="OK" />
+    <div class="close" @click="clear" v-show="searchText">
+        &times;
+    </div>
 
 
     </div>
@@ -63,7 +66,7 @@
                     }
                     else {
                         this.selected = selected.item;
-                        this.$emit("selected", selected.item)
+                        this.$emit("selected", selected.item.id)
 
                     }
 
@@ -92,7 +95,20 @@
             },
             getSuggestionValue(suggestion) {
                 let {name, item} = suggestion;
-                return _.truncate(item.name, {length: 30})
+                return item.name
+            },
+            clear(event){
+                console.log("clear", event)
+                this.suggestions = []
+                this.selected = null
+                this.searchText = ""
+                this.$refs.inputFunder.searchInput = ""
+                this.$emit("selected", null)
+
+                this.$refs.inputFunder.searchInput.focus()
+                this.$refs.inputFunder.focus()
+                document.getElementById("funder-input").focus()
+
             }
         },
         watch: {
