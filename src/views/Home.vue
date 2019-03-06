@@ -204,6 +204,8 @@
     import InputFunder from '../components/InputFunder'
     import {store} from '../components/store.js'
 
+    console.log("hi heather!")
+
     export default {
         name: 'Home',
         data: () => ({
