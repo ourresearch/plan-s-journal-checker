@@ -647,7 +647,6 @@
                         .journal-row {
                             display: flex;
                             margin-bottom: 40px;
-                            opacity: .5;
                             &.compliant {
                                 opacity: 1;
                             }
