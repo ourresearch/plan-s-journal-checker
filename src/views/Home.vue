@@ -51,26 +51,99 @@
 
               <div class="results-list loaded" v-if="!res.journalList.isLoading">
                   <div class="journal-row"
+                       :class="{compliant: journal.policy_compliance.compliant}"
                        v-for="journal in res.journalList.data">
 
                       <div class="icon">
-                          <i class="fas fa-times" v-show="!journal.policy_compliance.compliant"></i>
+                          <i class="fas fa-ban" v-show="!journal.policy_compliance.compliant"></i>
                           <i class="fas fa-check" v-show="journal.policy_compliance.compliant"></i>
                       </div>
                       <div class="words">
-                          <div class="row-1">
-                              <span class="name" @click="getJournal(journal.issnl)">
+                          <div class="row-main">
+                              <span class="name" @click="getJournal(journal.id)">
                                 {{journal.name}}
+                                  <span class="issn">
+                                      {{journal.id}}
+                                  </span>
                               </span>
                           </div>
-                          <div class="row-1">
-                              {{ journal.num_articles_since_2018}} articles since 2018
-                          </div>
-                          <div class="row-3">
-                              <div v-show="journal.policy_compliance.compliant">
-                                  Plan S compliant
+
+
+                          <div class="row-topics">
+                              <div class="topic" v-for="topic in journal.topics.slice(0,3)">
+                                {{topic.replace(" (miscellaneous)", "")}};
                               </div>
                           </div>
+
+
+                          <div class="row-meta">
+                              <span class="volume">
+                                  <span class="low" v-show="journal.num_articles_since_2018 < 25">
+                                      <span class="icons">
+                                          <i class="fas fa-circle"></i>
+                                          <i class="far fa-circle"></i>
+                                          <i class="far fa-circle"></i>
+                                      </span>
+                                      <!--Lower-->
+                                  </span>
+                                  <span class="low" v-show="journal.num_articles_since_2018 > 25 && journal.num_articles_since_2018 < 150">
+                                      <span class="icons">
+                                          <i class="fas fa-circle"></i>
+                                          <i class="fas fa-circle"></i>
+                                          <i class="far fa-circle"></i>
+                                      </span>
+                                      <!--Medium-->
+                                  </span>
+                                  <span class="high" v-show="journal.num_articles_since_2018 > 150">
+                                      <span class="icons">
+                                          <i class="fas fa-circle"></i>
+                                          <i class="fas fa-circle"></i>
+                                          <i class="fas fa-circle"></i>
+                                      </span>
+                                      <!--High-->
+                                  </span>
+                                  Publication volume
+                              </span>
+
+
+                              <span class="impact">
+                                  <span class="low" v-show="journal.sjr_best_quartile=='Q4'">
+                                      <span class="icons">
+                                          <i class="fas fa-circle"></i>
+                                          <i class="far fa-circle"></i>
+                                          <i class="far fa-circle"></i>
+                                      </span>
+                                      <!--Lower-->
+                                  </span>
+                                  <span class="medium" v-show="['Q3', 'Q2'].includes(journal.sjr_best_quartile)">
+                                      <span class="icons">
+                                          <i class="fas fa-circle"></i>
+                                          <i class="fas fa-circle"></i>
+                                          <i class="far fa-circle"></i>
+                                      </span>
+                                      <!--Medium-->
+                                  </span>
+                                  <span class="high" v-show="journal.sjr_best_quartile=='Q1'">
+                                      <span class="icons">
+                                          <i class="fas fa-circle"></i>
+                                          <i class="fas fa-circle"></i>
+                                          <i class="fas fa-circle"></i>
+                                      </span>
+                                      <!--High-->
+                                  </span>
+                                  Impact
+                              </span>
+
+                              <span class="publisher">
+                                  {{journal.publisher}}
+                              </span>
+
+
+
+
+
+                          </div>
+
                       </div>
                   </div>
               </div>
@@ -573,15 +646,72 @@
 
                         .journal-row {
                             display: flex;
-                            margin-bottom: 20px;
+                            margin-bottom: 40px;
+                            opacity: .5;
+                            &.compliant {
+                                opacity: 1;
+                            }
+
                             .icon {
                                 margin-right: 7px;
+                                font-size: 150%;
+                                color: #4DA1E7;
                             }
-                            .name {
-                                font-size: 20px;
-                                cursor: pointer;
+                            .row-main {
+                                .name {
+                                    font-size: 22px;
+                                    cursor: pointer;
+                                    color: #4DA1E7;
+                                }
+                                .issn {
+                                    font-size: 50%;
+                                    font-weight: normal;
+                                    color: #333;
+                                }
+                            }
+                            .row-meta {
+                                font-size: 16px;
+                                padding-top: 10px;
+                                display: flex;
+                                .icons {
+                                    font-size: 70%;
+                                    i {
+                                        margin-right: 2px;
+                                        &.fas {
+                                            opacity: .5;
+                                        }
+                                    }
+                                }
 
+                                .impact {
+                                    border-left: 1px solid #999;
+                                    border-right: 1px solid #999;
+                                    margin: 0 .5em;
+                                    padding: 0 .5em;
+                                }
+                                .volume {
+                                }
+                                .publisher {
+                                    font-style: italic;
+                                }
                             }
+
+                            .row-topics {
+                                display: flex;
+                                margin-top: 8px;
+                                .topic {
+                                    /*border: 1px solid #999;*/
+                                    /*padding: 2px 7px;*/
+                                    /*background: #eee;*/
+                                    border-radius: 10px;
+                                    margin-right: 10px;
+                                    display: flex;
+                                    align-items: center;
+                                    font-size: 16px;
+
+                                }
+                            }
+
                         }
 
                     }
