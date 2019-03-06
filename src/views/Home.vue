@@ -54,8 +54,8 @@
                        v-for="journal in res.journalList.data">
 
                       <div class="icon">
-                          <i class="fas fa-times" v-show="!journal.policy_compliance.plan_s.compliant"></i>
-                          <i class="fas fa-check" v-show="journal.policy_compliance.plan_s.compliant"></i>
+                          <i class="fas fa-times" v-show="!journal.policy_compliance.compliant"></i>
+                          <i class="fas fa-check" v-show="journal.policy_compliance.compliant"></i>
                       </div>
                       <div class="words">
                           <div class="row-1">
@@ -67,7 +67,7 @@
                               {{ journal.num_articles_since_2018}} articles since 2018
                           </div>
                           <div class="row-3">
-                              <div v-show="journal.policy_compliance.plan_s.compliant">
+                              <div v-show="journal.policy_compliance.compliant">
                                   Plan S compliant
                               </div>
                           </div>
@@ -401,7 +401,6 @@
                             transition: flex-basis 300ms ease-in-out;
                             &.input-journal {
                                 border-radius: 10px 0 0 10px;
-                                border-right: 1px solid #ddd;
                                 flex: 2;
                                 .autosuggest__results {
                                     width: 502px;
@@ -409,6 +408,7 @@
                             }
                             &.input-funder {
                                 border-left: 1px solid #ddd;
+                                border-right: 1px solid #ddd;
                             }
 
                             &.has-focus {
@@ -575,7 +575,7 @@
                             display: flex;
                             margin-bottom: 20px;
                             .icon {
-                                display: none;
+                                margin-right: 7px;
                             }
                             .name {
                                 font-size: 20px;

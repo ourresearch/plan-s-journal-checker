@@ -5,7 +5,7 @@
         <vue-autosuggest
                 class="hello"
                 id="auto-2"
-                ref="autosuggest"
+                ref="inputFunder"
                 :suggestions="suggestions"
                 :inputProps="inputProps"
                 :getSuggestionValue="getSuggestionValue"
@@ -17,6 +17,13 @@
                 <span class="my-suggestion-item">{{suggestion.item.name}}</span>
             </template>
         </vue-autosuggest>
+
+        <md-dialog-alert
+      :md-active.sync="alert"
+      md-content="Sorry, only Plan S funders are suported right now."
+      md-confirm-text="OK" />
+
+
     </div>
 </template>
 
@@ -38,8 +45,9 @@
                 selected: this.initialValue,
                 searchText: "",
                 hasFocus: false,
+                alert: false,
                 debounceMilliseconds: 50,
-                fundersUrl: "http://api.rickscafe.io/search/funders/name/",
+                fundersUrl: "http://api.rickscafe.io/autocomplete/funders/name/",
                 inputProps: {
                     id: "funder-input",
                     onInputChange: this.fetchResults,
@@ -48,8 +56,17 @@
                 },
                 suggestions: [],
                 onSelected: selected => {
-                    this.selected = selected.item;
-                    this.$emit("selected", selected.item)
+                    if (selected.item.policy != "plan-s") {
+                        this.alert = true
+                        this.results = []
+                        this.$refs.inputFunder.searchInput = ""
+                    }
+                    else {
+                        this.selected = selected.item;
+                        this.$emit("selected", selected.item)
+
+                    }
+
                 }
             };
         },

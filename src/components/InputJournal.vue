@@ -47,8 +47,8 @@
                 selected: this.initialValue,
                 searchText: "",
                 debounceMilliseconds: 50,
-                journalsUrl: "http://api.rickscafe.io/search/journals/title/",
-                topicsUrl: "https://rickscafe-api.herokuapp.com/search/topics/",
+                journalsUrl: "http://api.rickscafe.io/autocomplete/journals/name/",
+                topicsUrl: "https://rickscafe-api.herokuapp.com/autocomplete/topics/name/",
                 inputProps: {
                     id: "journal-input",
                     onInputChange: this.fetchResults,

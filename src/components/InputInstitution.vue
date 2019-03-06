@@ -37,7 +37,7 @@
                 searchText: "",
                 hasFocus: false,
                 debounceMilliseconds: 50,
-                institutionsUrl: "http://api.rickscafe.io/search/institutions/name/",
+                institutionsUrl: "http://api.rickscafe.io/autocomplete/institutions/name/",
                 inputProps: {
                     id: "institution-input",
                     onInputChange: this.fetchResults,
