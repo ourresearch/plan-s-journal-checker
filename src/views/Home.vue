@@ -30,7 +30,7 @@
                 <div class="results-list loaded" v-if="!isLoading">
                     <div v-for="myJournal in journalData.list">
 
-                        <journal-row :journal="myJournal"></journal-row>
+                        <journal-row :journal="myJournal" @zoom="zoomOnJournal"></journal-row>
 
                     </div>
                 </div>
@@ -43,9 +43,9 @@
             <!--leave-active-class="animated slideOutRight"-->
             <!--&gt;-->
             <div class="single-result-wrapper" v-if="journalData && !journalData.list">
-                <div class="go-back-wrapper" v-if="mainQuery.field && mainQuery.field != 'journal'">
+                <div class="go-back-wrapper" v-if="mainQuery.journalQueryField && mainQuery.journalQueryField != 'journal'">
                     <div class="go-back">
-                        <div class="back-button" @click="hideJournal">
+                        <div class="back-button" @click="resubmitForm">
                             <i class="fas fa-arrow-left"></i> back to results
                         </div>
 
@@ -62,6 +62,14 @@
                     <div class="top">
                         <h1>{{journalData.name}}</h1>
 
+                    </div>
+
+                    <div>
+                        <h2>similar journals</h2>
+                        <div class="similar" v-for="myJournal in journalData.similar_journals">
+                            <journal-row :journal="myJournal" @zoom="zoomOnJournal"></journal-row>
+
+                        </div>
 
                     </div>
 
@@ -86,7 +94,6 @@
 
     import JournalRow from '../components/JournalRow'
     import SearchForm from '../components/SearchForm'
-    import {store} from '../components/store.js'
 
 
     export default {
@@ -102,7 +109,12 @@
                 journal: "journal/"
             },
 
-            mainQuery: {}, // set from form or url
+            mainQuery: {
+                journalQuery: null,
+                journalQueryField: null,
+                institution: null,
+                funder: null
+            }, // set from form or url
 
 
             isLoading: false,
@@ -119,16 +131,22 @@
         },
         computed: {},
         methods: {
-            hideJournal() {
-                this.res.journalList.show = false
-                this.res.zoomJournal.show = false
-            },
             updateSearch(formData){
+            },
+            zoomOnJournal(id){
+                console.log("zoom!", id)
+                let clonedMainQuery = { ... this.mainQuery}
+                clonedMainQuery.journalQueryField = "journal"
+                clonedMainQuery.journalQuery = id
+                this.doSearch(clonedMainQuery)
             },
             formSubmitHandler(formData){
                 this.doSearch(formData)
                 this.mainQuery = formData
                 this.showLandingMode = false
+            },
+            resubmitForm(){
+                this.doSearch(this.mainQuery)
             },
             doSearch(formData){
                 console.log("home.doSearch", formData)

@@ -10,7 +10,7 @@
         </div>
         <div class="words">
             <div class="row-main">
-                              <span class="name" @click="getJournal(journal.id)">
+                              <span class="name" @click="$emit('zoom', journal.id)">
                                 {{journal.name}}
                                   <span class="issn">
                                       {{journal.id}}
