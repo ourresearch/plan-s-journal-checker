@@ -47,7 +47,7 @@
                 hasFocus: false,
                 alert: false,
                 debounceMilliseconds: 50,
-                fundersUrl: "http://api.rickscafe.io/autocomplete/funders/name/",
+                fundersUrl: "https://api.rickscafe.io/autocomplete/funders/name/",
                 inputProps: {
                     id: "funder-input",
                     onInputChange: this.fetchResults,
