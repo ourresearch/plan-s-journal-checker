@@ -43,25 +43,28 @@
             };
         },
         methods: {
-            update(field, val) {
-                this.values[field] = val
-                console.log("updating the form", field, val)
+            update() {
+                console.log("SearchForm.update()", this.values)
                 this.$emit("input", this.values)
             },
             submit(){
                 this.$emit("submit", this.values)
             },
             updateFunder(id) {
-                this.update("funder", id)
+                this.values.funder = id
                 document.getElementById("institution-input").focus()
+                this.update()
             },
             updateInstitution(id) {
-                this.update("institution", id)
+                this.values.institution = id
+                this.update()
             },
             updateJournal(input) {
                 console.log("updating journal", input)
-                this.update(input.field, input.val)
+                this.values.journalQueryField = input.field
+                this.values.journalQuery = input.val
                 document.getElementById("funder-input").focus()
+                this.update()
             },
         }
     }

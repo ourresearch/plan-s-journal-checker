@@ -8,33 +8,27 @@
                     Find journals that meet your
                     open-access funder mandate:
                 </h2>
-                <search-form></search-form>
+                <search-form @submit="doSearch" @update="updateSearch"></search-form>
             </div>
 
 
 
-            <div class="data" style="display:none;color:#fff; width:500px; background:#000;padding:20px;">
-                <pre>
-                    {{userInput}}
-                </pre>
-
-            </div>
 
         </div>
 
 
         <div class="bottom-screen" :class="{'landing-mode': showLandingMode}">
 
-            <div class="results-list-wrapper" v-show="!res.journal.show">
+            <div class="results-list-wrapper" v-show="journalData.list">
 
-                <div class="results-list loading" v-show="res.journalList.isLoading">
+                <div class="results-list loading" v-show="isLoading">
                     <div class="loading">
                         Loading...
                     </div>
                 </div>
 
-                <div class="results-list loaded" v-if="!res.journalList.isLoading">
-                    <div v-for="myJournal in res.journalList.data">
+                <div class="results-list loaded" v-if="!isLoading">
+                    <div v-for="myJournal in journalData.list">
 
                         <journal-row :journal="myJournal"></journal-row>
 
@@ -48,8 +42,8 @@
             <!--enter-active-class="animated slideInRight"-->
             <!--leave-active-class="animated slideOutRight"-->
             <!--&gt;-->
-            <div class="single-result-wrapper" v-if="res.journal.show">
-                <div class="go-back-wrapper" v-if="res.journalList.data.length">
+            <div class="single-result-wrapper" v-if="!journalData.list">
+                <div class="go-back-wrapper" v-if="query.field && query.field != 'journal'">
                     <div class="go-back">
                         <div class="back-button" @click="hideJournal">
                             <i class="fas fa-arrow-left"></i> back to results
@@ -58,21 +52,21 @@
                     </div>
                 </div>
 
-                <div class="single-result loading" v-if="res.journal.isLoading">
+                <div class="single-result loading" v-if="isLoading">
                     <div class="loading">
-                        Loading journal...
+                        Loading zoomJournal...
                     </div>
                 </div>
 
-                <div class="single-result loaded" v-if="!res.journal.isLoading">
+                <div class="single-result loaded" v-if="!isLoading">
                     <div class="top">
-                        <h1>{{res.journal.data.name}}</h1>
+                        <h1>{{journalData.name}}</h1>
 
 
                     </div>
 
 
-                    <pre>{{res.journal.data}}</pre>
+                    <pre>{{journalData}}</pre>
 
                 </div>
 
@@ -98,9 +92,6 @@
     export default {
         name: 'Home',
         data: () => ({
-            userInput: store.input,
-
-            pageMode: "ready",
             showLandingMode: true,
 
             journalEndpoint: "https://rickscafe-api.herokuapp.com/journal/",
@@ -110,31 +101,12 @@
                 text: "search/journals/",
                 journal: "journal/"
             },
-            results: [],
-            singleResult: {},
+
+            query: {}, // set from form or url
 
 
-            form: {
-                institution: {},
-                funder: {},
-                journalSearch: {
-                    type: null,
-                    q: null
-                }
-
-            },
-
-            res: {
-                journal: {
-                    isLoading: false,
-                    data: {},
-                    show: false
-                },
-                journalList: {
-                    isLoading: false,
-                    data: []
-                }
-            }
+            isLoading: false,
+            journalData: {}
 
         }),
         components: {
@@ -149,22 +121,18 @@
         methods: {
             hideJournal() {
                 this.res.journalList.show = false
-                this.res.journal.show = false
+                this.res.zoomJournal.show = false
+            },
+            updateSearch(formData){
+            },
+            doSearch(formData){
+                console.log("home.doSearch", formData)
+
             },
 
-            submitForm() {
-                this.res.journal.show = false;
-            },
-            getJournal(id) {
-                this.res.journal.isLoading = true
-                this.res.journal.show = true
-
-                // let query = this.$route.query
-                // query.zoom = id
-                // this.$router.push({
-                //     path: "/",
-                //     query: query
-                // })
+            getZoomJournal(id) {
+                this.res.isLoading = true
+                this.res.zoomJournal.show = true
 
                 let url = this.baseEndpoint
                     + this.endpoints.journal
@@ -177,14 +145,14 @@
                 axios.get(url)
                     .then(response => {
                         console.log("got response from journal endpoint", response.data)
-                        this.res.journal.data = response.data
-                        this.res.journal.isLoading = false
+                        this.res.zoomJournal.data = response.data
+                        this.res.isLoading = false
                     })
 
             },
             getJournalList(q, queryType) {
                 this.res.journalList.isLoading = true
-                this.res.journal.show = false
+                this.res.zoomJournal.show = false
                 // this.$router.push({
                 //     path: "/",
                 //     query: {
