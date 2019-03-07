@@ -4,10 +4,10 @@
 
 
 
-        <div class="icon">
-            <i class="fas fa-ban" v-show="!journal.policy_compliance.compliant"></i>
-            <i class="fas fa-check" v-show="journal.policy_compliance.compliant"></i>
-        </div>
+        <!--<div class="icon">-->
+            <!--<i class="fas fa-ban" v-show="!journal.policy_compliance.compliant"></i>-->
+            <!--<i class="fas fa-check" v-show="journal.policy_compliance.compliant"></i>-->
+        <!--</div>-->
         <div class="words">
             <div class="row-main">
                               <span class="name" @click="$emit('zoom', journal.id)">
