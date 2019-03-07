@@ -59,22 +59,8 @@
                 </div>
 
                 <div class="single-result loaded" v-if="!isLoading">
-                    <div class="top">
-                        <h1>{{journalData.name}}</h1>
+                    <journal-zoom :journal="journalData"></journal-zoom>
 
-                    </div>
-
-                    <div>
-                        <h2>similar journals</h2>
-                        <div class="similar" v-for="myJournal in journalData.similar_journals">
-                            <journal-row :journal="myJournal" @zoom="zoomOnJournal"></journal-row>
-
-                        </div>
-
-                    </div>
-
-
-                    <pre>{{journalData}}</pre>
 
                 </div>
 
@@ -94,6 +80,7 @@
 
     import JournalRow from '../components/JournalRow'
     import SearchForm from '../components/SearchForm'
+    import JournalZoom from '../components/JournalZoom'
 
 
     export default {
@@ -124,7 +111,8 @@
         components: {
             axios,
             SearchForm,
-            JournalRow
+            JournalRow,
+            JournalZoom
         },
         metaInfo: {
             title: 'Search'
