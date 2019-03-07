@@ -3,7 +3,6 @@ import Router from 'vue-router'
 import Meta from 'vue-meta'
 
 import Journal from './views/Journal'
-import Home from './views/Home'
 import Search from './views/Search'
 
 
@@ -25,11 +24,11 @@ export default new Router({
   routes: [
     {
       path: '/',
-      component: Home
+      redirect: "/search"
     },
 
     {
-      path: '/search',
+      path: '/search/:queryType?/:query?',
       component: Search
     },
 

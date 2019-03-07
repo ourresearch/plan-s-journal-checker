@@ -66,7 +66,7 @@
         left: 0;
         right: 0;
         background: #fff;
-        &.landing {
+        &.search {
             background: none;
             height: 50px;
             position: static;
