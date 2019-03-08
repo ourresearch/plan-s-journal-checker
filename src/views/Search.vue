@@ -1,5 +1,6 @@
 <template>
     <div class="home">
+        hello
         <div class="top-screen" :class="{'landing-mode': showLandingMode}">
 
             <div class="content" :class="{'landing-mode': showLandingMode}">
@@ -8,7 +9,7 @@
                     Find journals that meet your
                     open-access funder mandate:
                 </h2>
-                <search-form @submit="formSubmitHandler" @update="updateSearch"></search-form>
+                <search-form @submit="formSubmitHandler"></search-form>
             </div>
 
 
@@ -30,22 +31,17 @@
                 <div class="results-list loaded" v-if="!isLoading">
                     <div v-for="myJournal in journalData.list">
 
-                        <journal-row :journal="myJournal" @zoom="zoomOnJournal"></journal-row>
+                        <journal-row :journal="myJournal"></journal-row>
 
                     </div>
                 </div>
             </div>
 
 
-            <!--<transition-->
-            <!--name="custom-classes-transition"-->
-            <!--enter-active-class="animated slideInRight"-->
-            <!--leave-active-class="animated slideOutRight"-->
-            <!--&gt;-->
             <div class="single-result-wrapper" v-if="journalData && !journalData.list">
-                <div class="go-back-wrapper" v-if="mainQuery.journalQueryField && mainQuery.journalQueryField != 'journal'">
+                <div class="go-back-wrapper" v-if="storeState.topic || storeState.text">
                     <div class="go-back">
-                        <div class="back-button" @click="resubmitForm">
+                        <div class="back-button" @click="store.setJournal(null)">
                             <i class="fas fa-arrow-left"></i> back to results
                         </div>
 
@@ -66,7 +62,6 @@
 
             </div>
 
-            <!--</transition>-->
 
 
         </div>
@@ -78,6 +73,7 @@
 <script>
     import axios from 'axios'
 
+    import {store} from '../components/store.js'
     import JournalRow from '../components/JournalRow'
     import SearchForm from '../components/SearchForm'
     import JournalZoom from '../components/JournalZoom'
@@ -87,22 +83,15 @@
         name: 'Search',
         data: () => ({
             showLandingMode: true,
+            storeState: store.state,
+            store: store,
 
-            journalEndpoint: "https://rickscafe-api.herokuapp.com/journal/",
             baseEndpoint: "https://rickscafe-api.herokuapp.com/",
             endpoints: {
                 topic: "topic/",
                 text: "search/journals/",
                 journal: "journal/"
             },
-
-            mainQuery: {
-                journalQuery: null,
-                journalQueryField: null,
-                institution: null,
-                funder: null
-            }, // set from form or url
-
 
             isLoading: false,
             journalData: {}
@@ -119,32 +108,28 @@
         },
         computed: {},
         methods: {
-            updateSearch(formData){
-            },
-            zoomOnJournal(id){
-                console.log("zoom!", id)
-                let clonedMainQuery = { ... this.mainQuery}
-                clonedMainQuery.journalQueryField = "journal"
-                clonedMainQuery.journalQuery = id
-                this.doSearch(clonedMainQuery)
-            },
-            formSubmitHandler(formData){
-                this.doSearch(formData)
-                this.mainQuery = formData
+            formSubmitHandler(){
+                this.doSearch()
                 this.showLandingMode = false
             },
-            resubmitForm(){
-                this.doSearch(this.mainQuery)
-            },
-            doSearch(formData){
-                console.log("home.doSearch", formData)
+            doSearch(){
+                console.log("home.doSearch", this.storeState)
 
-                this.isLoading = true
                 let url = this.baseEndpoint
-                    + this.endpoints[formData.journalQueryField]
-                    + formData.journalQuery
-                    + "?institution=" + formData.institution
-                    + "&funder=" + formData.funder
+                if (this.storeState.journal){
+                    url += this.endpoints["journal"] + this.storeState.journal
+                }
+
+                else if (this.storeState.text){
+                    url += this.endpoints["text"] + this.storeState.text
+                }
+
+                else if (this.storeState.topic){
+                    url += this.endpoints["topic"] + this.storeState.topic
+                }
+                url += "?institution=" + this.storeState.institution
+                url += "&funder=" + this.storeState.funder
+
 
                 console.log("Home.doSearch() getting this url", url)
                 axios.get(url)
@@ -155,111 +140,14 @@
                     })
             },
 
-            getZoomJournal(id) {
-                this.res.isLoading = true
-                this.res.zoomJournal.show = true
 
-                let url = this.baseEndpoint
-                    + this.endpoints.journal
-                    + id
-                    + this.getJournalQueryModifiersStr()
-
-
-                console.log("getting this url", url)
-
-                axios.get(url)
-                    .then(response => {
-                        console.log("got response from journal endpoint", response.data)
-                        this.res.zoomJournal.data = response.data
-                        this.res.isLoading = false
-                    })
-
-            },
-            getJournalList(q, queryType) {
-                this.res.journalList.isLoading = true
-                this.res.zoomJournal.show = false
-                // this.$router.push({
-                //     path: "/",
-                //     query: {
-                //         q: q,
-                //         queryType: queryType
-                //     }
-                // })
-
-                let url = this.baseEndpoint
-                    + this.endpoints[queryType]
-                    + q
-                    + this.getJournalQueryModifiersStr()
-
-
-                console.log("getting this url", url)
-
-                axios.get(url)
-                    .then(response => {
-                        console.log("got response from journal list", response.data.list)
-                        this.res.journalList.data = response.data.list
-                        this.res.journalList.isLoading = false
-                    })
-
-            },
-            getJournalQueryModifiers() {
-                let ret = {}
-                if (this.form.institution) {
-                    ret.institution = this.form.institution.id
-                }
-                if (this.form.funder) {
-                    ret.funder = this.form.funder.id
-                }
-                return ret
-            },
-
-            getJournalQueryModifiersStr() {
-                let str = Object.entries(this.getJournalQueryModifiers())
-                    .map(entry => {
-                        return entry[0] + "=" + entry[1]
-                    })
-                    .join("&")
-
-                if (str) {
-                    return "?" + str
-                }
-                else {
-                    return ""
-                }
-            },
-
-            submitForm() {
-                console.log(
-                    "submitting form",
-                    this.form.journalSearch.q,
-                    this.form.journalSearch.type,
-                    this.form
-                )
-
-                this.showLandingMode = false;
-                // this.$router.push({
-                //     path: "/",
-                //     query: this.getJournalQueryModifiers()
-                // })
-
-                if (["topic", "text"].indexOf(this.form.journalSearch.type) > -1) {
-                    this.getJournalList(
-                        this.form.journalSearch.q,
-                        this.form.journalSearch.type
-                    )
-                }
-                else {
-                    this.res.journalList.data = []
-                    this.getJournal(this.form.journalSearch.q)
-                }
-            }
         },
         mounted() {
             // store.reset()
-            this.$router.push({
-                path: "/",
-                query: {}
-            })
+            // this.$router.push({
+            //     path: "/",
+            //     query: {}
+            // })
             setTimeout(function () {
                 document.getElementById("journal-input").focus()
             }, 100)
@@ -267,6 +155,9 @@
         watch: {
             "$route": function (to, from) {
                 // console.log("route change")
+            },
+            "storeState": function(newState){
+                console.log("Search.watch(): store state changed", to)
             }
         }
     }

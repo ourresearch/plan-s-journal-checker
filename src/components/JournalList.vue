@@ -1,5 +1,5 @@
 <template>
-    <div class="journal-zoom">
+    <div class="journal-search">
         <div class="top">
             <div class="main-col">
                 <h1>{{journalData.name}}</h1>
@@ -12,7 +12,7 @@
         <div>
             <h2>similar journals</h2>
             <div class="similar" v-for="myJournal in journal.similar_journals">
-                <journal-row :journal="myJournal"></journal-row>
+                <journal-row :journal="myJournal" @zoom="zoomOnJournal"></journal-row>
 
             </div>
 
@@ -25,16 +25,17 @@
 </template>
 
 <script>
-    import JournalRow from '../components/JournalRow'
+    import axios from 'axios'
+    import {store} from '../components/store.js'
+
     export default {
-        name: 'JournalZoom',
+        name: 'JournalList',
+        props: ["journals"],
         components: {
-            JournalRow
+            store
         },
-        props: ["journal"],
         data() {
             return {
-                journalData: this.journal
             };
         },
         methods: {

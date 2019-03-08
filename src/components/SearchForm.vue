@@ -18,7 +18,7 @@
 </template>
 
 <script>
-    import axios from 'axios'
+    import {store} from '../components/store.js'
     import InputJournal from '../components/InputJournal'
     import InputInstitution from '../components/InputInstitution'
     import InputFunder from '../components/InputFunder'
@@ -26,43 +26,46 @@
     export default {
         name: 'SearchForm',
         components: {
-            axios,
             InputJournal,
             InputInstitution,
             InputFunder,
+            store
         },
         props: [], // it'll need these later, to load from URL. or maybe get from URL?
         data() {
             return {
-                values: {
-                    journalQuery: null,
-                    journalQueryField: null,
-                    institution: null,
-                    funder: null
-                }
             };
         },
         methods: {
             update() {
-                console.log("SearchForm.update()", this.values)
-                this.$emit("input", this.values)
+                console.log("SearchForm.update()", store.state)
+                // this.$emit("input")
             },
             submit(){
-                this.$emit("submit", this.values)
+                console.log("SearchForm.submit()", store.state)
+                this.$emit("submit")
             },
+
             updateFunder(id) {
-                this.values.funder = id
+                store.setFunder(id)
                 document.getElementById("institution-input").focus()
                 this.update()
             },
             updateInstitution(id) {
-                this.values.institution = id
+                store.setInstitution(id)
                 this.update()
             },
             updateJournal(input) {
                 console.log("updating journal", input)
-                this.values.journalQueryField = input.field
-                this.values.journalQuery = input.val
+                if (input.field === "topic") {
+                    store.setTopic(input.val)
+                }
+                else if (input.field === "text") {
+                    store.setText(input.val)
+                }
+                else if (input.field === "journal") {
+                    store.setJournal(input.val)
+                }
                 document.getElementById("funder-input").focus()
                 this.update()
             },

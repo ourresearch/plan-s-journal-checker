@@ -8,6 +8,7 @@
 
 <script>
     import axios from 'axios'
+    import JournalZoom from '../components/JournalZoom'
 
     const toLower = text => {
         return text.toString().toLowerCase()

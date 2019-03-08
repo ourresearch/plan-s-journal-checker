@@ -28,7 +28,7 @@ export default new Router({
     },
 
     {
-      path: '/search/:queryType?/:query?',
+      path: '/search',
       component: Search
     },
 
