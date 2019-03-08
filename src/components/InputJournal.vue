@@ -32,21 +32,22 @@
 
 <script>
     import axios from 'axios'
-    import _ from "lodash"
+    import {store} from "../components/store"
     import {VueAutosuggest} from "vue-autosuggest";
-    import {store} from './store.js'
 
     export default {
         name: 'InputJournal',
         components: {
-            VueAutosuggest
+            VueAutosuggest,
+            store
         },
-        props:['initialValue'],
+        props:['displayValue'],
         data() {
             return {
                 results: [],
                 timeout: null,
                 hasFocus: false,
+                store: store,
                 selected: {},
                 selectedToReport: {},  // handles string selections
                 searchText: "",
@@ -115,17 +116,29 @@
                 }
             },
             blurHandler(){
-                this.hasFocus = false
-                if (!this.selected && this.searchText){
-                    this.update("text", this.searchText)
-                }
 
-                // when the user tabs out of the the input, the
-                // library doesn't close the suggestions
+                // wait to make sure that this blur isn't being cause by
+                // the user clicking to make a selection
                 let that = this
                 setTimeout(function(){
-                    that.suggestions = [];
-                }, 250)
+                    that.hasFocus = false
+                    if (!that.selected && that.searchText){
+                        that.update("text", that.searchText)
+
+
+                        // when the user tabs out of the the input, the
+                        // library doesn't close the suggestions
+                        let that = this
+                        setTimeout(function(){
+                            that.suggestions = [];
+                        }, 100)
+
+                    }
+                }, 100)
+
+
+
+
             },
             focusHandler(){
                 this.hasFocus = true
@@ -138,7 +151,7 @@
 
 
                 // null out the value of whatever field is selected right now
-                this.selectedToReport.value = null
+                this.selectedToReport.val = null
                 this.selected = null
                 this.$emit("selected", this.selectedToReport)
 
@@ -148,14 +161,15 @@
                     field: field,
                     val: val
                 }
-
                 this.$emit("selected", this.selectedToReport)
             }
         },
         watch: {
-            suggestions(newSuggestions, oldSuggestions) {
-                // console.log("new suggestions:", newSuggestions);
+            "store.journalInputDisplayStr": function(to, from) {
+                console.log("InputJournal.watch(): store.journalInputDisplayStr", to);
+                this.$refs.autosuggestJournal.searchInput = to
             },
+
 
         },
         mounted() {

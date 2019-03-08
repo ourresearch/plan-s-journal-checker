@@ -1,6 +1,5 @@
 <template>
     <div class="home">
-        hello
         <div class="top-screen" :class="{'landing-mode': showLandingMode}">
 
             <div class="content" :class="{'landing-mode': showLandingMode}">
@@ -19,48 +18,41 @@
 
 
         <div class="bottom-screen" :class="{'landing-mode': showLandingMode}">
-
-            <div class="results-list-wrapper" v-show="journalData.list">
-
-                <div class="results-list loading" v-show="isLoading">
-                    <div class="loading">
-                        Loading...
-                    </div>
-                </div>
-
-                <div class="results-list loaded" v-if="!isLoading">
-                    <div v-for="myJournal in journalData.list">
-
-                        <journal-row :journal="myJournal"></journal-row>
-
-                    </div>
+            <div class="loading-screen" v-show="store.isLoading">
+                <div class="loading">
+                    Loading...
                 </div>
             </div>
 
+            <div class="loaded-screen" v-show="!store.isLoading">
+                <div class="results-list-wrapper" v-show="!store.showJournalZoom && store.server.journalList">
 
-            <div class="single-result-wrapper" v-if="journalData && !journalData.list">
-                <div class="go-back-wrapper" v-if="storeState.topic || storeState.text">
-                    <div class="go-back">
-                        <div class="back-button" @click="store.setJournal(null)">
-                            <i class="fas fa-arrow-left"></i> back to results
+                    <div class="results-list">
+                        <div v-for="myJournal in store.server.journalList.list">
+                            <journal-row :journal="myJournal"></journal-row>
                         </div>
-
                     </div>
                 </div>
 
-                <div class="single-result loading" v-if="isLoading">
-                    <div class="loading">
-                        Loading zoomJournal...
+
+                <div class="single-result-wrapper" v-if="store.showJournalZoom">
+                    <!--<div class="go-back-wrapper" v-if="storeState.server.journalList">-->
+                        <!--<div class="go-back">-->
+                            <!--<div class="back-button" @click="store.setJournal(null)">-->
+                                <!--<i class="fas fa-arrow-left"></i> back to results-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <div class="single-result">
+                        <journal-zoom :journal="store.server.journalZoom"></journal-zoom>
+
                     </div>
-                </div>
-
-                <div class="single-result loaded" v-if="!isLoading">
-                    <journal-zoom :journal="journalData"></journal-zoom>
-
 
                 </div>
 
             </div>
+
 
 
 
@@ -86,15 +78,6 @@
             storeState: store.state,
             store: store,
 
-            baseEndpoint: "https://rickscafe-api.herokuapp.com/",
-            endpoints: {
-                topic: "topic/",
-                text: "search/journals/",
-                journal: "journal/"
-            },
-
-            isLoading: false,
-            journalData: {}
 
         }),
         components: {
@@ -109,45 +92,11 @@
         computed: {},
         methods: {
             formSubmitHandler(){
-                this.doSearch()
                 this.showLandingMode = false
             },
-            doSearch(){
-                console.log("home.doSearch", this.storeState)
-
-                let url = this.baseEndpoint
-                if (this.storeState.journal){
-                    url += this.endpoints["journal"] + this.storeState.journal
-                }
-
-                else if (this.storeState.text){
-                    url += this.endpoints["text"] + this.storeState.text
-                }
-
-                else if (this.storeState.topic){
-                    url += this.endpoints["topic"] + this.storeState.topic
-                }
-                url += "?institution=" + this.storeState.institution
-                url += "&funder=" + this.storeState.funder
-
-
-                console.log("Home.doSearch() getting this url", url)
-                axios.get(url)
-                    .then(response => {
-                        console.log("Home.doSearch() got response: ", response.data)
-                        this.journalData = response.data
-                        this.isLoading = false
-                    })
-            },
-
 
         },
         mounted() {
-            // store.reset()
-            // this.$router.push({
-            //     path: "/",
-            //     query: {}
-            // })
             setTimeout(function () {
                 document.getElementById("journal-input").focus()
             }, 100)
@@ -156,8 +105,12 @@
             "$route": function (to, from) {
                 // console.log("route change")
             },
-            "storeState": function(newState){
-                console.log("Search.watch(): store state changed", to)
+            "store.state": {
+                // handler: function(to){
+                //     console.log("Search.watch(): store state changed", to)
+                //     // this.doSearch()
+                // },
+                // deep: true
             }
         }
     }
@@ -224,6 +177,10 @@
             &.landing-mode {
                 min-height: 0;
             }
+            .loading-screen {
+                padding: 20px;
+                text-align: center;
+            }
 
             .results-list-wrapper {
                 width: 100%;
@@ -269,11 +226,8 @@
 
                     }
                 }
-                .single-result.loading {
-                    display: flex;
-                    justify-content: center;
-                }
-                .single-result.loaded {
+
+                .single-result {
                     max-width: 1150px;
                     margin: 0 auto;
                 }

@@ -2,7 +2,7 @@
     <div class="journal-zoom">
         <div class="top">
             <div class="main-col">
-                <h1>{{journalData.name}}</h1>
+                <h1>{{journal.name}}</h1>
             </div>
             <div class="tools-col">
 
@@ -34,7 +34,6 @@
         props: ["journal"],
         data() {
             return {
-                journalData: this.journal
             };
         },
         methods: {

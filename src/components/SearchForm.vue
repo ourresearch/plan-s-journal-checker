@@ -34,41 +34,47 @@
         props: [], // it'll need these later, to load from URL. or maybe get from URL?
         data() {
             return {
+                store: store
             };
         },
         methods: {
-            update() {
-                console.log("SearchForm.update()", store.state)
-                // this.$emit("input")
-            },
             submit(){
                 console.log("SearchForm.submit()", store.state)
                 this.$emit("submit")
             },
-
             updateFunder(id) {
                 store.setFunder(id)
                 document.getElementById("institution-input").focus()
-                this.update()
             },
             updateInstitution(id) {
                 store.setInstitution(id)
-                this.update()
             },
             updateJournal(input) {
                 console.log("updating journal", input)
-                if (input.field === "topic") {
+
+                // if the user enters a journal in the form, they
+                // want a first-class search on journal
+                if (input.field === "journal") {
+                    store.setTopic(null)
+                    store.setText(null)
+                    store.setJournal(input.val)
+                }
+                else if (input.field === "topic") {
                     store.setTopic(input.val)
                 }
                 else if (input.field === "text") {
                     store.setText(input.val)
                 }
-                else if (input.field === "journal") {
-                    store.setJournal(input.val)
-                }
                 document.getElementById("funder-input").focus()
-                this.update()
             },
+        },
+        watch: {
+            "store.isLoading": {
+                handler: function(to){
+                    console.log("SearchForm.watch(): store state changed", to)
+                },
+                deep: true
+            }
         }
     }
 </script>

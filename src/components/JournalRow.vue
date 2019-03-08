@@ -10,7 +10,7 @@
         <!--</div>-->
         <div class="words">
             <div class="row-main">
-                              <span class="name" @click="$emit('zoom', journal.id)">
+                              <span class="name" @click="store.setJournal(journal.id)">
                                 {{journal.name}}
                                   <span class="issn">
                                       {{journal.id}}
@@ -98,6 +98,7 @@
 
 <script>
     // import axios from 'axios'
+    import {store} from '../components/store.js'
 
     export default {
         name: 'JournalRow',
@@ -105,6 +106,7 @@
         props: ['journal'],
         data() {
             return {
+                store: store
             };
         },
         methods: {},
