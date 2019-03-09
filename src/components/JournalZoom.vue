@@ -108,7 +108,7 @@
         </div>
 
         <div class="bottom">
-            <div class="infographic">
+            <div class="infographic" v-if="store.server.journalZoom.oa_details.license">
 
 
 
@@ -162,7 +162,7 @@
                                 $
                             </span>
                             <span class="num">
-                                {{ store.server.journalZoom.oa_details.apc_fee }}
+                                {{ Number(store.server.journalZoom.oa_details.apc_fee) }}
                             </span>
                         </div>
                         <div class="label">
@@ -235,7 +235,7 @@
 
             <div class="related-journals">
                 <h2>similar journals</h2>
-                <div class="related-journal-wrapper" v-for="myJournal in server.journalZoom.similar_journals">
+                <div class="related-journal-wrapper" v-for="myJournal in server.journalZoom.similar_journals.slice(0,3)">
                     <journal-row :journal="myJournal"></journal-row>
                 </div>
             </div>
@@ -285,7 +285,7 @@
             justify-content: space-between;
             .main-col {
                 display: flex;
-                flex-basis: 700px;
+                flex: 2;
                 .image {
                     margin: 10px 25px 0 0;
                     height: 200px;
@@ -337,7 +337,7 @@
                         }
                     }
                     .row.topics {
-                        border-top: 1px solid #ddd;
+                        /*border-top: 1px solid #ddd;*/
                         margin-top: 5px;
                         padding-top: 5px;
                         i.fas {
@@ -355,9 +355,48 @@
                 }
 
             }
+            .tools-col {
+                flex: 1;
+                display: flex;
+                justify-content: flex-end;
+            }
         }
 
         .bottom {
+            display: flex;
+            .infographic {
+                border-top: 1px solid #ddd;
+                border-bottom: 1px solid #ddd;
+                margin: 20px 0 10px;
+                padding: 20px 0 10px;
+                flex: 2;
+                display: flex;
+                flex-wrap: wrap;
+                .infobox {
+                    margin-right: 20px;
+                    width: 200px;
+                    width: 250px;
+                    &.impact {
+                    }
+                    .big {
+                        font-size: 40px;
+                        font-weight: bold;
+                        line-height: 1.1;
+                    }
+                }
+
+            }
+
+            .related-journals {
+                margin-top: 20px;
+                h2 {
+                    margin: 0 0 20px;
+                }
+                /*display: flex;*/
+                .journal-row {
+
+                }
+            }
 
         }
 
