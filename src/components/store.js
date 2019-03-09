@@ -80,10 +80,18 @@ export const store = {
     },
     setFunder(id) {
         this.state.funder = id
+
+
+        // this is temporary!
+        this.setTopic(this.state.topic)
+
+
         if (!id){
             this.server.funder = {}
             return
         }
+
+
 
         let url = this.baseEndpoint + this.endpoints.funder  + id
         console.log("store.getFunder() getting this url", url)
@@ -103,8 +111,7 @@ export const store = {
     setTopic(topic) {
         // clear out everything that's not topic
         this.state.text = null
-        this.state.journal = null
-        this.server.journalZoom = {}
+        this.setJournal(null)
 
         // get the list from the server
         this.state.topic = topic
@@ -115,8 +122,7 @@ export const store = {
     setText(text) {
         // clear out everything that's not text
         this.state.topic = null
-        this.state.journal = null
-        this.server.journalZoom = {}
+        this.setJournal(null)
 
         // get the list from the server
         this.state.text = text
@@ -126,7 +132,7 @@ export const store = {
     setJournal(issn) {
         this.state.journal = issn
         this.showJournalZoom = true
-        this.state.journalInputDisplayStr = "NEW JOURNAL!"
+        // this.state.journalInputDisplayStr = "NEW JOURNAL!"
 
         if (!issn){
             this.server.journalZoom = {}
@@ -148,6 +154,7 @@ export const store = {
                 this.isLoading = false
             })
             .catch(e => {
+                console.log("store.getJournalZoom() had an error", e)
                 this.isLoading = false
                 this.server.journalZoom = {}
             })

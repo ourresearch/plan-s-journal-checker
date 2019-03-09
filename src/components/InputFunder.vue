@@ -105,8 +105,6 @@
                 this.$refs.inputFunder.searchInput = ""
                 this.$emit("selected", null)
 
-                this.$refs.inputFunder.searchInput.focus()
-                this.$refs.inputFunder.focus()
                 document.getElementById("funder-input").focus()
 
             }

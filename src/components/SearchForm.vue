@@ -71,7 +71,6 @@
         watch: {
             "store.isLoading": {
                 handler: function(to){
-                    console.log("SearchForm.watch(): store state changed", to)
                 },
                 deep: true
             }

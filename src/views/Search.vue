@@ -17,7 +17,7 @@
         </div>
 
 
-        <div class="bottom-screen" :class="{'landing-mode': showLandingMode}">
+        <div class="bottom-screen" v-show="!showLandingMode" :class="{'landing-mode': showLandingMode}">
             <div class="loading-screen" v-show="store.isLoading">
                 <div class="loading">
                     Loading...
@@ -45,7 +45,7 @@
                     <!--</div>-->
 
                     <div class="single-result">
-                        <journal-zoom :journal="store.server.journalZoom"></journal-zoom>
+                        <journal-zoom></journal-zoom>
 
                     </div>
 
@@ -181,58 +181,63 @@
                 padding: 20px;
                 text-align: center;
             }
+            .loaded-screen {
+                padding-top: 30px;
 
-            .results-list-wrapper {
-                width: 100%;
-                .results-list {
-                    max-width: 1150px;
-                    margin: 0 auto;
-                    &.loading {
-                        display: flex;
-                        justify-content: center;
-                    }
-                    &.loaded {
-                        padding-top: 50px;
-
-                    }
-
-                }
-
-            }
-
-            .single-result-wrapper {
-                /*position: absolute;*/
-                /*top: 0;*/
-                /*bottom: 0;*/
-                /*width: 100%;*/
-                /*background: #fff;*/
-                /*box-shadow: 0 10px 5px 5px rgba(0,0,0,.5);*/
-                /*border-left: 1px solid #333;*/
-                /*z-index: 99;*/
-
-                .go-back-wrapper {
-                    background: #4DA1E7;
-                    color: #fff;
-                    padding: 10px;
-                    .go-back {
+                .results-list-wrapper {
+                    width: 100%;
+                    .results-list {
                         max-width: 1150px;
                         margin: 0 auto;
-                        .back-button {
-                            font-size: 16px;
-                            text-transform: uppercase;
-                            font-weight: bold;
-                            cursor: pointer;
+                        &.loading {
+                            display: flex;
+                            justify-content: center;
+                        }
+                        &.loaded {
+                            padding-top: 50px;
+
                         }
 
                     }
+
                 }
 
-                .single-result {
-                    max-width: 1150px;
-                    margin: 0 auto;
+                .single-result-wrapper {
+                    /*position: absolute;*/
+                    /*top: 0;*/
+                    /*bottom: 0;*/
+                    /*width: 100%;*/
+                    /*background: #fff;*/
+                    /*box-shadow: 0 10px 5px 5px rgba(0,0,0,.5);*/
+                    /*border-left: 1px solid #333;*/
+                    /*z-index: 99;*/
+
+                    .go-back-wrapper {
+                        background: #4DA1E7;
+                        color: #fff;
+                        padding: 10px;
+                        .go-back {
+                            max-width: 1150px;
+                            margin: 0 auto;
+                            .back-button {
+                                font-size: 16px;
+                                text-transform: uppercase;
+                                font-weight: bold;
+                                cursor: pointer;
+                            }
+
+                        }
+                    }
+
+                    .single-result {
+                        max-width: 1150px;
+                        margin: 0 auto;
+                    }
+
                 }
 
             }
+
 
         }
 

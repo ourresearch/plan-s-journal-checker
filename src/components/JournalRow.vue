@@ -20,8 +20,10 @@
 
 
             <div class="row-topics">
-                <div class="topic" v-for="topic in journal.topics.slice(0,3)">
-                    {{topic.replace(" (miscellaneous)", "")}};
+                <div class="topic"
+                     @click="store.setTopic(topic)"
+                     v-for="topic in journal.topics.slice(0,3)">
+                    {{topic[0].replace(" (miscellaneous)", "")}};
                 </div>
             </div>
 
@@ -179,6 +181,10 @@
                 display: flex;
                 align-items: center;
                 font-size: 16px;
+                cursor: pointer;
+                &:hover {
+                    text-decoration: underline;
+                }
 
             }
         }
