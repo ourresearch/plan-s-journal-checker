@@ -21,6 +21,7 @@
     "vue": "^2.5.13",
     "vue-analytics": "^5.10.4",
     "vue-autosuggest": "^1.8.1",
+    "vue-flag-icon": "^1.0.6",
     "vue-material": "1.0.0-beta-8",
     "vue-meta": "^1.5.0",
     "vue-moment": "^3.2.0",

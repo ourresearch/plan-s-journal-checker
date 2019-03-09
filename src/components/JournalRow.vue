@@ -21,7 +21,7 @@
 
             <div class="row-topics">
                 <div class="topic"
-                     @click="store.setTopic(topic)"
+                     @click="store.setTopic(topic[0])"
                      v-for="topic in journal.topics.slice(0,3)">
                     {{topic[0].replace(" (miscellaneous)", "")}};
                 </div>
@@ -120,7 +120,7 @@
 <style lang="scss">
     .journal-row {
         display: flex;
-        margin-bottom: 40px;
+        margin-bottom: 30px;
         &.compliant {
             opacity: 1;
         }
@@ -132,19 +132,19 @@
         }
         .row-main {
             .name {
-                font-size: 22px;
+                font-size: 20px;
                 cursor: pointer;
                 color: #4DA1E7;
             }
             .issn {
-                font-size: 50%;
+                font-size: 11px;
                 font-weight: normal;
                 color: #333;
             }
         }
         .row-meta {
             font-size: 16px;
-            padding-top: 10px;
+            padding-top: 5px;
             display: flex;
             .icons {
                 font-size: 70%;
@@ -171,7 +171,6 @@
 
         .row-topics {
             display: flex;
-            margin-top: 8px;
             .topic {
                 /*border: 1px solid #999;*/
                 /*padding: 2px 7px;*/

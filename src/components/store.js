@@ -60,6 +60,8 @@ export const store = {
 
     setInstitution(id) {
         this.state.institution = id
+        this.refreshFromServer()
+
         if (!id){
             this.server.institution = {}
             return
@@ -80,13 +82,11 @@ export const store = {
     },
     setFunder(id) {
         this.state.funder = id
-
-
-        // this is temporary!
-        this.setTopic(this.state.topic)
+        this.refreshFromServer()
 
 
         if (!id){
+            console.log("unsetting funder")
             this.server.funder = {}
             return
         }
@@ -106,6 +106,19 @@ export const store = {
                 this.isLoading = false
                 this.server.funder = {}
             })
+    },
+
+    refreshFromServer(){
+        if (this.state.journal){
+            this.setJournal(this.state.journal)
+        }
+
+        if (this.state.topic){
+            this.setTopic(this.state.topic)
+        }
+        else if (this.state.text){
+            this.setText(this.state.text)
+        }
     },
 
     setTopic(topic) {

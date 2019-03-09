@@ -13,6 +13,7 @@ import VueScrollTo from 'vue-scrollto'
 import VueAnalytics from 'vue-analytics'
 import VueMoment from 'vue-moment'
 import VueTyperPlugin from 'vue-typer'
+import FlagIcon from 'vue-flag-icon'
 
 Vue.use(VueMaterial)
 Vue.use(VueScrollTo)
@@ -22,6 +23,7 @@ Vue.use(VueAnalytics, {
 })
 Vue.use(VueMoment);
 Vue.use(VueTyperPlugin)
+Vue.use(FlagIcon);
 
 
 
