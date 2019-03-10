@@ -52,21 +52,20 @@
                 store.setInstitution(id)
             },
             updateJournal(input) {
-                console.log("updating journal", input)
+                console.log("updating journal search field", input)
+                store.setState(input.field, input.val)
 
-                // if the user enters a journal in the form, they
-                // want a first-class search on journal
-                if (input.field === "journal") {
-                    store.setTopic(null)
-                    store.setText(null)
-                    store.setJournal(input.val)
-                }
-                else if (input.field === "topic") {
-                    store.setTopic(input.val)
-                }
-                else if (input.field === "text") {
-                    store.setText(input.val)
-                }
+                // // if the user enters a journal in the form, they
+                // // want a first-class search on journal
+                // if (input.field === "journal") {
+                //     store.setJournal(input.val)
+                // }
+                // else if (input.field === "topic") {
+                //     store.setTopic(input.val)
+                // }
+                // else if (input.field === "text") {
+                //     store.setText(input.val)
+                // }
                 document.getElementById("funder-input").focus()
             },
         },

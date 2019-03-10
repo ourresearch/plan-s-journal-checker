@@ -25,7 +25,7 @@
             </div>
 
             <div class="loaded-screen" v-show="!store.isLoading">
-                <div class="results-list-wrapper" v-show="!store.showJournalZoom && store.server.journalList">
+                <div class="results-list-wrapper" v-show="store.server.journalList">
 
                     <div class="results-list">
                         <div v-for="myJournal in store.server.journalList.list">
@@ -35,10 +35,10 @@
                 </div>
 
 
-                <div class="single-result-wrapper" v-if="store.showJournalZoom">
+                <div class="single-result-wrapper" v-if="store.server.journalZoom">
                     <!--<div class="go-back-wrapper" v-if="storeState.server.journalList">-->
                         <!--<div class="go-back">-->
-                            <!--<div class="back-button" @click="store.setJournal(null)">-->
+                            <!--<div class="back-button" @click="store.journal = null">-->
                                 <!--<i class="fas fa-arrow-left"></i> back to results-->
                             <!--</div>-->
                         <!--</div>-->
@@ -97,20 +97,27 @@
 
         },
         mounted() {
+            store.setFromQueryObj(this.$route.query)
+            store.fetchAll()
+            if (this.$route.query){
+                this.showLandingMode = false
+            }
             setTimeout(function () {
                 document.getElementById("journal-input").focus()
             }, 100)
         },
         watch: {
             "$route": function (to, from) {
-                // console.log("route change")
+                console.log("route changed", to.query, from.query)
+                store.setFromQueryObj(to.query)
+                store.fetchAll()
             },
             "store.state": {
-                // handler: function(to){
-                //     console.log("Search.watch(): store state changed", to)
-                //     // this.doSearch()
-                // },
-                // deep: true
+                handler: function(to){
+                    console.log("Search.watch(): store state changed", to)
+                    this.$router.push({query: store.getAsQueryObj()})
+                },
+                deep: true
             }
         }
     }
