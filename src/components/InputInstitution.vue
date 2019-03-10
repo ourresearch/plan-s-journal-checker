@@ -4,7 +4,7 @@
         <vue-autosuggest
                 class="hello"
                 id="auto-2"
-                ref="autosuggestInstitution"
+                ref="inputInstitution"
                 :suggestions="suggestions"
                 :inputProps="inputProps"
                 :getSuggestionValue="getSuggestionValue"
@@ -25,6 +25,7 @@
 <script>
     import axios from 'axios'
     import {VueAutosuggest} from "vue-autosuggest";
+    import {store} from '../store.js'
 
     export default {
         name: 'InputInstitution',
@@ -38,6 +39,7 @@
                 timeout: null,
                 selected: this.initialValue,
                 searchText: "",
+                store: store,
                 hasFocus: false,
                 debounceMilliseconds: 50,
                 institutionsUrl: "https://api.rickscafe.io/autocomplete/institutions/name/",
@@ -83,14 +85,20 @@
                 this.suggestions = []
                 this.selected = null
                 this.searchText = ""
-                this.$refs.autosuggestInstitution.searchInput = ""
-                this.$emit("selected", null)
+                this.$refs.inputInstitution.searchInput = ""
+                this.$emit("clear")
+                this.store.setInstitution(null)
+                document.getElementById("institution-input").focus()
 
             }
         },
         watch: {
-            suggestions(newSuggestions, oldSuggestions) {
-                // console.log("new suggestions:", newSuggestions);
+            "store.server.institution": {
+                handler: function(to){
+                    console.log("SETTTING INSTI", store.server.institution.name)
+                    this.$refs.inputInstitution.searchInput = store.server.institution.name
+                },
+                deep: true
             }
         }
     }

@@ -155,6 +155,7 @@
                 this.store.setText(null)
 
                 this.$emit("clear")
+                document.getElementById("journal-input").focus()
             },
             update(field, val){
                 this.selectedToReport = {

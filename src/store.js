@@ -20,7 +20,6 @@ export const store = {
         journal: null,
     },
 
-    isLoading: false,
     showJournalZoom: false,
     server: {
         institution: {},
@@ -83,6 +82,7 @@ export const store = {
         }
 
         this.state[k] = v
+        this.setJournalInputContent()
     },
 
     setFromQueryObj(obj){
@@ -97,6 +97,18 @@ export const store = {
             that.state[k] = newVal
             that.setState(k, newVal)
         })
+    },
+
+    setJournalInputContent(){
+        if (this.state.topic){
+            this.server.journalInputContent = this.state.topic
+        }
+        else if (this.state.text){
+            this.server.journalInputContent = this.state.text
+        }
+        else if (this.server.journalZoom){
+            this.server.journalInputContent = this.server.journalZoom.name
+        }
     },
 
 
@@ -127,14 +139,12 @@ export const store = {
             return Promise.resolve(true)
         }
         let url = this.baseEndpoint + this.endpoints.institution + this.state.institution
-        this.isLoading = true
+
         let request = axios.get(url)
             .then(response => {
                 this.server.institution = response.data
-                this.isLoading = false
             })
             .catch(e => {
-                this.isLoading = false
                 this.server.institution = {}
             })
 
@@ -146,14 +156,11 @@ export const store = {
             return Promise.resolve(true)
         }
         let url = this.baseEndpoint + this.endpoints.funder  + this.state.funder
-        this.isLoading = true
         let request = axios.get(url)
             .then(response => {
                 this.server.funder = response.data
-                this.isLoading = false
             })
             .catch(e => {
-                this.isLoading = false
                 this.server.funder = {}
             })
         return request
@@ -182,15 +189,12 @@ export const store = {
         url += "&funder=" + this.state.funder
 
         console.log("store.getJournalList() getting this url", url)
-        this.isLoading = true
         let request = axios.get(url)
             .then(response => {
                 console.log("store.getJournalList() got response: ", response.data)
                 this.server.journalList = response.data
-                this.isLoading = false
             })
             .catch(e => {
-                this.isLoading = false
                 this.server.journalList = {}
             })
         return request
@@ -199,6 +203,7 @@ export const store = {
     fetchJournalZoom() {
         if (!this.state.journal){
             this.server.journalZoom = {}
+            this.setJournalInputContent()
             return Promise.resolve(true)
         }
 
@@ -207,16 +212,14 @@ export const store = {
         url += "?institution=" + this.state.institution
         url += "&funder=" + this.state.funder
 
-        this.isLoading = true
         let request = axios.get(url)
             .then(response => {
                 console.log("store.getJournalZoom() got response: ", response.data)
                 this.server.journalZoom = response.data
-                this.isLoading = false
+                this.setJournalInputContent()
             })
             .catch(e => {
                 console.log("store.getJournalZoom() had an error", e)
-                this.isLoading = false
                 this.server.journalZoom = {}
             })
         return request

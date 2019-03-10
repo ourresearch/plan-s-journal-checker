@@ -48,6 +48,7 @@
                 selected: this.initialValue,
                 searchText: "",
                 hasFocus: false,
+                store: store,
                 alert: false,
                 debounceMilliseconds: 50,
                 fundersUrl: "https://api.rickscafe.io/autocomplete/funders/name/",
@@ -103,15 +104,20 @@
                 this.selected = null
                 this.searchText = ""
                 this.$refs.inputFunder.searchInput = ""
-                this.$emit("selected", null)
+                this.$emit("clear")
+
+                this.store.setFunder(null)
 
                 document.getElementById("funder-input").focus()
 
             }
         },
         watch: {
-            suggestions(newSuggestions, oldSuggestions) {
-                // console.log("new suggestions:", newSuggestions);
+            "store.server.funder": {
+                handler: function(to){
+                    this.$refs.inputFunder.searchInput = store.server.funder.name
+                },
+                deep: true
             }
         }
     }
