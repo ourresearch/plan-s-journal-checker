@@ -19,21 +19,17 @@
                         </div>
 
                         <div class="noncompliant" v-if="!server.journalZoom.policy_compliance.compliant">
-                            <i class="fas fa-thumbs-down"></i>
-                            This hybrid journal
-                            <strong>does not comply</strong> with your funder publication guidelines. <a href="https://www.coalition-s.org/">Learn more</a>
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Noncompliant
 
                         </div>
                     </div>
 
 
 
+
                     <h1>
                         {{server.journalZoom.name}}
-                        <small class="issn">
-
-                            {{server.journalZoom.id}}
-                        </small>
                     </h1>
 
                     <div class="row publisher">
@@ -51,39 +47,13 @@
                             </span>
                         </span>
                     </div>
-                    <div class="row volume">
-                        <span class="volume">
-                                  <span class="low" v-show="server.journalZoom.num_articles_since_2018 < 25">
-                                      <span class="icons">
-                                          <i class="fas fa-circle"></i>
-                                          <i class="far fa-circle"></i>
-                                          <i class="far fa-circle"></i>
-                                      </span>
-                                      Low
-                                  </span>
-                                  <span class="low"
-                                        v-show="server.journalZoom.num_articles_since_2018 > 25 && server.journalZoom.num_articles_since_2018 < 150">
-                                      <span class="icons">
-                                          <i class="fas fa-circle"></i>
-                                          <i class="fas fa-circle"></i>
-                                          <i class="far fa-circle"></i>
-                                      </span>
-                                      Medium
-                                  </span>
-                                  <span class="high" v-show="server.journalZoom.num_articles_since_2018 > 150">
-                                      <span class="icons">
-                                          <i class="fas fa-circle"></i>
-                                          <i class="fas fa-circle"></i>
-                                          <i class="fas fa-circle"></i>
-                                      </span>
-                                      High
-                                  </span>
-                                  volume
-                              </span>
 
-
-                        ({{server.journalZoom.num_articles_since_2018}} articles published in the last year)
+                    <div class="row issn">
+                        <div class="issn">
+                        ISSN: {{server.journalZoom.id}}
                     </div>
+                    </div>
+
                     <div class="row topics">
                         <div class="topic"
                              @click="store.setTopic(topic[0])"
@@ -115,25 +85,29 @@
 
                 <!--IMPACT INFOBOX-->
                 <div class="infobox impact">
-                    <div class="main">
+                    <div class="main-row">
                         <div class="big">
                             {{ 99 - (store.server.journalZoom.topics[0][1] * 24) }}
                         </div>
                         <div class="label">
-                            <div class="main">Percentile Impact</div>
-                            <div class="minor">in {{ store.server.journalZoom.topics[0][0].replace(" (miscellaneous)", "") }}</div>
+                            Percentile Citedness
+                            <div class="main"></div>
                         </div>
+                    </div>
+
+                    <div class="second-row">
+                            <div class="minor">in {{ store.server.journalZoom.topics[0][0].replace(" (miscellaneous)", "") }}</div>
                     </div>
 
 
                     <div class="also">
-                        <div class="also-row sjr">
-                            <a :href="'https://www.scimagojr.com/journalsearch.php?q=' + store.server.journalZoom.id">
-                                <i class="fas fa-chart-area"></i>
-                                <strong>{{ store.server.journalZoom.sjr }}</strong> Scimago Journal Ranking
-                            </a>
+                        <!--<div class="also-row sjr">-->
+                            <!--<a :href="'https://www.scimagojr.com/journalsearch.php?q=' + store.server.journalZoom.id">-->
+                                <!--<i class="fas fa-chart-area"></i>-->
+                                <!--<strong>{{ store.server.journalZoom.sjr }}</strong> Scimago Journal Ranking-->
+                            <!--</a>-->
 
-                        </div>
+                        <!--</div>-->
 
 
                         <div class="peer-review also-row" v-show="store.server.journalZoom.oa_details.review_process">
@@ -156,32 +130,29 @@
 
                 <!--PRICE INFOBOX-->
                 <div class="infobox price">
-                    <div class="main">
+                    <div class="main-row">
                         <div class="big">
-                            <span class="currency">
-                                $
-                            </span>
                             <span class="num">
-                                {{ Number(store.server.journalZoom.oa_details.apc_fee) }}
+                                <span class="currency">$</span>{{ Number(store.server.journalZoom.oa_details.apc_fee).toLocaleString() }}
                             </span>
                         </div>
-                        <div class="label">
-                            Article Processing Charge
+                    </div>
+                    <div class="second-row">
+                        Article Processing Charge
+                    </div>
+                    <div class="also">
+                        <div class="also-row" v-show="store.server.journalZoom.oa_details.submission_fee">
+                            <a :href="store.server.journalZoom.oa_details.submission_fee_url">
+                                <i class="far fa-money-bill-alt"></i>
+                                <strong>${{ store.server.journalZoom.oa_details.submission_fee }}</strong>
+                                Submission Fee
+                            </a>
                         </div>
-                        <div class="also">
-                            <div class="also-row" v-show="store.server.journalZoom.oa_details.submission_fee">
-                                <a :href="store.server.journalZoom.oa_details.submission_fee_url">
-                                    <i class="far fa-money-bill-alt"></i>
-                                    <strong>${{ store.server.journalZoom.oa_details.submission_fee }}</strong>
-                                    Submission Fee
-                                </a>
-                            </div>
-                            <div class="also-row">
-                                <a :href="store.server.journalZoom.oa_details.apc_waiver_url">
-                                    <i class="fas fa-hand-holding-usd"></i>
-                                    Waivers available
-                                </a>
-                            </div>
+                        <div class="also-row">
+                            <a :href="store.server.journalZoom.oa_details.apc_waiver_url">
+                                <i class="fas fa-hand-holding-usd"></i>
+                                Waivers available
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -191,15 +162,34 @@
 
                 <!--SPEED INFOBOX-->
                 <div class="infobox speed">
-                    <div class="main">
+                    <div class="main-row">
                         <div class="big">
                             <span class="num">
                                 {{ (store.server.journalZoom.oa_details.weeks_submission_to_publication / 4).toFixed(1) }}
                             </span>
                         </div>
                         <div class="label">
-                            Months from submission to publication (avg)
+                            Months
                         </div>
+                    </div>
+                    <div class="second-row">
+                        Average time from submission to publication
+                    </div>
+                </div>
+
+
+
+                <!--VOLUME INFOBOX-->
+                <div class="infobox volume">
+                    <div class="main-row">
+                        <div class="big">
+                            <span class="num">
+                                {{Number(server.journalZoom.num_articles_since_2018).toLocaleString()}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="second-row">
+                        articles published per year
                     </div>
                 </div>
 
@@ -207,15 +197,15 @@
 
                 <!--LICENSE INFOBOX-->
                 <div class="infobox speed">
-                    <div class="main">
+                    <div class="main-row">
                         <div class="big">
                             <span class="str">
                                 {{ store.server.journalZoom.oa_details.license }}
                             </span>
                         </div>
-                        <div class="label">
-                            Open Access license
-                        </div>
+                    </div>
+                    <div class="second-row">
+                        Open Access license
                     </div>
                     <div class="also">
                             <div class="also-row" v-show="store.server.journalZoom.oa_details.author_holds_copyright_no_restictions">
@@ -233,10 +223,25 @@
             </div>
 
 
-            <div class="related-journals">
-                <h2>similar journals</h2>
-                <div class="related-journal-wrapper" v-for="myJournal in server.journalZoom.similar_journals.slice(0,3)">
-                    <journal-row :journal="myJournal"></journal-row>
+            <div class="related-journals" v-show="!server.journalZoom.policy_compliance.compliant">
+                <div class="header">
+                    <h2>
+
+                        This hybrid journal doesn't comply with your funder's open access policy.</h2>
+                    <p>Here are some policy-compliant alternatives:</p>
+                </div>
+                <div class="related-journals-list">
+                    <div class="journal-row-wrapper" v-for="myJournal in server.journalZoom.similar_journals.slice(0, 5)">
+                        <i class="fas fa-check bullet"></i>
+                        <journal-row :journal="myJournal" ></journal-row>
+
+                    </div>
+
+                </div>
+
+
+
+
                 </div>
             </div>
         </div>
@@ -248,7 +253,7 @@
 <script>
     import JournalRow from '../components/JournalRow'
     import {ImgFallback} from 'v-img-fallback'
-    import {store} from '../components/store.js'
+    import {store} from '../store.js'
 
     export default {
         name: 'JournalZoom',
@@ -287,7 +292,7 @@
                 display: flex;
                 flex: 2;
                 .image {
-                    margin: 10px 25px 0 0;
+                    margin: 5px 25px 0 0;
                     height: 200px;
                     img {
                         border: 1px solid #ddd;
@@ -300,24 +305,21 @@
 
 
                     .compliance {
-                        i {margin-right: 5px;}
+                        margin-bottom: -5px;
+                        i {margin-right: 3px;}
                         a {text-decoration: underline;}
+
                         .compliant {
                             color: green;
                             a {color: green;}
                         }
                         .noncompliant {
                             color: red;
-                            a {color: red;}
                         }
                     }
 
                     h1 {
                         margin: 0;
-                        small {
-                            font-size: 50%;
-                            font-weight: normal;
-                        }
                     }
                     .row.publisher {
                         .flag-icon { margin-right: 5px;}
@@ -369,30 +371,84 @@
                 border-bottom: 1px solid #ddd;
                 margin: 20px 0 10px;
                 padding: 20px 0 10px;
-                flex: 2;
                 display: flex;
-                flex-wrap: wrap;
                 .infobox {
-                    margin-right: 20px;
-                    width: 200px;
-                    width: 250px;
+                    margin: 20px;
+                    flex: 1 1 200px;
+                    justify-content: space-between;
+
                     &.impact {
                     }
-                    .big {
-                        font-size: 40px;
-                        font-weight: bold;
-                        line-height: 1.1;
+                    .main-row {
+                        display: flex;
+                        align-items: flex-end;
+                        .big {
+                            font-size: 40px;
+                            font-weight: bold;
+                            line-height: 1.1;
+                            padding-right: 5px;
+                        }
+                        .label {
+                            flex: 0 1 5em;
+                            padding-bottom: 4px;
+                            font-weight: bold;
+                        }
+
+                    }
+                    .second-row {
+                        margin-bottom: 5px;
+                    }
+                    .also {
+                        /*border-top: 1px solid #eee;*/
+                        .also-row {
+                            a {
+                                padding: 4px 10px;
+                                margin: 4px 5px 4px -3px;
+                                display: block;
+                                border: 1px solid #ccc;
+                                border-radius: 20px;
+                                color: #333;
+                                &:hover {
+                                    text-decoration: none;
+                                }
+                            }
+                        }
                     }
                 }
 
             }
 
             .related-journals {
+                width: 100%;
                 margin-top: 20px;
-                h2 {
-                    margin: 0 0 20px;
+                .header {
+                    color: red;
+                    /*background: #F8D6D9;*/
+                    /*padding: 20px;*/
+                    padding-bottom: 20px;
+                    h2 {
+                        margin: 0;
+                        margin-bottom: 10px;
+                        font-size: 28px;
+                    }
+                    p {
+                        font-size: 18px;
+                        margin:0 ;
+                        /*color: #333;*/
+                    }
                 }
-                /*display: flex;*/
+                .related-journals-list {
+                    padding-left: 20px;
+                    .journal-row-wrapper {
+                        display: flex;
+                        i.bullet {
+                            margin-top: 2px;
+                            font-size: 20px;
+                            color: green;
+                            margin-right: 5px;
+                        }
+                    }
+                }
                 .journal-row {
 
                 }

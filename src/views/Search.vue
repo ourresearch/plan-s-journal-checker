@@ -65,7 +65,7 @@
 <script>
     import axios from 'axios'
 
-    import {store} from '../components/store.js'
+    import {store} from '../store.js'
     import JournalRow from '../components/JournalRow'
     import SearchForm from '../components/SearchForm'
     import JournalZoom from '../components/JournalZoom'

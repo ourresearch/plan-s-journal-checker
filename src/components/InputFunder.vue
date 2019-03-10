@@ -33,7 +33,7 @@
 <script>
     import axios from 'axios'
     import {VueAutosuggest} from "vue-autosuggest";
-    import {store} from './store.js'
+    import {store} from '../store.js'
 
     export default {
         name: 'InputFunder',

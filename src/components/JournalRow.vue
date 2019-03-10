@@ -100,7 +100,7 @@
 
 <script>
     // import axios from 'axios'
-    import {store} from '../components/store.js'
+    import {store} from '../store.js'
 
     export default {
         name: 'JournalRow',

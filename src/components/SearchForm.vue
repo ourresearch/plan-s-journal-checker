@@ -8,7 +8,7 @@
 
 
         </div>
-        <div id="search-button" @click="submit">
+        <div id="search-button" @click="submit" v-if="">
 
             <i class="fas fa-search"></i>
             <span>Find journals</span>
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-    import {store} from '../components/store.js'
+    import {store} from '../store.js'
     import InputJournal from '../components/InputJournal'
     import InputInstitution from '../components/InputInstitution'
     import InputFunder from '../components/InputFunder'
@@ -34,12 +34,14 @@
         props: [], // it'll need these later, to load from URL. or maybe get from URL?
         data() {
             return {
-                store: store
+                store: store,
+                hasBeenSubmitted: false
             };
         },
         methods: {
             submit(){
                 console.log("SearchForm.submit()", store.state)
+                this.hasBeenSubmitted = true
                 this.$emit("submit")
             },
             updateFunder(id) {
@@ -117,7 +119,7 @@
                 &.has-focus {
                     flex-basis: 400px;
                     h2 {
-                        color: orangered;
+                        color: green;
                     }
                 }
 
@@ -235,11 +237,13 @@
         }
 
         #search-button {
-            background: orangered;
+            background: lightgreen;
             display: flex;
+
             align-items: center;
             justify-content: center;
-            border-radius: 0 10px 10px 0;
+            border-radius: 5px;
+            margin-left: 5px;
             height: 82px;
             color: #fff;
             font-size: 36px;

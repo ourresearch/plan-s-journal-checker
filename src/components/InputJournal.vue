@@ -32,7 +32,7 @@
 
 <script>
     import axios from 'axios'
-    import {store} from "../components/store"
+    import {store} from "../store"
     import {VueAutosuggest} from "vue-autosuggest";
 
     export default {
