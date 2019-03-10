@@ -1,4 +1,3 @@
-
 // from https://github.com/vuetifyjs/vue-cli-plugin-vuetify/issues/3
 import '@babel/polyfill'
 
@@ -15,11 +14,12 @@ import VueMoment from 'vue-moment'
 import VueTyperPlugin from 'vue-typer'
 import FlagIcon from 'vue-flag-icon'
 
+
 Vue.use(VueMaterial)
 Vue.use(VueScrollTo)
 Vue.use(VueAnalytics, {
-  id: "UA-23384030-8",
-  router
+    id: "UA-23384030-8",
+    router
 })
 Vue.use(VueMoment);
 Vue.use(VueTyperPlugin)
@@ -27,10 +27,9 @@ Vue.use(FlagIcon);
 
 
 
-
 Vue.config.productionTip = false
 new Vue({
-  router,
-  // store,
-  render: h => h(App)
+    router,
+    // store,
+    render: h => h(App)
 }).$mount('#app')

@@ -147,14 +147,14 @@
                 console.log("clear", event)
                 this.suggestions = []
                 this.searchText = ""
+                this.selected = null
                 this.$refs.autosuggestJournal.searchInput = ""
 
+                this.store.setJournal(null)
+                this.store.setTopic(null)
+                this.store.setText(null)
 
-                // null out the value of whatever field is selected right now
-                this.selectedToReport.val = null
-                this.selected = null
-                this.$emit("selected", this.selectedToReport)
-
+                this.$emit("clear")
             },
             update(field, val){
                 this.selectedToReport = {
@@ -165,17 +165,17 @@
             }
         },
         watch: {
-            "store.journalInputDisplayStr": function(to, from) {
-                console.log("InputJournal.watch(): store.journalInputDisplayStr", to);
-                this.$refs.autosuggestJournal.searchInput = to
-            },
+            "store.server.journalInputContent": {
+                handler: function(to){
+                    console.log("InputJournal watch: store state changed", to)
+                    this.$refs.autosuggestJournal.searchInput = store.server.journalInputContent
+                }
+            }
 
 
         },
         mounted() {
-            // if (store.input.journal){
-            //     this.$refs.autosuggestJournal.searchInput = store.state.journal.name
-            // }
+            this.$refs.autosuggestJournal.searchInput = store.server.journalInputContent
         },
     }
 </script>

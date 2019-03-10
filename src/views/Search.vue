@@ -1,5 +1,10 @@
 <template>
     <div class="home">
+        <div class="loading" v-show="isLoading">
+            Loading...
+        </div>
+
+
         <div class="top-screen" :class="{'landing-mode': showLandingMode}">
 
             <div class="content" :class="{'landing-mode': showLandingMode}">
@@ -18,40 +23,32 @@
 
 
         <div class="bottom-screen" v-show="!showLandingMode" :class="{'landing-mode': showLandingMode}">
-            <div class="loading-screen" v-show="store.isLoading">
-                <div class="loading">
-                    Loading...
+            <div class="results-list-wrapper" v-if="!store.state.journal">
+
+                <div class="results-list">
+                    <div v-for="myJournal in store.server.journalList.list">
+                        <journal-row :journal="myJournal"></journal-row>
+                    </div>
                 </div>
             </div>
 
-            <div class="loaded-screen" v-show="!store.isLoading">
-                <div class="results-list-wrapper" v-show="store.server.journalList">
 
-                    <div class="results-list">
-                        <div v-for="myJournal in store.server.journalList.list">
-                            <journal-row :journal="myJournal"></journal-row>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="single-result-wrapper" v-if="store.server.journalZoom">
-                    <!--<div class="go-back-wrapper" v-if="storeState.server.journalList">-->
-                        <!--<div class="go-back">-->
-                            <!--<div class="back-button" @click="store.journal = null">-->
-                                <!--<i class="fas fa-arrow-left"></i> back to results-->
-                            <!--</div>-->
+            <div class="single-result-wrapper" v-if="store.state.journal">
+                <!--<div class="go-back-wrapper" v-if="storeState.server.journalList">-->
+                    <!--<div class="go-back">-->
+                        <!--<div class="back-button" @click="store.journal = null">-->
+                            <!--<i class="fas fa-arrow-left"></i> back to results-->
                         <!--</div>-->
                     <!--</div>-->
+                <!--</div>-->
 
-                    <div class="single-result">
-                        <journal-zoom></journal-zoom>
-
-                    </div>
+                <div class="single-result">
+                    <journal-zoom></journal-zoom>
 
                 </div>
 
             </div>
+
 
 
 
@@ -65,6 +62,7 @@
 <script>
     import axios from 'axios'
 
+
     import {store} from '../store.js'
     import JournalRow from '../components/JournalRow'
     import SearchForm from '../components/SearchForm'
@@ -77,6 +75,7 @@
             showLandingMode: true,
             storeState: store.state,
             store: store,
+            isLoading: false
 
 
         }),
@@ -98,7 +97,11 @@
         },
         mounted() {
             store.setFromQueryObj(this.$route.query)
+            this.isLoading = true
             store.fetchAll()
+                .then(ret => {
+                        this.isLoading = false
+                    })
             if (this.$route.query){
                 this.showLandingMode = false
             }
@@ -108,13 +111,15 @@
         },
         watch: {
             "$route": function (to, from) {
-                console.log("route changed", to.query, from.query)
                 store.setFromQueryObj(to.query)
+                this.isLoading = true
                 store.fetchAll()
+                    .then(ret => {
+                        this.isLoading = false
+                    })
             },
             "store.state": {
                 handler: function(to){
-                    console.log("Search.watch(): store state changed", to)
                     this.$router.push({query: store.getAsQueryObj()})
                 },
                 deep: true
@@ -128,6 +133,19 @@
     @import '../assets/animate.css';
 
     .home {
+        .loading {
+            position: fixed;
+            width: 150px;
+            top: 0;
+            left: 50%;
+            padding: 5px;
+            background: #fff;
+            text-align: center;
+            margin-left: -75px;
+            border-radius: 0 0 5px 5px;
+            color: #333;
+            z-index: 999999999;
+        }
 
         .top-screen {
 
@@ -184,66 +202,56 @@
             &.landing-mode {
                 min-height: 0;
             }
-            .loading-screen {
-                padding: 20px;
-                text-align: center;
-            }
-            .loaded-screen {
-                padding-top: 30px;
+            padding-top: 30px;
 
-                .results-list-wrapper {
-                    width: 100%;
-                    .results-list {
-                        max-width: 1150px;
-                        margin: 0 auto;
-                        &.loading {
-                            display: flex;
-                            justify-content: center;
-                        }
-                        &.loaded {
-                            padding-top: 50px;
-
-                        }
+            .results-list-wrapper {
+                width: 100%;
+                .results-list {
+                    max-width: 1150px;
+                    margin: 0 auto;
+                    &.loaded {
+                        padding-top: 50px;
 
                     }
 
                 }
 
-                .single-result-wrapper {
-                    /*position: absolute;*/
-                    /*top: 0;*/
-                    /*bottom: 0;*/
-                    /*width: 100%;*/
-                    /*background: #fff;*/
-                    /*box-shadow: 0 10px 5px 5px rgba(0,0,0,.5);*/
-                    /*border-left: 1px solid #333;*/
-                    /*z-index: 99;*/
+            }
 
-                    .go-back-wrapper {
-                        background: #4DA1E7;
-                        color: #fff;
-                        padding: 10px;
-                        .go-back {
-                            max-width: 1150px;
-                            margin: 0 auto;
-                            .back-button {
-                                font-size: 16px;
-                                text-transform: uppercase;
-                                font-weight: bold;
-                                cursor: pointer;
-                            }
+            .single-result-wrapper {
+                /*position: absolute;*/
+                /*top: 0;*/
+                /*bottom: 0;*/
+                /*width: 100%;*/
+                /*background: #fff;*/
+                /*box-shadow: 0 10px 5px 5px rgba(0,0,0,.5);*/
+                /*border-left: 1px solid #333;*/
+                /*z-index: 99;*/
 
-                        }
-                    }
-
-                    .single-result {
+                .go-back-wrapper {
+                    background: #4DA1E7;
+                    color: #fff;
+                    padding: 10px;
+                    .go-back {
                         max-width: 1150px;
                         margin: 0 auto;
-                    }
+                        .back-button {
+                            font-size: 16px;
+                            text-transform: uppercase;
+                            font-weight: bold;
+                            cursor: pointer;
+                        }
 
+                    }
+                }
+
+                .single-result {
+                    max-width: 1150px;
+                    margin: 0 auto;
                 }
 
             }
+
 
 
         }

@@ -18,7 +18,6 @@ export const store = {
         topic: null,
         text: null,
         journal: null,
-        journalInputDisplayStr: "",
     },
 
     isLoading: false,
@@ -27,7 +26,8 @@ export const store = {
         institution: {},
         funder: {},
         journalList: {},
-        journalZoom: {}
+        journalZoom: {},
+        journalInputContent: ""
 
     },
 
@@ -74,21 +74,26 @@ export const store = {
         if (v && k === "topic") {
             this.state.text = null
             this.state.journal = null
+            this.server.journalInputContent = v
         }
         else if (v && k === "text") {
             this.state.topic = null
             this.state.journal = null
+            this.server.journalInputContent = v
         }
 
         this.state[k] = v
     },
 
     setFromQueryObj(obj){
-        console.log("settign from query", obj)
+        console.log("setting from query", obj)
         let that = this // dunno if this is needed, no time to test
         Object.entries(this.state).forEach(x => {
             let k = x[0]
             let newVal = obj[k]
+            if (typeof newVal === "undefined") {
+                newVal = null
+            }
             that.state[k] = newVal
             that.setState(k, newVal)
         })
@@ -107,21 +112,23 @@ export const store = {
     // **************************************
 
     fetchAll(){
-        this.fetchInstitution()
-        this.fetchFunder()
-        this.fetchJournalList()
-        this.fetchJournalZoom()
+        return Promise.all([
+            this.fetchInstitution(),
+            this.fetchFunder(),
+            this.fetchJournalList(),
+            this.fetchJournalZoom()
+        ])
     },
 
 
     fetchInstitution() {
         if (!this.state.institution){
             this.server.institution = {}
-            return
+            return Promise.resolve(true)
         }
-        let url = this.baseEndpoint + this.endpoints.institution + store.institution
+        let url = this.baseEndpoint + this.endpoints.institution + this.state.institution
         this.isLoading = true
-        axios.get(url)
+        let request = axios.get(url)
             .then(response => {
                 this.server.institution = response.data
                 this.isLoading = false
@@ -130,17 +137,18 @@ export const store = {
                 this.isLoading = false
                 this.server.institution = {}
             })
+
+        return request
     },
     fetchFunder() {
         if (!this.state.funder){
             this.server.funder = {}
-            return
+            return Promise.resolve(true)
         }
-        let url = this.baseEndpoint + this.endpoints.funder  + store.funder
+        let url = this.baseEndpoint + this.endpoints.funder  + this.state.funder
         this.isLoading = true
-        axios.get(url)
+        let request = axios.get(url)
             .then(response => {
-                console.log("store.getFunder() got response: ", response.data)
                 this.server.funder = response.data
                 this.isLoading = false
             })
@@ -148,6 +156,7 @@ export const store = {
                 this.isLoading = false
                 this.server.funder = {}
             })
+        return request
     },
 
     fetchJournalList(){
@@ -164,7 +173,7 @@ export const store = {
         }
         else {
             this.server.journalList = {}
-            return
+            return Promise.resolve(true)
         }
 
         let url = this.baseEndpoint
@@ -174,7 +183,7 @@ export const store = {
 
         console.log("store.getJournalList() getting this url", url)
         this.isLoading = true
-        axios.get(url)
+        let request = axios.get(url)
             .then(response => {
                 console.log("store.getJournalList() got response: ", response.data)
                 this.server.journalList = response.data
@@ -184,12 +193,13 @@ export const store = {
                 this.isLoading = false
                 this.server.journalList = {}
             })
+        return request
     },
 
     fetchJournalZoom() {
         if (!this.state.journal){
             this.server.journalZoom = {}
-            return
+            return Promise.resolve(true)
         }
 
         let url = this.baseEndpoint
@@ -198,7 +208,7 @@ export const store = {
         url += "&funder=" + this.state.funder
 
         this.isLoading = true
-        axios.get(url)
+        let request = axios.get(url)
             .then(response => {
                 console.log("store.getJournalZoom() got response: ", response.data)
                 this.server.journalZoom = response.data
@@ -209,6 +219,7 @@ export const store = {
                 this.isLoading = false
                 this.server.journalZoom = {}
             })
+        return request
     },
 
 
