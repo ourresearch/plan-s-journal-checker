@@ -72,9 +72,9 @@
 
                 <div class="results-list-wrapper" v-if="!store.state.journal">
                     <div class="results-list-header">
-                        <div class="label">
-                            Topic search results:
-                        </div>
+                        <!--<div class="label">-->
+                            <!--Topic search results:-->
+                        <!--</div>-->
                             <div class="topic">
                                 <i class="fas fa-tag" :style="{color: store.stringToColour(store.state.topic)}"></i>
                                 <span class="name">
@@ -298,7 +298,7 @@
                     }
                 }
                 .results-list-wrapper {
-                    margin-top:80px;
+                    margin-top:60px;
                     .results-list-header {
                         border-bottom: 1px solid #ddd;
                         margin-bottom: 10px;
