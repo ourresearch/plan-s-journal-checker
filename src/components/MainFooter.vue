@@ -59,9 +59,10 @@
         display: flex;
         padding: 0 40px 40px 40px;
         font-size: 14px;
+        margin-top: 100px;
 
         .content {
-            width: 800px;
+            width: 1150px;
             margin: 0 auto;
         }
         .made-by {

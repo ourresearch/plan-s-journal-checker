@@ -27,6 +27,10 @@
 
                 <div class="tools">
                     <div class="left">
+                        <md-button class="back" v-if="store.server.journalZoom.id && store.state.topic" @click="store.setJournal(null)">
+                            <i class="fas fa-arrow-left"></i>
+                            Back to search
+                        </md-button>
                         <md-button>
                             <i class="far fa-envelope"></i>
                             Create alert
@@ -266,7 +270,13 @@
                     margin-left: -13px;
                     display: flex;
                     justify-content: space-between;
-                    margin-bottom: 90px;
+                    margin-bottom: 40px;
+                    .back {
+                        color: dodgerblue;
+                        .md-button-content {
+
+                        }
+                    }
                     .search-alert {
                         font-size: 14px;
                         text-align: center;
