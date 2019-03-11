@@ -69,6 +69,9 @@
         left: 0;
         right: 0;
         background: none;
+        position: static;
+        margin-bottom: -60px;
+
         .header-top-row {
             display: flex;
             padding: 15px;
