@@ -6,32 +6,18 @@
 
         <div class="top">
             <div class="main-col">
-                <div class="image" v-if="hasImage">
-                    <img @error="noImg" :src="'http://images.serialssolutions.com/ulrichs/' + server.journalZoom.id.replace('-', '') + '.gif'"
-                         alt="">
-                </div>
-                <div class="text">
-                    <div class="row compliance" v-if="server.funder.id">
-                        <div class="compliant" v-if="server.journalZoom.policy_compliance.compliant">
-                            <i class="fas fa-thumbs-up"></i>
-                            This fully CC-BY journal is
-                            <strong>compliant</strong> with your funder publication guidelines. <a href="https://www.coalition-s.org/">Learn more</a>
-                        </div>
 
-                        <div class="noncompliant" v-if="!server.journalZoom.policy_compliance.compliant">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            Noncompliant
-
-                        </div>
+                <div class="row-1">
+                    <div class="image" v-if="hasImage">
+                        <img @error="noImg" :src="'http://images.serialssolutions.com/ulrichs/' + server.journalZoom.id.replace('-', '') + '.gif'"
+                             alt="">
                     </div>
-
-
-
-
                     <h1>
                         {{server.journalZoom.name}}
                     </h1>
+                </div>
 
+                <div class="text">
                     <div class="row publisher">
                         <flag :squared="false" :iso="server.journalZoom.country_code"/>
 
@@ -81,7 +67,7 @@
                         </div>
                         <div class="label">
                             Percentile Citedness
-                            <div class="main"></div>
+                            <div class="main"></div>console.log("
                         </div>
                     </div>
 
@@ -277,21 +263,26 @@
     .journal-zoom {
         display: flex;
         .top {
-            display: flex;
-            justify-content: space-between;
-            flex: 1;
+            flex: 2;
+            /*background: #eee;*/
             .main-col {
-                display: flex;
-                /*background: lightpink;*/
-                /*border: 2px solid red;*/
-                padding: 20px;
-                border-radius: 5px;
-                flex: 2;
+
+                .row-1 {
+                    display: flex;
+                    h1 {
+                        margin: 0;
+                        line-height: 1.3;
+                    }
+                    margin-bottom: 10px;
+                }
+
                 .image {
-                    margin: 5px 25px 0 0;
-                    height: 200px;
+                    margin: 5px 15px 0 0;
+                    /*max-width: 100px;*/
                     img {
                         border: 1px solid #ddd;
+                        /*max-height: 100px;*/
+                        max-height: 75px;
 
                     }
                 }
@@ -315,9 +306,7 @@
                         }
                     }
 
-                    h1 {
-                        margin: 0;
-                    }
+
                     .row.publisher {
                         .flag-icon { margin-right: 5px;}
                         .publisher-name {
@@ -363,12 +352,11 @@
 
         .bottom {
             display: flex;
-            flex: 2;
+            flex: 3;
             .infographic {
                 border-top: 1px solid #ddd;
                 border-bottom: 1px solid #ddd;
-                margin: 20px 0 10px;
-                padding: 20px 0 10px;
+                padding: 5px 0 5px;
                 display: flex;
                 flex-wrap: wrap;
                 .infobox {
@@ -422,7 +410,7 @@
 
             .related-journals {
                 width: 100%;
-                margin-top: 20px;
+                margin-left: 20px;
                 .header {
                     color: red;
                     /*background: #F8D6D9;*/
@@ -432,6 +420,7 @@
                         margin: 0;
                         margin-bottom: 10px;
                         font-size: 28px;
+                        line-height: 1.3;
                     }
                     p {
                         font-size: 18px;
