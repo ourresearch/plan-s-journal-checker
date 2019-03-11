@@ -15,7 +15,7 @@
             <div class="row-main">
                               <span class="name"
                                     :class="{compliant: store.state.funder && journal.policy_compliance.compliant}"
-                                    >
+                              >
                                 {{journal.name}}
                                   <span class="issn">
                                       {{journal.id}}
@@ -27,7 +27,6 @@
                                   {{journal.publisher}}
                               </span>
             </div>
-
 
 
             <div class="row-meta">
@@ -93,7 +92,6 @@
             </div>
 
 
-
             <div class="row-topics">
                 <div class="topic"
                      @click="store.setTopic(topic[0])"
@@ -142,9 +140,8 @@
         /*min-width: 300px;*/
 
         &:hover {
-            box-shadow: 0px 3px 6px 2px rgba(0,0,0,0.2);
+            box-shadow: 0px 3px 6px 2px rgba(0, 0, 0, 0.2);
         }
-
 
         .col.icon {
             margin-right: 7px;
@@ -181,7 +178,6 @@
                 font-style: italic;
             }
 
-
             .row-topics {
                 /*display: flex;*/
                 .topic {
@@ -205,7 +201,6 @@
 
             .row-meta {
                 font-size: 16px;
-
 
                 padding: 7px 0;
                 margin: 7px 0;
@@ -238,7 +233,6 @@
             }
 
         }
-
 
     }
 

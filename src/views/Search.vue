@@ -23,21 +23,6 @@
 
 
         <div class="bottom-screen" v-show="!showLandingMode" :class="{'landing-mode': showLandingMode}">
-            <div class="search-alert" v-show="(store.server.journalZoom || store.server.journalList) && !store.state.funder">
-                <div class="add-funder" >
-                    <i class="fas fa-hand-point-right"></i>
-                    Tip: Enter your funder to find policy-compliant journals.
-
-                </div>
-            </div>
-
-            <div class="search-alert" v-show="(store.server.journalZoom || store.server.journalList) && store.state.funder && !store.state.institution">
-                <div class="add-funder" >
-                    <i class="fas fa-hand-point-right"></i>
-                    Tip: Enter your institution for more accurate compliance reporting.
-
-                </div>
-            </div>
             <div class="results-wrapper">
 
                 <div class="tools">
@@ -48,6 +33,25 @@
                         </md-button>
 
                     </div>
+                    <div class="center">
+                        <div class="search-alert" v-show="(store.server.journalZoom || store.server.journalList) && !store.state.funder">
+                            <div class="add-funder" >
+                                <i class="fas fa-hand-point-right"></i>
+                                Tip: Enter your funder to find policy-compliant journals.
+
+                            </div>
+                        </div>
+
+                        <div class="search-alert" v-show="(store.server.journalZoom || store.server.journalList) && store.state.funder && !store.state.institution">
+                            <div class="add-funder" >
+                                <i class="fas fa-hand-point-right"></i>
+                                Tip: Enter your institution for more accurate compliance reporting.
+
+                            </div>
+                        </div>
+
+                    </div>
+
                     <div class="right">
                         <md-button :href="store.getSearchApiUrl()" target="_blank">
                             <i class="fas fa-cogs"></i>
@@ -172,6 +176,9 @@
             "store.state": {
                 handler: function(to){
                     this.$router.push({query: store.getAsQueryObj()})
+                    if (store.state.funder && store.state.institution && (store.state.topic || store.state.journal)) {
+                        this.showLandingMode = false
+                    }
                 },
                 deep: true
             }
@@ -251,12 +258,6 @@
             &.landing-mode {
                 min-height: 0;
             }
-            .search-alert {
-                background: #fafafa;
-                font-size: 16px;
-                text-align: center;
-                padding: 10px;
-            }
             .results-wrapper {
                 max-width: 1150px;
                 margin: 0 auto;
@@ -265,7 +266,21 @@
                     margin-left: -13px;
                     display: flex;
                     justify-content: space-between;
-                    margin-bottom: 20px;
+                    margin-bottom: 90px;
+                    .search-alert {
+                        background: #B6DAFD;
+                        background: #fafafa;
+                        font-size: 14px;
+                        text-align: center;
+                        padding: 10px 30px;
+                        border-radius: 3px;
+                    }
+                    .md-button-content {
+                        font-size: 13px;
+                        text-transform: none;
+                        font-weight: normal;
+
+                    }
                 }
                 .results-list-wrapper {
                     .results-list-header {

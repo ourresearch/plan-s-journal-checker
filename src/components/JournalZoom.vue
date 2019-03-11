@@ -8,72 +8,67 @@
             <div class="main-col">
 
                 <div class="row-1">
+
+                    <h1>
+                        <i class="fas fa-unlock" v-show="server.journalZoom.oa_details.num_oa_since_2018 "></i>
+                        <i class="fas fa-lock" v-show="!server.journalZoom.oa_details.num_oa_since_2018 "></i>
+
+                        {{server.journalZoom.name}}
+                    </h1>
+                </div>
+
+
+                <div class="row-2">
                     <div class="image" v-if="hasImage">
                         <img @error="noImg"
                              :src="'http://images.serialssolutions.com/ulrichs/' + server.journalZoom.id.replace('-', '') + '.gif'"
                              alt="">
                     </div>
-                    <h1>
-                        {{server.journalZoom.name}}
-                    </h1>
+
+                    <div class="text">
+
+                        <div class="row publisher">
+                            <flag :squared="false" :iso="server.journalZoom.country_code"/>
+
+
+                            <span class="publisher">
+                                <span class="publisher-name">
+                                    {{server.journalZoom.publisher}}
+                                </span>
+                            </span>
+                        </div>
+                        <div class="row dates">
+                            <i class="far fa-calendar-alt"></i>
+                            <span class="date start">{{ server.journalZoom.oldest_published_date | moment("YYYY") }}</span>&ndash;<span
+                                class="date till">present</span>
+                        </div>
+                        <div class="row issn">
+                            <div class="issn">
+                                ISSN: {{server.journalZoom.id}}
+                            </div>
+                        </div>
+
+
+                    </div>
+
                 </div>
 
-                <div class="text">
-                    <div class="row publisher">
-                        <flag :squared="false" :iso="server.journalZoom.country_code"/>
+                <div class="row-3">
+                        <div class="row topics">
 
-                        <span class="date start">{{ server.journalZoom.oldest_published_date | moment("YYYY") }}</span>&ndash;<span
-                            class="date till">present,</span>
-                        <span class="publisher">
-                            <span class="publisher-country">
-
-
-                            </span>
-                            <span class="publisher-name">
-                                {{server.journalZoom.publisher}}
-                            </span>
-                        </span>
-                    </div>
-
-                    <div class="row issn">
-                        <div class="issn">
-                            ISSN: {{server.journalZoom.id}}
+                            <div class="topic"
+                                 @click="store.setTopic(topic[0])"
+                                 v-for="topic in store.server.journalZoom.topics.slice(0,3)">
+                                <i class="fas fa-tag"></i>
+                                {{topic[0].replace(" (miscellaneous)", "")}}
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="row topics">
-                        <div class="topic"
-                             @click="store.setTopic(topic[0])"
-                             v-for="topic in store.server.journalZoom.topics.slice(0,3)">
-                            <i class="fas fa-tag"></i>
-                            {{topic[0].replace(" (miscellaneous)", "")}}
-                        </div>
-                    </div>
                 </div>
+
             </div>
 
         </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         <div class="bottom">
@@ -133,9 +128,6 @@
                 </div>
 
 
-
-
-
                 <div class="related-journals" v-show="!server.journalZoom.policy_compliance.compliant">
                     <div class="related-journals-header">
                         <h1 class="alternatives">
@@ -160,15 +152,6 @@
 
                 </div>
             </div>
-
-
-
-
-
-
-
-
-
 
 
             <div class="infographic" v-if="store.server.journalZoom.policy_compliance.compliant">
@@ -357,10 +340,21 @@
                     h1 {
                         margin: 0;
                         line-height: 1.3;
+                        i {
+                            font-size: 66%;
+                            vertical-align: 4px;
+                        }
                     }
                     margin-bottom: 10px;
+                }
+                .row-2 {
+                    display: flex;
+                    border-top: 1px solid #ddd;
+                    border-bottom: 1px solid #ddd;
+                    padding: 15px 0 5px;
+                    align-items: center;
                     .image {
-                        margin: 5px 15px 0 0;
+                        padding: 0 20px 10px 0;
                         /*flex: 1 100px 75px;*/
                         max-width: 100px;
                         width: 100px;
@@ -372,47 +366,50 @@
 
                         }
                     }
-                }
-
-                .text {
-                    font-size: 16px;
-                    line-height: 1.5;
-
-                    .row.publisher {
-                        .flag-icon {
-                            margin-right: 5px;
+                    .text {
+                        font-size: 18px;
+                        line-height: 1.5;
+                        .row {
+                            padding: 3px;
                         }
-                        .publisher-name {
-                            font-style: italic;
-                        }
-                    }
-                    .row.volume {
-                        .icons {
-                            font-size: 70%;
-                            i {
-                                margin-right: 2px;
-                                &.fas {
-                                    opacity: .8;
-                                }
+
+                        .row.publisher {
+                            .flag-icon {
+                                margin-right: 5px;
+                            }
+                            .publisher-name {
+                                font-style: italic;
                             }
                         }
+                        .row.dates {
+                            i {margin-right: 3px;}
+                        }
                     }
+
+                }
+
+                .row-3 {
                     .row.topics {
                         /*border-top: 1px solid #ddd;*/
-                        margin-top: 5px;
-                        padding-top: 5px;
+
                         i.fas {
                             opacity: .8;
-                            font-size: 66%;
+                            font-size: 70%;
                         }
                         .topic {
                             cursor: pointer;
+                            padding: 8px 16px;
+                            font-size: 18px;
+                            float: left;
+                            clear: left;
                             &:hover {
-                                text-decoration: underline;
+                                background: #fafafa;
+                                border-radius: 3px;
                             }
 
                         }
                     }
+
                 }
 
             }
@@ -420,7 +417,7 @@
 
         .bottom {
             flex: 3;
-            padding:  20px;
+            padding: 20px;
             margin-bottom: 50px;
 
             .compliance {
@@ -444,11 +441,15 @@
                 .compliance-message {
                     padding: 20px;
                     &.no {
-                        h1 { color: #D50000;}
+                        h1 {
+                            color: #D50000;
+                        }
                         background: #FFEBEE;
                     }
                     &.yes {
-                        h1 { color: darkgreen;}
+                        h1 {
+                            color: darkgreen;
+                        }
                         background: #E8F5E9;
                     }
 
