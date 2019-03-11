@@ -84,7 +84,7 @@
     .search-form {
         display: flex;
         border-radius: 5px;
-        box-shadow: 0 2px 10px 5px rgba(0, 0, 0, .1);
+        box-shadow: 0 2px 10px 5px rgba(0, 0, 0, .3);
         width: 100%;
         .inputs {
             display: flex;

@@ -275,11 +275,17 @@
 <style lang="scss">
 
     .journal-zoom {
+        display: flex;
         .top {
             display: flex;
             justify-content: space-between;
+            flex: 1;
             .main-col {
                 display: flex;
+                /*background: lightpink;*/
+                /*border: 2px solid red;*/
+                padding: 20px;
+                border-radius: 5px;
                 flex: 2;
                 .image {
                     margin: 5px 25px 0 0;
@@ -295,6 +301,7 @@
 
 
                     .compliance {
+                        display: none;
                         margin-bottom: -5px;
                         i {margin-right: 3px;}
                         a {text-decoration: underline;}
@@ -348,7 +355,7 @@
 
             }
             .tools-col {
-                flex: 1;
+                flex: 2;
                 display: flex;
                 justify-content: flex-end;
             }
@@ -356,16 +363,21 @@
 
         .bottom {
             display: flex;
+            flex: 2;
             .infographic {
                 border-top: 1px solid #ddd;
                 border-bottom: 1px solid #ddd;
                 margin: 20px 0 10px;
                 padding: 20px 0 10px;
                 display: flex;
+                flex-wrap: wrap;
                 .infobox {
-                    margin: 20px;
+                    margin: 10px;
                     flex: 1 1 200px;
                     justify-content: space-between;
+                    width: 250px;
+                    background: #fafafa;
+                    padding: 20px;
 
                     &.impact {
                     }
