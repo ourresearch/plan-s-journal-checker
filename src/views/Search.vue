@@ -31,13 +31,7 @@
                             <i class="fas fa-arrow-left"></i>
                             Back to search
                         </md-button>
-                        <md-button>
-                            <i class="far fa-envelope"></i>
-                            Create alert
-                        </md-button>
 
-                    </div>
-                    <div class="center">
                         <div class="search-alert" v-show="(store.server.journalZoom || store.server.journalList) && !store.state.funder">
                             <div class="add-funder" >
                                 <i class="fas fa-hand-point-right"></i>
@@ -55,8 +49,15 @@
                         </div>
 
                     </div>
+                    <div class="center">
+
+                    </div>
 
                     <div class="right">
+                        <md-button>
+                            <i class="far fa-envelope"></i>
+                            Create alert
+                        </md-button>
                         <md-button :href="store.getSearchApiUrl()" target="_blank">
                             <i class="fas fa-cogs"></i>
                             View in API
@@ -221,7 +222,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            height: 150px;
+            height: 200px;
             transition: height 0.3s;
 
             &.landing-mode {
@@ -230,7 +231,7 @@
 
             .content {
                 border-radius: 10px;
-                margin-top: 60px;
+                margin-top: 100px;
                 transition: margin-top 0.3s;
                 width: 1150px;
 
@@ -274,6 +275,10 @@
                     display: flex;
                     justify-content: space-between;
                     margin-bottom: 40px;
+                    align-items: center;
+                    .left {
+                        display: flex;
+                    }
                     .back {
                         color: dodgerblue;
                         .md-button-content {
@@ -282,18 +287,18 @@
                     }
                     .search-alert {
                         font-size: 14px;
-                        text-align: center;
-                        padding: 10px 30px;
+                        padding: 13px 30px;
                         border-radius: 3px;
                     }
                     .md-button-content {
-                        font-size: 13px;
+                        font-size: 14px;
                         text-transform: none;
                         font-weight: normal;
 
                     }
                 }
                 .results-list-wrapper {
+                    margin-top:80px;
                     .results-list-header {
                         border-bottom: 1px solid #ddd;
                         margin-bottom: 10px;
