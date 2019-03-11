@@ -122,9 +122,9 @@
                 .then(ret => {
                         this.isLoading = false
                     })
-            if (this.$route.query){
-                this.showLandingMode = false
-            }
+            // if (this.$route.query){
+            //     this.showLandingMode = false
+            // }
             setTimeout(function () {
                 document.getElementById("journal-input").focus()
             }, 100)
@@ -150,7 +150,6 @@
 
 
 <style lang="scss">
-    @import '../assets/animate.css';
 
     .home {
         .loading {

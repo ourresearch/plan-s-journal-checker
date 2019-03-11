@@ -57,7 +57,7 @@
                 inputProps: {
                     id: "journal-input",
                     onInputChange: this.fetchResults,
-                    placeholder: "eg: Nature, astronomy",
+                    placeholder: 'Try: "oncology" or "Angewandte Chemie"',
                     class: "form-control"
                 },
                 suggestions: [],

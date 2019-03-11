@@ -55,7 +55,7 @@
                 inputProps: {
                     id: "funder-input",
                     onInputChange: this.fetchResults,
-                    placeholder: "eg: Wellcome Trust",
+                    placeholder: 'Try: "Wellcome Trust"',
                     class: "form-control"
                 },
                 suggestions: [],

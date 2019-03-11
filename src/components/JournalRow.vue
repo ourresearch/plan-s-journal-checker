@@ -137,7 +137,6 @@
         /*box-shadow: 0px 3px 6px 1px rgba(0,0,0,0.1);*/
         border-radius: 3px;
         background: #fafafa;
-        background: #fff;
         border: 1px solid #ddd;
 
         /*flex: 1 0 300px;*/

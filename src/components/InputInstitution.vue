@@ -46,7 +46,7 @@
                 inputProps: {
                     id: "institution-input",
                     onInputChange: this.fetchResults,
-                    placeholder: "eg: Cambridge",
+                    placeholder: 'Try: "Max Planck Society"',
                     class: "form-control",
                 },
                 suggestions: [],
