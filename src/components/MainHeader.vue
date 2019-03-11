@@ -68,18 +68,13 @@
         top: 0;
         left: 0;
         right: 0;
-        background: #fff;
-        &.search {
-            background: none;
-            height: 50px;
-            position: static;
-            margin-bottom: -50px;
-        }
+        background: none;
         .header-top-row {
             display: flex;
             padding: 15px;
             align-items: center;
-            border-bottom: 1px solid #ddd;
+            max-width: 1150px;
+            margin: 0 auto;
             &.landing {
                 border-bottom: none;
             }
