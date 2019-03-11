@@ -1,10 +1,11 @@
 <template>
     <div class="search-form">
         <div class="inputs">
+                <input-journal @selected="updateJournal"></input-journal>
+                <input-funder @selected="updateFunder"></input-funder>
+                <input-institution @selected="updateInstitution"></input-institution>
 
-            <input-journal @selected="updateJournal"></input-journal>
-            <input-funder @selected="updateFunder"></input-funder>
-            <input-institution @selected="updateInstitution"></input-institution>
+
 
 
         </div>

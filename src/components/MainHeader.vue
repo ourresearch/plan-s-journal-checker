@@ -3,14 +3,17 @@
         <div class="header-top-row" :class="specialPageMode">
             <div class="left">
                 <h1>
-                    <router-link to="/">
-                    PublishOpen
-                    </router-link>
+                    <a href="/search">
+                        <i class="fas fa-unlock-alt"></i>
+                        <span>Publish</span>Open
+                    </a>
                 </h1>
 
             </div>
             <div class="spacer"></div>
             <div class="nav">
+                <router-link to="./transformative-agreements">Transformative Agreements</router-link>
+                <div class="sep"></div>
                 <router-link to="./faq">FAQ</router-link>
             </div>
         </div>
@@ -87,7 +90,11 @@
                 flex: 1;
                 h1 {
                     margin: 0 10px 0 0;
-                    font-weight: 300;
+                    span {
+                        font-weight: normal;
+                    }
+                    i {margin-right: 3px;}
+                    font-size: 20px;
                     a {
                         color: #fff;
                     }
@@ -103,6 +110,10 @@
                     padding: 5px;
                     display: block;
                     color: #fff;
+                }
+                .sep {
+                    border-left: 1px solid #fff;
+                    margin: 0 5px;
                 }
             }
 

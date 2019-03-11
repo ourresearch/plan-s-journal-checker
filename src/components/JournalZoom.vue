@@ -352,23 +352,28 @@
 
                 .row-1 {
                     display: flex;
+                    align-items: center;
+                    flex: 1;
                     h1 {
                         margin: 0;
                         line-height: 1.3;
                     }
                     margin-bottom: 10px;
-                }
+                    .image {
+                        margin: 5px 15px 0 0;
+                        /*flex: 1 100px 75px;*/
+                        max-width: 100px;
+                        width: 100px;
+                        min-width: 100px;
+                        img {
+                            border: 1px solid #ddd;
+                            /*max-height: 100px;*/
+                            /*max-height: 200px;*/
 
-                .image {
-                    margin: 5px 15px 0 0;
-                    /*max-width: 100px;*/
-                    img {
-                        border: 1px solid #ddd;
-                        /*max-height: 100px;*/
-                        /*max-height: 200px;*/
-
+                        }
                     }
                 }
+
                 .text {
                     font-size: 16px;
                     line-height: 1.5;
@@ -415,7 +420,7 @@
 
         .bottom {
             flex: 3;
-            padding: 0 20px;
+            padding:  20px;
             margin-bottom: 50px;
 
             .compliance {

@@ -23,7 +23,23 @@
 
 
         <div class="bottom-screen" v-show="!showLandingMode" :class="{'landing-mode': showLandingMode}">
+            <div class="search-alert" v-show="(store.server.journalZoom || store.server.journalList) && !store.state.funder">
+                <div class="add-funder" >
+                    <i class="fas fa-hand-point-right"></i>
+                    Tip: Enter your funder to find policy-compliant journals.
+
+                </div>
+            </div>
+
+            <div class="search-alert" v-show="(store.server.journalZoom || store.server.journalList) && store.state.funder && !store.state.institution">
+                <div class="add-funder" >
+                    <i class="fas fa-hand-point-right"></i>
+                    Tip: Enter your institution for more accurate compliance reporting.
+
+                </div>
+            </div>
             <div class="results-wrapper">
+
                 <div class="tools">
                     <div class="left">
                         <md-button>
@@ -44,10 +60,25 @@
                     </div>
                 </div>
 
-                <div class="results-list" v-if="!store.state.journal">
-                    <div v-for="myJournal in store.server.journalList.list">
-                        <journal-row :journal="myJournal"></journal-row>
+
+                <div class="results-list-wrapper" v-if="!store.state.journal">
+                    <div class="results-list-header">
+                        <h1>
+                            Journal search results:
+                            <i class="fas fa-tag"></i>
+                            <span class="topic">
+                                {{ store.state.topic }}
+
+                            </span>
+                        </h1>
                     </div>
+                    <div class="results-list">
+                        <div v-for="myJournal in store.server.journalList.list">
+                            <journal-row :journal="myJournal"></journal-row>
+                        </div>
+                    </div>
+
+
                 </div>
 
 
@@ -220,29 +251,50 @@
             &.landing-mode {
                 min-height: 0;
             }
+            .search-alert {
+                background: #fafafa;
+                font-size: 16px;
+                text-align: center;
+                padding: 10px;
+            }
             .results-wrapper {
                 max-width: 1150px;
                 margin: 0 auto;
                 .tools {
+                    margin-top: 5px;
                     margin-left: -13px;
                     display: flex;
                     justify-content: space-between;
                     margin-bottom: 20px;
                 }
-                .results-list {
-                    display: flex;
-                    flex-wrap: wrap;
-
-                    &.loaded {
-                        padding-top: 50px;
+                .results-list-wrapper {
+                    .results-list-header {
+                        border-bottom: 1px solid #ddd;
+                        margin-bottom: 10px;
+                        padding-left: 10px;
+                        h1 {
+                            font-size: 24px;
+                            font-weight: normal;
+                            .topic {
+                                font-weight: bold;
+                            }
+                        }
                     }
-                    .journal-row {
-                        width: 350px;
-                        min-height: 275px;
+                    .results-list {
+                        display: flex;
+                        flex-wrap: wrap;
+
+                        &.loaded {
+                            padding-top: 50px;
+                        }
+                        .journal-row {
+                            width: 350px;
+                            min-height: 275px;
+
+                        }
+
 
                     }
-
-
                 }
                 .single-result {
                 }
