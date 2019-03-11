@@ -71,14 +71,17 @@
 
                 <div class="results-list-wrapper" v-if="!store.state.journal">
                     <div class="results-list-header">
-                        <h1>
-                            Journal search results:
-                            <i class="fas fa-tag"></i>
-                            <span class="topic">
-                                {{ store.state.topic }}
+                        <div class="label">
+                            Topic search results:
+                        </div>
+                            <div class="topic">
+                                <i class="fas fa-tag" :style="{color: store.stringToColour(store.state.topic)}"></i>
+                                <span class="name">
+                                    {{ store.state.topic }}
 
-                            </span>
-                        </h1>
+                                </span>
+
+                        </div>
                     </div>
                     <div class="results-list">
                         <div v-for="myJournal in store.server.journalList.list">
@@ -295,12 +298,17 @@
                         border-bottom: 1px solid #ddd;
                         margin-bottom: 10px;
                         padding-left: 10px;
-                        h1 {
-                            font-size: 24px;
-                            font-weight: normal;
-                            .topic {
-                                font-weight: bold;
-                            }
+                        .label {
+                            font-size: 20px;
+                        }
+                        .topic {
+                            font-size: 38px;
+                            font-weight: bold;
+                            padding: 20px 0;
+                            display: flex;
+                            align-items: center;
+                            line-height: 1.1;
+                            i {margin-right: 10px;}
                         }
                     }
                     .results-list {

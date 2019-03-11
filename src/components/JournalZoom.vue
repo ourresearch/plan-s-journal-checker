@@ -59,7 +59,7 @@
                             <div class="topic"
                                  @click="store.setTopic(topic[0])"
                                  v-for="topic in store.server.journalZoom.topics.slice(0,3)">
-                                <i class="fas fa-tag"></i>
+                                <i class="fas fa-tag" :style="{color: store.stringToColour(topic[0])}"></i>
                                 {{topic[0].replace(" (miscellaneous)", "")}}
                             </div>
                         </div>
@@ -394,13 +394,15 @@
                         /*border-top: 1px solid #ddd;*/
 
                         i.fas {
-                            opacity: .8;
-                            font-size: 70%;
+                            font-size: 100%;
+                            margin-right: 5px;
                         }
                         .topic {
                             cursor: pointer;
                             padding: 8px 16px 8px 8px;
                             font-size: 18px;
+                            display: flex;
+                            align-items: center;
                             float: left;
                             clear: left;
                             &:hover {

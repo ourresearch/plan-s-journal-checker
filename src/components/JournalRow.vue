@@ -96,7 +96,7 @@
                 <div class="topic"
                      @click="store.setTopic(topic[0])"
                      v-for="topic in journal.topics.slice(0,3)">
-                    <i class="fas fa-tag"></i>
+                    <i class="fas fa-tag" :style="{color: store.stringToColour(topic[0])}"></i>
                     {{topic[0].replace(" (miscellaneous)", "")}}
                 </div>
             </div>
@@ -192,8 +192,7 @@
                     }
                     i {
                         margin-right: 5px;
-                        font-size: 70%;
-                        opacity: .7
+                        font-size: 90%;
                     }
 
                 }
