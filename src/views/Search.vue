@@ -268,8 +268,6 @@
                     justify-content: space-between;
                     margin-bottom: 90px;
                     .search-alert {
-                        background: #B6DAFD;
-                        background: #fafafa;
                         font-size: 14px;
                         text-align: center;
                         padding: 10px 30px;

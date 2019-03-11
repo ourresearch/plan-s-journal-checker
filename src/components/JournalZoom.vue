@@ -331,7 +331,7 @@
             flex: 2;
             /*background: #eee;*/
             .main-col {
-                padding: 20px;
+                padding: 25px 20px;
 
                 .row-1 {
                     display: flex;
@@ -340,6 +340,7 @@
                     h1 {
                         margin: 0;
                         line-height: 1.3;
+                        font-size: 38px;
                         i {
                             font-size: 66%;
                             vertical-align: 4px;
@@ -398,7 +399,7 @@
                         }
                         .topic {
                             cursor: pointer;
-                            padding: 8px 16px;
+                            padding: 8px 16px 8px 8px;
                             font-size: 18px;
                             float: left;
                             clear: left;
