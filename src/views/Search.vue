@@ -23,31 +23,51 @@
 
 
         <div class="bottom-screen" v-show="!showLandingMode" :class="{'landing-mode': showLandingMode}">
-            <div class="results-list-wrapper" v-if="!store.state.journal">
+            <div class="results-wrapper">
+                <div class="tools">
+                    <div class="left">
+                        <md-button>
+                            <i class="far fa-envelope"></i>
+                            Create alert
+                        </md-button>
 
-                <div class="results-list">
+                    </div>
+                    <div class="right">
+                        <md-button :href="store.getSearchApiUrl()" target="_blank">
+                            <i class="fas fa-cogs"></i>
+                            View in API
+                        </md-button>
+                        <md-button>
+                            <i class="fas fa-wrench"></i>
+                            Report errors
+                        </md-button>
+                    </div>
+                </div>
+
+                <div class="results-list" v-if="!store.state.journal">
                     <div v-for="myJournal in store.server.journalList.list">
                         <journal-row :journal="myJournal"></journal-row>
                     </div>
                 </div>
-            </div>
 
 
-            <div class="single-result-wrapper" v-if="store.state.journal">
-                <!--<div class="go-back-wrapper" v-if="storeState.server.journalList">-->
-                    <!--<div class="go-back">-->
-                        <!--<div class="back-button" @click="store.journal = null">-->
-                            <!--<i class="fas fa-arrow-left"></i> back to results-->
+
+                <div class="single-result" v-if="store.state.journal">
+                    <!--<div class="go-back-wrapper" v-if="storeState.server.journalList">-->
+                        <!--<div class="go-back">-->
+                            <!--<div class="back-button" @click="store.journal = null">-->
+                                <!--<i class="fas fa-arrow-left"></i> back to results-->
+                            <!--</div>-->
                         <!--</div>-->
                     <!--</div>-->
-                <!--</div>-->
-
-                <div class="single-result">
                     <journal-zoom></journal-zoom>
 
                 </div>
-
             </div>
+
+
+
+
 
 
 
@@ -197,60 +217,33 @@
 
         .bottom-screen {
             background: #fff;
-            min-height: 100vh;
-            position: relative;
+            min-height: 80vh;
             &.landing-mode {
                 min-height: 0;
             }
-            padding-top: 30px;
-
-            .results-list-wrapper {
-                width: 100%;
+            .results-wrapper {
+                max-width: 1150px;
+                margin: 0 auto;
+                .tools {
+                    margin-left: -13px;
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 20px;
+                }
                 .results-list {
-                    max-width: 1150px;
-                    margin: 0 auto;
                     &.loaded {
                         padding-top: 50px;
 
                     }
 
                 }
-
-            }
-
-            .single-result-wrapper {
-                /*position: absolute;*/
-                /*top: 0;*/
-                /*bottom: 0;*/
-                /*width: 100%;*/
-                /*background: #fff;*/
-                /*box-shadow: 0 10px 5px 5px rgba(0,0,0,.5);*/
-                /*border-left: 1px solid #333;*/
-                /*z-index: 99;*/
-
-                .go-back-wrapper {
-                    background: #4DA1E7;
-                    color: #fff;
-                    padding: 10px;
-                    .go-back {
-                        max-width: 1150px;
-                        margin: 0 auto;
-                        .back-button {
-                            font-size: 16px;
-                            text-transform: uppercase;
-                            font-weight: bold;
-                            cursor: pointer;
-                        }
-
-                    }
-                }
-
                 .single-result {
-                    max-width: 1150px;
-                    margin: 0 auto;
+
                 }
 
             }
+
+
 
 
 

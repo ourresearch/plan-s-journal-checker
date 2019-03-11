@@ -47,6 +47,8 @@ export const store = {
     },
 
 
+
+
     // setters
     // **************************************
     // **************************************
@@ -167,26 +169,7 @@ export const store = {
     },
 
     fetchJournalList(){
-        let q
-        let searchType
-
-        if (this.state.topic){
-            q = this.state.topic
-            searchType = "topic"
-        }
-        else if (this.state.text){
-            q = this.state.text
-            searchType = "text"
-        }
-        else {
-            this.server.journalList = {}
-            return Promise.resolve(true)
-        }
-
-        let url = this.baseEndpoint
-        url += this.endpoints[searchType] + q
-        url += "?institution=" + this.state.institution
-        url += "&funder=" + this.state.funder
+        let url = this.getSearchApiUrl()
 
         console.log("store.getJournalList() getting this url", url)
         let request = axios.get(url)
@@ -200,6 +183,24 @@ export const store = {
         return request
     },
 
+    getSearchApiUrl(){
+        let url = this.baseEndpoint
+        if (this.state.journal){
+            url += this.endpoints["journal"] + this.state.journal
+        }
+        else if (this.state.topic) {
+            url += this.endpoints.topic + this.state.topic
+        }
+        else if (this.state.text) {
+            url += this.endpoints.text + this.state.text
+        }
+
+        url += "?institution=" + this.state.institution
+        url += "&funder=" + this.state.funder
+
+        return url
+    },
+
     fetchJournalZoom() {
         if (!this.state.journal){
             this.server.journalZoom = {}
@@ -207,10 +208,7 @@ export const store = {
             return Promise.resolve(true)
         }
 
-        let url = this.baseEndpoint
-        url += this.endpoints["journal"] + this.state.journal
-        url += "?institution=" + this.state.institution
-        url += "&funder=" + this.state.funder
+        let url = this.getSearchApiUrl()
 
         let request = axios.get(url)
             .then(response => {

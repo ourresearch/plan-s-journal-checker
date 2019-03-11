@@ -64,17 +64,7 @@
                     </div>
                 </div>
             </div>
-            <div class="tools-col">
-                <md-button>
-                    View in API
-                </md-button>
-                <md-button>
-                    Get updates
-                </md-button>
-                <md-button>
-                    Report errors
-                </md-button>
-            </div>
+
         </div>
 
         <div class="bottom">
