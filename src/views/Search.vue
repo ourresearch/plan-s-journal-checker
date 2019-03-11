@@ -231,14 +231,21 @@
                     margin-bottom: 20px;
                 }
                 .results-list {
+                    display: flex;
+                    flex-wrap: wrap;
+
                     &.loaded {
                         padding-top: 50px;
+                    }
+                    .journal-row {
+                        width: 350px;
+                        min-height: 275px;
 
                     }
 
+
                 }
                 .single-result {
-
                 }
 
             }

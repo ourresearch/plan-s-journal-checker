@@ -83,8 +83,8 @@
 <style lang="scss">
     .search-form {
         display: flex;
-        border-radius: 5px;
-        box-shadow: 0 2px 10px 5px rgba(0, 0, 0, .3);
+        border-radius: 3px;
+        box-shadow: 0 2px 5px 3px rgba(0, 0, 0, .1);
         width: 100%;
         .inputs {
             display: flex;
@@ -100,7 +100,7 @@
                 // see https://codepen.io/thomas-eilermann/pen/grjEjE
                 transition: flex-basis 300ms ease-in-out;
                 &.input-journal {
-                    border-radius: 5px 0 0 5px;
+                    border-radius: 3px 0 0 3px;
                     .autosuggest__results {
                         width: 502px;
                     }
@@ -176,7 +176,7 @@
                     margin-top: 23px;
                     z-index: 999;
                     background: #fff;
-                    border-radius: 5px;
+                    border-radius: 3px;
                     box-shadow: 0px 6px 6px 0px rgba(0, 0, 0, .1);
 
                     ul {
@@ -241,7 +241,7 @@
 
             align-items: center;
             justify-content: center;
-            border-radius: 5px;
+            border-radius: 3px;
             margin-left: 5px;
             height: 82px;
             color: #fff;
