@@ -2,6 +2,10 @@
 
 
     <div class="trans-ag">
+        <div class="heading">
+            <h2 class="label">transformative agreement #42:</h2>
+            <h1>MIT and Royal Society</h1>
+        </div>
 
 
 
@@ -14,7 +18,7 @@
     import {store} from '../store.js'
 
     export default {
-        name: 'JournalZoom',
+        name: 'TransAg',
         components: {
             JournalRow
         },
@@ -24,9 +28,6 @@
             };
         },
         methods: {
-        },
-        directives: {
-            ImgFallback
         },
         watch: {}
     }

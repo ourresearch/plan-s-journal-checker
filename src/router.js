@@ -4,6 +4,7 @@ import Meta from 'vue-meta'
 
 import Journal from './views/Journal'
 import Search from './views/Search'
+import TransAg from './views/TransAg'
 
 
 Vue.use(Router)
@@ -30,6 +31,11 @@ export default new Router({
     {
       path: '/search',
       component: Search
+    },
+
+    {
+      path: '/transformative-agreement/:id',
+      component: TransAg
     },
 
 
