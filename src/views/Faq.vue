@@ -8,7 +8,7 @@
         </div>
 
         <p>
-            FAQs go here.
+            FAQ coming soon 😀🤷‍
         </p>
 
 

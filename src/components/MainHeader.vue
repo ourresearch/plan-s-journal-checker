@@ -12,9 +12,9 @@
             </div>
             <div class="spacer"></div>
             <div class="nav">
-                <router-link to="./transformative-agreements">Transformative Agreements</router-link>
+                <router-link to="/transformative-agreements">Transformative Agreements</router-link>
                 <div class="sep"></div>
-                <router-link to="./faq">FAQ</router-link>
+                <router-link to="/faq">FAQ</router-link>
             </div>
         </div>
     </div>
@@ -64,13 +64,12 @@
 <style  lang="scss">
 
     .header-container {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        background: none;
+        background: dodgerblue;
         position: static;
-        margin-bottom: -60px;
+        &.search {
+            background: none;
+            margin-bottom: -60px;
+        }
 
         .header-top-row {
             display: flex;
@@ -78,9 +77,6 @@
             align-items: center;
             max-width: 1150px;
             margin: 0 auto;
-            &.landing {
-                border-bottom: none;
-            }
 
             .left {
                 align-items: center;
@@ -108,6 +104,9 @@
                     padding: 5px;
                     display: block;
                     color: #fff;
+                    &:hover {
+                        color: #fff;
+                    }
                 }
                 .sep {
                     border-left: 1px solid #fff;

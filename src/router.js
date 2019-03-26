@@ -5,6 +5,8 @@ import Meta from 'vue-meta'
 import Journal from './views/Journal'
 import Search from './views/Search'
 import TransAg from './views/TransAg'
+import TransagList from './views/TransagList'
+import Faq from './views/Faq'
 
 
 Vue.use(Router)
@@ -33,6 +35,15 @@ export default new Router({
       component: Search
     },
 
+    {
+      path: '/faq',
+      component: Faq
+    },
+
+    {
+      path: '/transformative-agreements',
+      component: TransagList
+    },
     {
       path: '/transformative-agreement/:id',
       component: TransAg
