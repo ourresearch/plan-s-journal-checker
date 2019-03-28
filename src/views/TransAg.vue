@@ -26,7 +26,7 @@
         </div>
 
         <div class="content" v-if="transag">
-            <div class="dates">
+            <div class="dates" v-if="transag.start_date">
                 Effective from <span class="date">{{transag.start_date}}</span> until <span class="date">{{transag.end_date}}</span>
             </div>
             <div class="more">
@@ -40,17 +40,39 @@
 
             <div class="parties">
                 <div class="institutions party">
-                    <h2>Institutions covered</h2>
-                    <div class="match institution" v-for="institution in transag.matches.institutions">
+                    <h2>{{transag.matches.institutions.length}}
+                        Institution<span v-show="transag.matches.institutions.length > 1">s</span> covered
+                    </h2>
+                    <div class="match institution"
+                         v-if="index <= 10 || showAllInstitutions"
+                         v-for="(institution, index) in transag.matches.institutions">
                         {{institution.name}}
                     </div>
+
+                    <div class="show-all" v-show="transag.matches.institutions.length > 10 && !showAllInstitutions">
+                        ...and {{ transag.matches.institutions.length - 10 }} others
+                        <a href="" @click.prevent="showAllInstitutions=true">(show)</a>
+                    </div>
+
+
                 </div>
 
                 <div class="journals party">
-                    <h2>Journals covered</h2>
-                    <div class="match institution" v-for="journal in transag.matches.journals">
+                    <h2>{{transag.matches.journals.length}}
+                        Journal<span v-show="transag.matches.journals.length > 1">s</span> covered
+                    </h2>
+                    <div class="match institution"
+                         v-if="index <= 10 || showAllJournals"
+                         v-for="(journal, index) in transag.matches.journals">
                         {{journal.name}}
                     </div>
+
+                    <div class="show-all" v-show="transag.matches.journals.length > 10 && !showAllJournals">
+                        ...and {{ transag.matches.journals.length - 10 }} others
+                        <a href="" @click.prevent="showAllJournals=true">(show)</a>
+                    </div>
+
+
                     <div class="sorry" v-if="!transag.matches.journals.length">
                         Sorry, looks like we're still working on this. We'll have it filled in before our launch in  summer 2019.
                     </div>
@@ -79,8 +101,9 @@
                 apiUrl: "http://api.rickscafe.io/transformative-agreement/",
                 store: store,
                 transag: null,
-
-                transagId: null
+                transagId: null,
+                showAllInstitutions: false,
+                showAllJournals: false
             };
         },
         methods: {
@@ -132,6 +155,10 @@
                 display: flex;
                 .party {
                     flex: 1;
+                    .show-all {
+                        margin-top: 10px;
+                        font-size: 80%;
+                    }
                 }
             }
         }

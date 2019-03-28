@@ -59,6 +59,9 @@
                 store: store
             };
         },
+        computed: {
+
+        },
         methods: {
             fetchTransagList() {
                 console.log("loading transformative agreements list!")
