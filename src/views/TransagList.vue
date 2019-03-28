@@ -28,7 +28,14 @@
                 </div>
             </div>
 
+            <div class="download">
+                <strong>Download raw data:</strong>
+                <a href="" @click.prevent="comingSoon" class="csv">CSV</a> or
+                <a href="https://api.rickscafe.io/transformative-agreements" target="_blank" class="json">JSON</a>
+            </div>
+
         <md-table v-model="transags">
+
 
               <md-table-row slot="md-table-row" slot-scope="{ item }" @click="visitTransag(item.id)">
                 <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ item.id }}</md-table-cell>
@@ -76,6 +83,9 @@
             },
             visitTransag(id){
                 this.$router.push("/transformative-agreement/" + id)
+            },
+            comingSoon(){
+                alert("Sorry, CSV download isn't ready yet...there's only JSON for now.")
             }
         },
         watch: {},
