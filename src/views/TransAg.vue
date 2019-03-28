@@ -27,7 +27,7 @@
 
         <div class="content" v-if="transag">
             <div class="dates" v-if="transag.start_date">
-                Effective from <span class="date">{{transag.start_date}}</span> until <span class="date">{{transag.end_date}}</span>
+                <strong>Effective dates:</strong> <span class="date">{{transag.start_date}}</span> through <span class="date">{{transag.end_date}}</span>
             </div>
             <div class="more">
                 <div class="link">
@@ -36,7 +36,25 @@
                 <div class="notes" v-if="transag.notes">
                     <strong>Notes: </strong> {{ transag.notes }}
                 </div>
+                <div class="esac-id">
+                    <strong>
+                        ESAC ID:
+                    </strong>
+                    <span class="esac-id-true" v-if="transag.esac_id">
+                        <a :href="'http://esac-initiative.org/about/transformative-agreements/agreement-registry/' + transag.esac_id">{{transag.esac_id}}</a>
+                    </span>
+                    <span class="esac-id-false" v-if="!transag.esac_id">
+                        <a href="http://esac-initiative.org/about/transformative-agreements/agreement-registry/">Not listed on ESAC</a>
+                    </span>
+                </div>
+
+                <div class="download">
+                    <strong>Download:</strong>
+                    <a href="" @click.prevent="comingSoon" class="csv">CSV</a> or
+                    <a :href="'https://api.rickscafe.io/transformative-agreement/' + transag.id" target="_blank" class="json">JSON</a>
+                </div>
             </div>
+
 
             <div class="parties">
                 <div class="institutions party">
@@ -118,6 +136,9 @@
                     .catch(e => {
                         console.log("error from server", e)
                     })
+            },
+            comingSoon(){
+                alert("This is not implemented yet.")
             }
         },
         watch: {},
