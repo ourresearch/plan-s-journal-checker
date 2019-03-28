@@ -42,8 +42,16 @@
         methods: {
             submit(){
                 console.log("SearchForm.submit()", store.state)
-                this.hasBeenSubmitted = true
-                this.$emit("submit")
+                if (store.getHasQuery()) {
+                    this.hasBeenSubmitted = true
+                    this.$emit("submit")
+                }
+                else {
+                    alert("Sorry, the 'Journal or Topic' field can't handle free-text entries yet...for now you have to *click* on an item in the 'Journal or Topic' dropdown list. This will be fixed before launch.")
+                }
+
+
+
             },
             updateFunder(id) {
                 store.setFunder(id)

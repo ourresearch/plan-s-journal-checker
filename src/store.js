@@ -47,6 +47,10 @@ export const store = {
     },
 
 
+    getHasQuery(){
+        return (this.state.topic || this.state.journal)
+    },
+
 
 
     // setters
