@@ -100,7 +100,7 @@
                               v-show="server.journalZoom.policy_compliance.reason=='transformative-agreement'">
                             of a transformative agreement signed between its publisher and {{store.server.institution.name}}
 
-                            <router-link to="'./transformative-agreement/' + server.journalZoom.policy_compliance.transformative_agreement_id">
+                            <router-link :to="'./transformative-agreement/' + server.journalZoom.policy_compliance.transformative_agreement_id">
                                 (Agreement {{ server.journalZoom.policy_compliance.transformative_agreement_id }})
                             </router-link>
 
