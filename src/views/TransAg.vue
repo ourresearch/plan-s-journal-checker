@@ -79,7 +79,7 @@
                     <h2>{{transag.matches.journals.length}}
                         Journal<span v-show="transag.matches.journals.length > 1">s</span> covered
                     </h2>
-                    <div class="match institution"
+                    <div class="match journal"
                          v-if="index <= 10 || showAllJournals"
                          v-for="(journal, index) in transag.matches.journals">
                         {{journal.name}}
@@ -116,7 +116,7 @@
         },
         data() {
             return {
-                apiUrl: "http://api.rickscafe.io/transformative-agreement/",
+                apiUrl: "https://api.rickscafe.io/transformative-agreement/",
                 store: store,
                 transag: null,
                 transagId: null,
