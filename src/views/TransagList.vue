@@ -61,7 +61,7 @@
         },
         data() {
             return {
-                apiUrl: "http://api.rickscafe.io/transformative-agreements",
+                apiUrl: "https://api.rickscafe.io/transformative-agreements",
                 transags: [],
                 store: store
             };
