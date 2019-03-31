@@ -3,6 +3,7 @@ import axios from 'axios'
 export const store = {
 
 
+    isLoading: false,
     baseEndpoint: "https://rickscafe-api.herokuapp.com/",
     endpoints: {
         topic: "topic/",

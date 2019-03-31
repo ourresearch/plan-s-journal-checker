@@ -72,13 +72,16 @@
         methods: {
             fetchTransagList() {
                 console.log("loading transformative agreements list!")
+                this.store.isLoading = true
                 axios.get(this.apiUrl)
                     .then(resp => {
                         console.log("got this back: ", resp.data)
                         this.transags = resp.data.list
+                        this.store.isLoading = false
                     })
                     .catch(e => {
                         console.log("error from server", e)
+                        this.store.isLoading = false
                     })
             },
             visitTransag(id){

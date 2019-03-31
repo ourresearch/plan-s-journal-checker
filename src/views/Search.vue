@@ -1,10 +1,5 @@
 <template>
     <div class="home">
-        <div class="loading" v-show="isLoading">
-            Loading...
-        </div>
-
-
         <div class="top-screen" :class="{'landing-mode': showLandingMode}">
 
             <div class="content" :class="{'landing-mode': showLandingMode}">
@@ -160,10 +155,10 @@
         },
         mounted() {
             store.setFromQueryObj(this.$route.query)
-            this.isLoading = true
+            this.store.isLoading = true
             store.fetchAll()
                 .then(ret => {
-                        this.isLoading = false
+                        this.store.isLoading = false
                     })
             // if (this.$route.query){
             //     this.showLandingMode = false
@@ -175,10 +170,10 @@
         watch: {
             "$route": function (to, from) {
                 store.setFromQueryObj(to.query)
-                this.isLoading = true
+                this.store.isLoading = true
                 store.fetchAll()
                     .then(ret => {
-                        this.isLoading = false
+                        this.store.isLoading = false
                     })
             },
             "store.state": {
@@ -198,19 +193,6 @@
 <style lang="scss">
 
     .home {
-        .loading {
-            position: fixed;
-            width: 150px;
-            top: 0;
-            left: 50%;
-            padding: 5px;
-            background: #fff;
-            text-align: center;
-            margin-left: -75px;
-            border-radius: 0 0 5px 5px;
-            color: #333;
-            z-index: 999999999;
-        }
 
         .top-screen {
 

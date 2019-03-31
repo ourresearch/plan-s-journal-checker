@@ -1,5 +1,9 @@
 <template>
     <div class="header-container" :class="specialPageMode">
+        <md-progress-bar
+                v-show="store.isLoading"
+                md-mode="indeterminate"
+                class="md-accent"></md-progress-bar>
         <div class="header-top-row" :class="specialPageMode">
             <div class="left">
                 <h1>
@@ -24,6 +28,7 @@
 
 <script>
     import InputJournal from './InputJournal.vue'
+    import {store} from '../store.js'
 
     export default {
         name: 'SearchHeader',
@@ -31,7 +36,8 @@
             InputJournal
         },
         data: () => ({
-            specialPageMode: "landing"
+            specialPageMode: "landing",
+            store: store
         }),
         computed: {
         },
@@ -65,7 +71,16 @@
 
     .header-container {
         background: dodgerblue;
-        position: static;
+        position: relative;
+        .md-progress-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #fff;
+        }
+
+
         &.search {
             background: none;
             margin-bottom: -60px;
@@ -91,6 +106,9 @@
                     font-size: 20px;
                     a {
                         color: #fff;
+                        &:hover {
+                            text-decoration: none;
+                        }
                     }
                 }
 
