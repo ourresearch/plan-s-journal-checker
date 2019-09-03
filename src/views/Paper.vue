@@ -40,7 +40,7 @@
             </div>
             <div class="spacer"></div>
             <div class="controls">
-                <a href="mailto:team@impactstory.org">Feedback</a>
+                <a href="mailto:team@ourresearch.org">Feedback</a>
                 <a :href="'https://osat-api.herokuapp.com/paper/' + paperId">JSON</a>
             </div>
         </div>
@@ -236,7 +236,7 @@
                     })
                     .catch(resp => {
                         console.log("failure :(", resp)
-                        alert("Sorry, something went wrong! Please let us know at team@impactstory.org")
+                        alert("Sorry, something went wrong! Please let us know at team@ourresearch.org")
                     })
             },
             cancelProductEdit(product){

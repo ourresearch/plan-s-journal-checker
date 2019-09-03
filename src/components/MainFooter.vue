@@ -8,12 +8,12 @@
                 <div>
                     <ul class="contact-links">
                         <li>
-                            <a href="mailto:team@impactstory.org">
+                            <a href="mailto:team@ourresearch.org">
                                 Feedback
                             </a>
                         </li>
                         <li>
-                            <a href="mailto:team@impactstory.org">
+                            <a href="mailto:team@ourresearch.org">
                                 Contact
                             </a>
 
